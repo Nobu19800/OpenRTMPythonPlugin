@@ -11,13 +11,13 @@ apply_common_setting_for_plugin(${target})
 
 
 configure_file(OpenRTM_Python_plugin.py ${PROJECT_BINARY_DIR}/${CNOID_PLUGIN_SUBDIR}/python/cnoid/OpenRTM_Python_plugin.py COPYONLY)
-install(FILES OpenRTM_Python_plugin.py DESTINATION ${CNOID_PLUGIN_SUBDIR}/python/cnoid/OpenRTM_Python_plugin.py)
+install(FILES OpenRTM_Python_plugin.py DESTINATION ${CNOID_PLUGIN_SUBDIR}/python/cnoid/)
 
 
 
 
 configure_file(samples/TankIoRTC.py ${PROJECT_BINARY_DIR}/${CNOID_PLUGIN_SUBDIR}/rtc_python/TankIoRTC.py COPYONLY)
-install(FILES samples/TankIoRTC.py DESTINATION ${CNOID_PLUGIN_SUBDIR}/rtc_python/TankIoRTC.py)
+install(FILES samples/TankIoRTC.py DESTINATION ${CNOID_PLUGIN_SUBDIR}/rtc_python/)
 
 
 

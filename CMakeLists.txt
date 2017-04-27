@@ -16,8 +16,19 @@ install(FILES OpenRTM_Python_plugin.py DESTINATION ${CNOID_PLUGIN_SUBDIR}/python
 
 
 
-configure_file(samples/TankIoRTC.py ${PROJECT_BINARY_DIR}/${CNOID_PLUGIN_SUBDIR}/rtc_python/TankIoRTC.py COPYONLY)
-install(FILES samples/TankIoRTC.py DESTINATION ${CNOID_PLUGIN_SUBDIR}/rtc_python/)
+configure_file(samples/TankIoRTC_Py/TankIoRTC_Py.py ${PROJECT_BINARY_DIR}/${CNOID_PLUGIN_SUBDIR}/rtc_python/TankIoRTC_Py.py COPYONLY)
+install(FILES samples/TankIoRTC_Py/TankIoRTC_Py.py DESTINATION ${CNOID_PLUGIN_SUBDIR}/rtc_python/)
+configure_file(samples/TankIoRTC_Py/TankIoRTC_Py.conf ${PROJECT_BINARY_DIR}/${CNOID_PLUGIN_SUBDIR}/rtc_python/TankIoRTC_Py.conf COPYONLY)
+install(FILES samples/TankIoRTC_Py/TankIoRTC_Py.conf DESTINATION ${CNOID_PLUGIN_SUBDIR}/rtc_python/)
 
+configure_file(samples/TankJoystickControllerRTC_Py/TankJoystickControllerRTC_Py.py ${PROJECT_BINARY_DIR}/${CNOID_PLUGIN_SUBDIR}/rtc_python/TankJoystickControllerRTC_Py.py COPYONLY)
+install(FILES samples/TankJoystickControllerRTC_Py/TankJoystickControllerRTC_Py.py DESTINATION ${CNOID_PLUGIN_SUBDIR}/rtc_python/)
+configure_file(samples/TankJoystickControllerRTC_Py/TankJoystickControllerRTC_Py.conf ${PROJECT_BINARY_DIR}/${CNOID_PLUGIN_SUBDIR}/rtc_python/TankJoystickControllerRTC_Py.conf COPYONLY)
+install(FILES samples/TankJoystickControllerRTC_Py/TankJoystickControllerRTC_Py.conf DESTINATION ${CNOID_PLUGIN_SUBDIR}/rtc_python/)
+
+configure_file(samples/JoystickPySDL2/JoystickPySDL2.py ${PROJECT_BINARY_DIR}/${CNOID_PLUGIN_SUBDIR}/rtc_python/JoystickPySDL2.py COPYONLY)
+install(FILES samples/JoystickPySDL2/JoystickPySDL2.py DESTINATION ${CNOID_PLUGIN_SUBDIR}/rtc_python/)
+configure_file(samples/JoystickPySDL2/JoystickPySDL2.conf ${PROJECT_BINARY_DIR}/${CNOID_PLUGIN_SUBDIR}/rtc_python/JoystickPySDL2.conf COPYONLY)
+install(FILES samples/JoystickPySDL2/JoystickPySDL2.conf DESTINATION ${CNOID_PLUGIN_SUBDIR}/rtc_python/)
 
 

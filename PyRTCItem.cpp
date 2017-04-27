@@ -210,6 +210,10 @@ void PyRTCItem::setRelativePathBaseType(int which)
 
 void PyRTCItem::createComp(std::string name)
 {
+	if (name.empty())
+	{
+		return;
+	}
 	{
 		PyGILock lock;
 
@@ -312,7 +316,7 @@ bool PyRTCItem::start()
 		PyGILock lock;
 		try
 		{
-			python::extract<std::string>(cnoid::pythonMainNamespace()["activateComp"](comp_name,execContextType.which()));
+			python::extract<std::string>(cnoid::pythonMainNamespace()["startSimulation"](comp_name,execContextType.which()));
 		}
 		catch(const python::error_already_set&)
 		{
@@ -411,7 +415,7 @@ void PyRTCItem::stop()
 		PyGILock lock;
 		try
 		{
-			python::extract<std::string>(cnoid::pythonMainNamespace()["deactivateComp"](comp_name,execContextType.which()));
+			python::extract<std::string>(cnoid::pythonMainNamespace()["stopSimulation"](comp_name,execContextType.which()));
 		}
 		catch(const python::error_already_set&)
 		{

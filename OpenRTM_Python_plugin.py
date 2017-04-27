@@ -45,7 +45,7 @@ def createComp(filepath):
 def exitComp(rtcname):
   mgr = OpenRTM_aist.Manager.instance()
   comp = mgr.getComponent(rtcname)
-  print comp,rtcname
+  #print comp,rtcname
   if comp:
     comp.exit()
     mgr.cleanupComponents()
@@ -77,13 +77,37 @@ def activateComp(rtcname, ecnum):
   if ec:
     ec.activate_component(comp.getObjRef())
 
-
 def deactivateComp(rtcname, ecnum):
   mgr = OpenRTM_aist.Manager.instance()
   comp = mgr.getComponent(rtcname)
   ec = getEC(comp, ecnum)
   if ec:
     ec.deactivate_component(comp.getObjRef())
+
+
+def startSimulation(rtcname, ecnum):
+  mgr = OpenRTM_aist.Manager.instance()
+  comp = mgr.getComponent(rtcname)
+  ec = getEC(comp, ecnum)
+  if ec:
+    if ec.get_component_state(comp.getObjRef()) == RTC.INACTIVE_STATE:
+      ec.activate_component(comp.getObjRef())
+
+
+
+
+def stopSimulation(rtcname, ecnum):
+  mgr = OpenRTM_aist.Manager.instance()
+  comp = mgr.getComponent(rtcname)
+  ec = getEC(comp, ecnum)
+  if ec:
+    if ec.get_component_state(comp.getObjRef()) == RTC.ACTIVE_STATE:
+      ec.deactivate_component(comp.getObjRef())
+    elif ec.get_component_state(comp.getObjRef()) == RTC.ERROR_STATE:
+      ec.reset_component(comp.getObjRef())
+
+
+
 
 def inputFromSimulator(rtcname):
   mgr = OpenRTM_aist.Manager.instance()
@@ -102,7 +126,7 @@ def tickEC(rtcname, ecnum):
   mgr = OpenRTM_aist.Manager.instance()
   comp = mgr.getComponent(rtcname)
   ec = getEC(comp, ecnum)
-  if ec:
+  if ec and hasattr(ec, "tick"):
     ec.tick()
 
 def runManager():

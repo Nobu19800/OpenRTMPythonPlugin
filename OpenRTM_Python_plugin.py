@@ -9,8 +9,8 @@ import OpenRTM_aist
 import os
 import importlib
 
-#from CnoidLink import *
-from CnoidLink import *
+
+
 
 def createComp(filepath):
   
@@ -32,20 +32,18 @@ def createComp(filepath):
 
   mgr.load(filepath, None)
   
-  #if compname in sys.modules.keys():
-    #print sys.modules[compname]
-    #reload(importlib.import_module("sys"))
-    
-  #print sys.modules.keys()
+
   comp = mgr.createComponent(compname+"?execution_contexts=PeriodicExecutionContext,OpenHRPExecutionContext")
-  #print mgr.getComponent(comp.getInstanceName());
-  #mgr.unload(filepath)
-  return comp.getInstanceName()
+  if comp:
+    return comp.getInstanceName()
+  else:
+    return ""
+
+  
 
 def exitComp(rtcname):
   mgr = OpenRTM_aist.Manager.instance()
   comp = mgr.getComponent(rtcname)
-  #print comp,rtcname
   if comp:
     comp.exit()
     mgr.cleanupComponents()
@@ -66,7 +64,7 @@ def setBody(body, rtcname):
   mgr = OpenRTM_aist.Manager.instance()
   comp = mgr.getComponent(rtcname)
   if comp and hasattr(comp, "setBody"):
-    comp.setBody(body, ControlLinkObj)
+    comp.setBody(body)
     
 
 
@@ -137,10 +135,6 @@ def runManager():
 
 def shutdownManager():
   mgr = OpenRTM_aist.Manager.instance()
-  #comps = mgr.getComponents()
-  #for comp in comps:
-  #  comp.exit()
-  #mgr.cleanupComponents()
   mgr.shutdown()
 
 

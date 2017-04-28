@@ -45,60 +45,10 @@ using namespace boost;
 using namespace rtmiddleware;
 
 
-controlLink::controlLink()
-{
-}
 
 
 
-LinkPtr controlLink::getLink(Body *ioBody, const char* name)
-{
-	return ioBody->link(name);
-}
 
-
-void controlLink::setJointPosition(LinkPtr *lb, double q)
-{
-	(*lb)->q() = q;
-};
-double controlLink::getJointPosition(LinkPtr *lb)
-{
-	return (*lb)->q();
-};
-void controlLink::setJointVelocity(LinkPtr *lb, double dq)
-{
-	
-	(*lb)->dq() = dq;
-};
-double controlLink::getJointVelocity(LinkPtr *lb)
-{
-	return (*lb)->dq();
-};
-void controlLink::setJointAcceralation(LinkPtr *lb, double ddq)
-{
-	(*lb)->ddq() = ddq;
-};
-double controlLink::getJointAcceralation(LinkPtr *lb)
-{
-	return (*lb)->ddq();
-};
-void controlLink::setJointForce(LinkPtr *lb, double u)
-{
-	(*lb)->u() = u;
-};
-double controlLink::getJointForce(LinkPtr *lb)
-{
-	return (*lb)->u();
-};
-LightPtr controlLink::getLight(Body *ioBody, const char* name)
-{
-	return ioBody->findDevice<Light>(name);
-};
-void controlLink::lightOn(LightPtr *lb, bool on)
-{
-	(*lb)->on(on);
-	(*lb)->notifyStateChange();
-};
 
 
 
@@ -284,8 +234,8 @@ bool PyRTCItem::initialize(ControllerItemIO* io)
 		PyGILock lock;
 		try
 		{
-			controlLink *c = &m_crl;
-			cnoid::pythonMainNamespace()["ControlLinkObj"] = boost::ref(c);
+			//controlLink *c = &m_crl;
+			//cnoid::pythonMainNamespace()["ControlLinkObj"] = boost::ref(c);
 			Body *b = io->body();
 			python::extract<std::string>(cnoid::pythonMainNamespace()["setBody"](boost::ref(b), comp_name.c_str()));
 		}

@@ -23,25 +23,7 @@
 namespace rtmiddleware {
 
 
-	class controlLink
-	{
-	public:
-
-		controlLink();
-		cnoid::LinkPtr getLink(cnoid::Body *ioBody, const char* name);
-		void setJointPosition(cnoid::LinkPtr *lb, double q);
-		double getJointPosition(cnoid::LinkPtr *lb);
-		void setJointVelocity(cnoid::LinkPtr *lb, double dq);
-		double getJointVelocity(cnoid::LinkPtr *lb);
-		void setJointAcceralation(cnoid::LinkPtr *lb, double ddq);
-		double getJointAcceralation(cnoid::LinkPtr *lb);
-		void setJointForce(cnoid::LinkPtr *lb, double u);
-		double getJointForce(cnoid::LinkPtr *lb);
-		cnoid::LightPtr getLight(cnoid::Body *ioBody, const char* name);
-		void lightOn(cnoid::LightPtr *lb, bool on);
-		
-
-	};
+	
 
 	
 	class CNOID_EXPORT PyRTCItem : public cnoid::ControllerItem
@@ -73,7 +55,7 @@ namespace rtmiddleware {
 	        	N_EXEC_CONTEXT_TYPES
 	    	};
 	private:
-		controlLink m_crl;
+		//controlLink m_crl;
 		cnoid::BodyItem* body_item;
 		std::string comp_name;
 		std::string moduleNameProperty;

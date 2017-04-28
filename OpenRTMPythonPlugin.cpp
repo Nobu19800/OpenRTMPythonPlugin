@@ -31,6 +31,64 @@ using namespace rtmiddleware;
 
 
 
+class controlLink
+{
+public:
+
+	controlLink(){};
+
+	static LinkPtr getLink(Body *ioBody, const char* name)
+	{
+		return ioBody->link(name);
+	}
+
+
+	static void setJointPosition(LinkPtr *lb, double q)
+	{
+		(*lb)->q() = q;
+	};
+	static double getJointPosition(LinkPtr *lb)
+	{
+		return (*lb)->q();
+	};
+	static void setJointVelocity(LinkPtr *lb, double dq)
+	{
+
+		(*lb)->dq() = dq;
+	};
+	static double getJointVelocity(LinkPtr *lb)
+	{
+		return (*lb)->dq();
+	};
+	static void setJointAcceralation(LinkPtr *lb, double ddq)
+	{
+		(*lb)->ddq() = ddq;
+	};
+	static double getJointAcceralation(LinkPtr *lb)
+	{
+		return (*lb)->ddq();
+	};
+	static void setJointForce(LinkPtr *lb, double u)
+	{
+		(*lb)->u() = u;
+	};
+	static double getJointForce(LinkPtr *lb)
+	{
+		return (*lb)->u();
+	};
+	static LightPtr getLight(Body *ioBody, const char* name)
+	{
+		return ioBody->findDevice<Light>(name);
+	};
+	static void lightOn(LightPtr *lb, bool on)
+	{
+		(*lb)->on(on);
+		(*lb)->notifyStateChange();
+	};
+
+
+};
+
 
 
 
@@ -57,17 +115,17 @@ BOOST_PYTHON_MODULE(CnoidLink)
 	;
 	*/
 	python::class_<controlLink>("controlLink")
-	.def("getLink", &controlLink::getLink)
-	.def("setJointPosition", &controlLink::setJointPosition, python::return_internal_reference<>())
-	.def("getJointPosition", &controlLink::getJointPosition)
-	.def("setJointVelocity", &controlLink::setJointVelocity, python::return_internal_reference<>())
-	.def("getJointVelocity", &controlLink::getJointVelocity)
-	.def("setJointAcceralation", &controlLink::setJointAcceralation, python::return_internal_reference<>())
-	.def("getJointAcceralation", &controlLink::getJointAcceralation)
-	.def("setJointForce", &controlLink::setJointForce, python::return_internal_reference<>())
-	.def("getJointForce", &controlLink::getJointForce)
-	.def("getLight", &controlLink::getLight)
-	.def("lightOn", &controlLink::lightOn)
+	.def("getLink", &controlLink::getLink).staticmethod("getLink")
+	.def("setJointPosition", &controlLink::setJointPosition, python::return_internal_reference<>()).staticmethod("setJointPosition")
+	.def("getJointPosition", &controlLink::getJointPosition).staticmethod("getJointPosition")
+	.def("setJointVelocity", &controlLink::setJointVelocity, python::return_internal_reference<>()).staticmethod("setJointVelocity")
+	.def("getJointVelocity", &controlLink::getJointVelocity).staticmethod("getJointVelocity")
+	.def("setJointAcceralation", &controlLink::setJointAcceralation, python::return_internal_reference<>()).staticmethod("setJointAcceralation")
+	.def("getJointAcceralation", &controlLink::getJointAcceralation).staticmethod("getJointAcceralation")
+	.def("setJointForce", &controlLink::setJointForce, python::return_internal_reference<>()).staticmethod("setJointForce")
+	.def("getJointForce", &controlLink::getJointForce).staticmethod("getJointForce")
+	.def("getLight", &controlLink::getLight).staticmethod("getLight")
+	.def("lightOn", &controlLink::lightOn).staticmethod("lightOn")
 	;
 
 }

@@ -19,10 +19,10 @@ def createComp(filepath):
   
   filename = os.path.basename(filepath)
   compname, ext = os.path.splitext(filename)
-  mgr._factory.unregisterObject(compname)
+  
   
   try:
-
+    mgr._factory.unregisterObject(compname)
     mgr.unload(filepath)
   except:
     pass

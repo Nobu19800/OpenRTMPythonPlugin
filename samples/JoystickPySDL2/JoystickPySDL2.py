@@ -257,14 +257,14 @@ class JoystickPySDL2(OpenRTM_aist.DataFlowComponentBase):
 			self._d_axes_1.data.y = float(val) / float(JoystickPySDL2.max_axis_value)
 			OpenRTM_aist.setTimestamp(self._d_axes_1)
 			self._axes_1Out.write()
-		if axes == 4:
+		elif axes == 4:
 			val = sdl2.joystick.SDL_JoystickGetAxis(self.stick, 2)
 			self._d_axes_2.data.x = float(val) / float(JoystickPySDL2.max_axis_value)
 			val = sdl2.joystick.SDL_JoystickGetAxis(self.stick, 3)
 			self._d_axes_2.data.y = float(val) / float(JoystickPySDL2.max_axis_value)
 			OpenRTM_aist.setTimestamp(self._d_axes_2)
 			self._axes_2Out.write()
-		if axes == 5:
+		elif axes == 5:
 			val = sdl2.joystick.SDL_JoystickGetAxis(self.stick, 3)
 			self._d_axes_2.data.x = float(val) / float(JoystickPySDL2.max_axis_value)
 			val = sdl2.joystick.SDL_JoystickGetAxis(self.stick, 4)
@@ -293,7 +293,7 @@ class JoystickPySDL2(OpenRTM_aist.DataFlowComponentBase):
 			bb = val & 0x04
 			rb = val & 0x02
 			ub = val & 0x01
-			self._d_hats.data = [ub,rb,bb,lb]
+			self._d_hats.data = [bool(ub),bool(rb),bool(bb),bool(lb)]
 			OpenRTM_aist.setTimestamp(self._d_hats)
 			self._buttonsOut.write()
 		

@@ -3,13 +3,28 @@
 #include <cnoid/MessageView>
 #include <boost/bind.hpp>
 
-#include <boost/python.hpp>
+
+
 #include <boost/ref.hpp>
 
 #include <cnoid/PythonExecutor>
 #include <cnoid/PyUtil>
 
+#ifdef CNOID_USE_PYBIND11
+#include <pybind11/embed.h>
+namespace py = pybind11;
+#else
+#include <boost/python.hpp>
+namespace py = boost::python;
+#endif
 
+namespace cnoid {
+# if defined _WIN32 || defined __CYGWIN__
+	__declspec(dllimport) python::object getGlobalNamespace();
+#else
+	python::object getGlobalNamespace();
+#endif
+}
 
 
 
@@ -19,18 +34,31 @@
 #include <cnoid/ExecutablePath>
 
 #include "exportdecl.h"
+#include "PyRTCItem.h"
 #include "gettext.h"
 
 
-#include "PyRTCItem.h"
+
 
 using namespace cnoid;
 using namespace boost;
 using namespace rtmiddleware;
 
 
+class PyGILock
+{
+	PyGILState_STATE gstate;
+public:
+	PyGILock() {
+		gstate = PyGILState_Ensure();
+	}
+	~PyGILock() {
+		PyGILState_Release(gstate);
+	}
+};
 
 
+/*
 class controlLink
 {
 public:
@@ -104,16 +132,7 @@ BOOST_PYTHON_MODULE(CnoidLink)
 	;
 	python::class_<LightPtr>("Light")
 	;
-	/*
-	python::class_<Link>("Link")
-	;
-	
-	python::class_<LightPtr>("Light")
-	;
-	python::class_<Body>("Body",python::init<>())
-	.def("link", (Link*(Body:: *)(const std::string&)const)&Body::link, python::return_internal_reference<>())
-	;
-	*/
+
 	python::class_<controlLink>("controlLink")
 	.def("getLink", &controlLink::getLink).staticmethod("getLink")
 	.def("setJointPosition", &controlLink::setJointPosition, python::return_internal_reference<>()).staticmethod("setJointPosition")
@@ -129,7 +148,7 @@ BOOST_PYTHON_MODULE(CnoidLink)
 	;
 
 }
-
+*/
 
 
 
@@ -149,7 +168,7 @@ public:
 
 
 OpenRTMPythonPlugin::OpenRTMPythonPlugin() :
-Plugin("OpenRTMPythonPlugin")
+Plugin("OpenRTMPython")
 {
 	require("Body");
 	require("Python");
@@ -163,12 +182,15 @@ OpenRTMPythonPlugin::~OpenRTMPythonPlugin()
 
 bool OpenRTMPythonPlugin::initialize()
 {
-
+	//itemManager().registerClass<PyRTCItem>(N_("PyRTCItem"));
+	//itemManager().addCreationPanel<PyRTCItem>();
+	/*
 	if( PyImport_AppendInittab( "CnoidLink" , initCnoidLink ) == -1 )
 	{
 		return false;
 	}
 
+	*/
 
 	{
 		PyGILock lock;
@@ -176,16 +198,25 @@ bool OpenRTMPythonPlugin::initialize()
 		try
 		{
 			std::string dir = (filesystem::path(executableTopDirectory()) / CNOID_PLUGIN_SUBDIR / "python/cnoid/OpenRTM_Python_plugin.py").generic_string();
-			
-			obj = python::exec_file
+#ifdef CNOID_USE_PYBIND11
+			obj = py::eval_file
+#else
+			obj = py::exec_file
+#endif
 				(
 				dir.c_str(),
-				 cnoid::pythonMainNamespace()
+				getGlobalNamespace()
+				//cnoid::pythonMainNamespace()
 				);
 		}
-		catch(const python::error_already_set&)
+		catch(const python::error_already_set&e)
 		{
-				PyErr_Print();
+#ifdef CNOID_USE_PYBIND11
+			MessageView::instance()->putln(MessageView::ERROR,
+				format(_("%1%")) % e.what());
+#else
+			PyErr_Print();
+#endif
 		}
 		catch (...)
 		{
@@ -197,11 +228,17 @@ bool OpenRTMPythonPlugin::initialize()
 		PyGILock lock;
 		try
 		{
-			cnoid::pythonMainNamespace()["runManager"]();
+			getGlobalNamespace()["runManager"]();
+			//cnoid::pythonMainNamespace()["runManager"]();
 		}
-		catch(const python::error_already_set&)
+		catch(const python::error_already_set&e)
 		{
+#ifdef CNOID_USE_PYBIND11
+			MessageView::instance()->putln(MessageView::ERROR,
+				format(_("%1%")) % e.what());
+#else
 			PyErr_Print();
+#endif
 		}
 		catch (...)
 		{
@@ -220,11 +257,17 @@ bool OpenRTMPythonPlugin::finalize()
 		PyGILock lock;
 		try
 		{
-			pythonMainNamespace()["shutdownManager"]();
+			getGlobalNamespace()["shutdownManager"]();
+			//pythonMainNamespace()["shutdownManager"]();
 		}
-		catch(const python::error_already_set&)
+		catch(const python::error_already_set&e)
 		{
+#ifdef CNOID_USE_PYBIND11
+			MessageView::instance()->putln(MessageView::ERROR,
+				format(_("%1%")) % e.what());
+#else
 			PyErr_Print();
+#endif
 		}
 		catch (...)
 		{

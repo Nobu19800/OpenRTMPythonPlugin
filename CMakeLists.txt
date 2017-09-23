@@ -4,10 +4,30 @@ if(NOT BUILD_OPENRTM_PYTHON_PULUGIN)
 endif()
 
 set(target CnoidOpenRTMPythonPlugin)
+
+make_gettext_mofiles(${target} mofiles)
+
 set(srcdir ${PROJECT_SOURCE_DIR}/sample/OpenRTMPythonPlugin)
-add_library(${target} SHARED ${srcdir}/OpenRTMPythonPlugin.cpp ${srcdir}/PyRTCItem.cpp ${srcdir}/PyRTCItem.h)
-target_link_libraries(${target} CnoidBase CnoidPython CnoidBodyPlugin CnoidPythonPlugin)
+#add_library(${target} SHARED ${srcdir}/OpenRTMPythonPlugin.cpp ${srcdir}/PyRTCItem.cpp ${srcdir}/PyRTCItem.h)
+#target_link_libraries(${target} CnoidBase CnoidPython CnoidBodyPlugin CnoidPythonPlugin)
+
+add_cnoid_plugin(${target} SHARED
+  OpenRTMPythonPlugin.cpp
+  PyRTCItem.cpp
+  PyRTCItem.h
+  ${mofiles}
+  ${RC_SRCS}
+  )
+if(WIN32)
+#	set_target_properties(${target} PROPERTIES COMPILE_DEFINITIONS "CNOID_USE_GETTEXT_WRAPPER")
+#	set_target_properties(${target} PROPERTIES COMPILE_DEFINITIONS "BOOST_ASIO_DISABLE_STD_ARRAY")
+endif(WIN32)
+
 apply_common_setting_for_plugin(${target})
+target_link_libraries(${target} CnoidBase CnoidBodyPlugin CnoidPythonPlugin)
+
+
+
 
 
 configure_file(OpenRTM_Python_plugin.py ${PROJECT_BINARY_DIR}/${CNOID_PLUGIN_SUBDIR}/python/cnoid/OpenRTM_Python_plugin.py COPYONLY)

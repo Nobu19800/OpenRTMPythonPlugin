@@ -9,10 +9,20 @@ import OpenRTM_aist
 import os
 import importlib
 
+from cnoid.Body import *
 
+try:
+  os.environ["PATH"] = os.environ["PATH"].encode('utf-8')
+except:
+  pass
 
 
 def createComp(filepath):
+  
+  try:
+    filepath = filepath.encode('utf-8')
+  except:
+    pass
   
   mgr = OpenRTM_aist.Manager.instance()
   
@@ -30,9 +40,10 @@ def createComp(filepath):
   if compname in sys.modules.keys():
     sys.modules.pop(compname)
 
-  mgr.load(filepath, None)
+  if mgr.load(filepath, None) is RTC.RTC_ERROR or mgr.load(filepath, None) is RTC.PRECONDITION_NOT_MET or mgr.load(filepath, None) is RTC.BAD_PARAMETER:
+    return ""
   
-
+  
   comp = mgr.createComponent(compname+"?execution_contexts=PeriodicExecutionContext,OpenHRPExecutionContext")
   if comp:
     return comp.getInstanceName()
@@ -42,6 +53,10 @@ def createComp(filepath):
   
 
 def exitComp(rtcname):
+  try:
+    rtcname = rtcname.encode('utf-8')
+  except:
+    pass
   mgr = OpenRTM_aist.Manager.instance()
   comp = mgr.getComponent(rtcname)
   if comp:
@@ -61,6 +76,10 @@ def getEC(comp, ecnum):
   return None
 
 def setBody(body, rtcname):
+  try:
+    rtcname = rtcname.encode('utf-8')
+  except:
+    pass
   mgr = OpenRTM_aist.Manager.instance()
   comp = mgr.getComponent(rtcname)
   if comp and hasattr(comp, "setBody"):
@@ -69,6 +88,10 @@ def setBody(body, rtcname):
 
 
 def activateComp(rtcname, ecnum):
+  try:
+    rtcname = rtcname.encode('utf-8')
+  except:
+    pass
   mgr = OpenRTM_aist.Manager.instance()
   comp = mgr.getComponent(rtcname)
   ec = getEC(comp, ecnum)
@@ -76,6 +99,10 @@ def activateComp(rtcname, ecnum):
     ec.activate_component(comp.getObjRef())
 
 def deactivateComp(rtcname, ecnum):
+  try:
+    rtcname = rtcname.encode('utf-8')
+  except:
+    pass
   mgr = OpenRTM_aist.Manager.instance()
   comp = mgr.getComponent(rtcname)
   ec = getEC(comp, ecnum)
@@ -84,6 +111,10 @@ def deactivateComp(rtcname, ecnum):
 
 
 def startSimulation(rtcname, ecnum):
+  try:
+    rtcname = rtcname.encode('utf-8')
+  except:
+    pass
   mgr = OpenRTM_aist.Manager.instance()
   comp = mgr.getComponent(rtcname)
   ec = getEC(comp, ecnum)
@@ -95,6 +126,10 @@ def startSimulation(rtcname, ecnum):
 
 
 def stopSimulation(rtcname, ecnum):
+  try:
+    rtcname = rtcname.encode('utf-8')
+  except:
+    pass
   mgr = OpenRTM_aist.Manager.instance()
   comp = mgr.getComponent(rtcname)
   ec = getEC(comp, ecnum)
@@ -108,6 +143,10 @@ def stopSimulation(rtcname, ecnum):
 
 
 def inputFromSimulator(rtcname):
+  try:
+    rtcname = rtcname.encode('utf-8')
+  except:
+    pass
   mgr = OpenRTM_aist.Manager.instance()
   comp = mgr.getComponent(rtcname)
   if comp and hasattr(comp, "inputFromSimulator"):
@@ -115,12 +154,20 @@ def inputFromSimulator(rtcname):
 
 
 def outputToSimulator(rtcname):
+  try:
+    rtcname = rtcname.encode('utf-8')
+  except:
+    pass
   mgr = OpenRTM_aist.Manager.instance()
   comp = mgr.getComponent(rtcname)
   if comp and hasattr(comp, "outputToSimulator"):
     comp.outputToSimulator()
 
 def tickEC(rtcname, ecnum):
+  try:
+    rtcname = rtcname.encode('utf-8')
+  except:
+    pass
   mgr = OpenRTM_aist.Manager.instance()
   comp = mgr.getComponent(rtcname)
   ec = getEC(comp, ecnum)

@@ -22,7 +22,7 @@ sys.path.append(".")
 import RTC
 import OpenRTM_aist
 
-from CnoidLink import *
+#from CnoidLink import *
 
 
 # Import Service implementation class
@@ -47,6 +47,12 @@ tankiortc_py_spec = ["implementation_id", "TankIoRTC_Py",
 		 "max_instance",      "1", 
 		 "language",          "Python", 
 		 "lang_type",         "SCRIPT",
+		 "conf.default.wheel_radius", "0.05",
+		 "conf.default.wheel_distance", "0.2",
+		 "conf.__widget__.wheel_radius", "text",
+		 "conf.__widget__.wheel_distance", "text",
+		 "conf.__type__.wheel_radius", "double",
+		 "conf.__type__.wheel_distance", "double",
 		 ""]
 # </rtc-template>
 
@@ -104,6 +110,21 @@ class TankIoRTC_Py(OpenRTM_aist.DataFlowComponentBase):
 		self.body = None
 		
 
+		"""
+		車輪半径
+		 - Name: wheel_radius wheel_radius
+		 - DefaultValue: 0.05
+		 - Unit: m
+		"""
+		self._wheel_radius = [0.05]
+
+		"""
+		車輪間の距離
+		 - Name: wheel_distance wheel_distance
+		 - DefaultValue: 0.2
+		 - Unit: m
+		"""
+		self._wheel_distance = [0.2]
 
 		# initialize of configuration-data.
 		# <rtc-template block="init_conf_param">
@@ -111,53 +132,49 @@ class TankIoRTC_Py(OpenRTM_aist.DataFlowComponentBase):
 		# </rtc-template>
 
 
-	def setBody(self, body, ControlLinkObj):
+	def setBody(self, body):
 		self.ioBody = body
-		self.ControlLink = ControlLinkObj
-		#self.cannonY = self.ioBody.link("CANNON_Y")
-		#self.cannonP = self.ioBody.link("CANNON_P")
-		#self.crawlerL = self.ioBody.link("CRAWLER_TRACK_L")
-		#self.crawlerR = self.ioBody.link("CRAWLER_TRACK_R")
-		self.cannonY = self.ControlLink.getLink(self.ioBody, "CANNON_Y")
-		self.cannonP = self.ControlLink.getLink(self.ioBody, "CANNON_P")
-		self.crawlerL = self.ControlLink.getLink(self.ioBody, "CRAWLER_TRACK_L")
-		self.crawlerR = self.ControlLink.getLink(self.ioBody, "CRAWLER_TRACK_R")
+		#self.ControlLink = ControlLinkObj
+
+		self.cannonY = self.ioBody.link("CANNON_Y")
+		self.cannonP = self.ioBody.link("CANNON_P")
+		self.crawlerL = self.ioBody.link("CRAWLER_TRACK_L")
+		self.crawlerR = self.ioBody.link("CRAWLER_TRACK_R")
 		
 		
-		self.light = self.ControlLink.getLight(self.ioBody, "MainLight")
+		self.light = self.ioBody.getLight("MainLight")
+		
 		
 
 	def inputFromSimulator(self):
 		if self.ioBody:
-			self._d_angles.pan = self.ControlLink.getJointPosition(self.cannonY)
-			self._d_angles.tilt = self.ControlLink.getJointPosition(self.cannonP)
+			self._d_angles.pan = self.cannonY.q
+			self._d_angles.tilt = self.cannonP.q
 			
 			OpenRTM_aist.setTimestamp(self._d_angles)
 			self._anglesOut.write()
 
 
 	def outputToSimulator(self):
-		wheel_radius = 0.05
-		wheel_distance = 0.2
 		if self.ioBody:
 			if self._torquesIn.isNew():
 				data = self._torquesIn.read()
-				self.ControlLink.setJointForce(self.cannonY, data.data[0])
-				self.ControlLink.setJointForce(self.cannonP, data.data[1])
+				self.cannonY.u = data.data[0]
+				self.cannonP.u = data.data[1]
 			if self._velocitiesIn.isNew():
 				data = self._velocitiesIn.read()
 				vx = data.data.vx
 				va = data.data.va
 				
-				rms = (vx + va*wheel_distance)/wheel_radius
-				lms = (vx - va*wheel_distance)/wheel_radius
+				rms = (vx + va*self._wheel_distance[0])/self._wheel_radius[0]
+				lms = (vx - va*self._wheel_distance[0])/self._wheel_radius[0]
 				
-				self.ControlLink.setJointVelocity(self.crawlerL, lms)
-				self.ControlLink.setJointVelocity(self.crawlerR, rms)
+				self.crawlerL.dq = lms
+				self.crawlerR.dq = rms
 			if self._lightSwitchIn.isNew():
 				data = self._lightSwitchIn.read()
 				
-				self.ControlLink.lightOn(self.light, data.data[0])
+				self.light.on =  data.data[0]
 
 
 
@@ -173,6 +190,8 @@ class TankIoRTC_Py(OpenRTM_aist.DataFlowComponentBase):
 	#
 	def onInitialize(self):
 		# Bind variables and configuration variable
+		self.bindParameter("wheel_radius", self._wheel_radius, "0.05")
+		self.bindParameter("wheel_distance", self._wheel_distance, "0.2")
 		
 		# Set InPort buffers
 		self.addInPort("velocities",self._velocitiesIn)

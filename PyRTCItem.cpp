@@ -2,7 +2,9 @@
 #include <cnoid/MessageView>
 #include <boost/bind.hpp>
 
-#include <boost/python.hpp>
+
+
+
 #include <boost/ref.hpp>
 
 #include <cnoid/PythonExecutor>
@@ -36,9 +38,17 @@
 #include <cnoid/FileUtil>
 #include <cnoid/ExecutablePath>
 
+#ifdef CNOID_USE_PYBIND11
+#include <pybind11/embed.h>
+namespace py = pybind11;
+#else
+#include <boost/python.hpp>
+namespace py = boost::python;
+#endif
 
-#include "gettext.h"
+
 #include "PyRTCItem.h"
+#include "gettext.h"
 
 using namespace cnoid;
 using namespace boost;
@@ -46,13 +56,29 @@ using namespace rtmiddleware;
 
 
 
+class PyGILock
+{
+	PyGILState_STATE gstate;
+public:
+	PyGILock() {
+		gstate = PyGILState_Ensure();
+	}
+	~PyGILock() {
+		PyGILState_Release(gstate);
+	}
+};
 
 
 
 
 
-
-
+namespace cnoid {
+# if defined _WIN32 || defined __CYGWIN__
+	__declspec(dllimport) python::object getGlobalNamespace();
+#else
+	python::object getGlobalNamespace();
+#endif
+}
 
 
 
@@ -123,7 +149,7 @@ void PyRTCItem::doPutProperties(PutPropertyFunction& putProperty)
 	
 	
 
-	putProperty("RTC module", FilePath(moduleNameProperty, filter, dir),
+	putProperty(_("RTC module"), FilePath(moduleNameProperty, filter, dir),
                 [&](const std::string& name){ this->createComp(name);return true; });
 
 
@@ -160,6 +186,8 @@ void PyRTCItem::setRelativePathBaseType(int which)
 
 void PyRTCItem::createComp(std::string name)
 {
+	//MessageView::instance()->putln(MessageView::ERROR,
+	//	format(_(name.c_str())));
 	if (name.empty())
 	{
 		return;
@@ -171,14 +199,29 @@ void PyRTCItem::createComp(std::string name)
 		{
 			if(!comp_name.empty())
 			{
-				python::extract<std::string>(cnoid::pythonMainNamespace()["exitComp"](comp_name.c_str()));
+#ifdef CNOID_USE_PYBIND11
+				getGlobalNamespace()["exitComp"](comp_name.c_str());
+#else
+				python::extract<std::string>(cnoid::getGlobalNamespace()["exitComp"](comp_name.c_str()));
+				//python::extract<std::string>(cnoid::pythonMainNamespace()["exitComp"](comp_name.c_str()));
+#endif
 			}
-			comp_name = python::extract<std::string>(cnoid::pythonMainNamespace()["createComp"](name.c_str()));
+#ifdef CNOID_USE_PYBIND11
+			comp_name = pybind11::str(getGlobalNamespace()["createComp"](name.c_str())).cast<std::string>();
+#else
+			comp_name = python::extract<std::string>(cnoid::getGlobalNamespace()["createComp"](name.c_str()));
+			//comp_name = python::extract<std::string>(cnoid::pythonMainNamespace()["createComp"](name.c_str()));
+#endif
 			moduleNameProperty = name;
 		}
-		catch(const python::error_already_set&)
+		catch (const py::error_already_set&e)
 		{
+#ifdef CNOID_USE_PYBIND11
+			MessageView::instance()->putln(MessageView::ERROR,
+				format(_("%1%")) % e.what());
+#else
 			PyErr_Print();
+#endif
 		}
 		catch (...)
 		{
@@ -223,7 +266,7 @@ bool PyRTCItem::restore(const Archive& archive)
 	if(archive.read("executionContext", symbol)){
 		execContextType.select(symbol);
 	}
-    	return ControllerItem::restore(archive);
+    return ControllerItem::restore(archive);
 }
 
 
@@ -237,11 +280,22 @@ bool PyRTCItem::initialize(ControllerItemIO* io)
 			//controlLink *c = &m_crl;
 			//cnoid::pythonMainNamespace()["ControlLinkObj"] = boost::ref(c);
 			Body *b = io->body();
-			python::extract<std::string>(cnoid::pythonMainNamespace()["setBody"](boost::ref(b), comp_name.c_str()));
+#ifdef CNOID_USE_PYBIND11;
+			getGlobalNamespace()["setBody"](b, comp_name.c_str());
+#else
+			python::extract<std::string>(cnoid::getGlobalNamespace()["setBody"](boost::ref(b), comp_name.c_str()));
+			//python::extract<std::string>(cnoid::pythonMainNamespace()["setBody"](boost::ref(b), comp_name.c_str()));
+#endif
+			
 		}
-		catch(const python::error_already_set&)
+		catch (const py::error_already_set&e)
 		{
+#ifdef CNOID_USE_PYBIND11
+			MessageView::instance()->putln(MessageView::ERROR,
+					format(_("%1%")) % e.what());
+#else
 			PyErr_Print();
+#endif
 		}
 		catch (...)
 		{
@@ -266,11 +320,22 @@ bool PyRTCItem::start()
 		PyGILock lock;
 		try
 		{
-			python::extract<std::string>(cnoid::pythonMainNamespace()["startSimulation"](comp_name,execContextType.which()));
+#ifdef CNOID_USE_PYBIND11
+			getGlobalNamespace()["startSimulation"](comp_name, execContextType.which());
+#else
+			python::extract<std::string>(cnoid::getGlobalNamespace()["startSimulation"](comp_name, execContextType.which()));
+			//python::extract<std::string>(cnoid::pythonMainNamespace()["startSimulation"](comp_name,execContextType.which()));
+#endif
+			
 		}
-		catch(const python::error_already_set&)
+		catch (const py::error_already_set&e)
 		{
+#ifdef CNOID_USE_PYBIND11
+			MessageView::instance()->putln(MessageView::ERROR,
+				format(_("%1%")) % e.what());
+#else
 			PyErr_Print();
+#endif
 		}
 		catch (...)
 		{
@@ -297,9 +362,10 @@ void PyRTCItem::input()
 		PyGILock lock;
 		try
 		{
-			cnoid::pythonMainNamespace()["inputFromSimulator"](comp_name);
+			cnoid::getGlobalNamespace()["inputFromSimulator"](comp_name);
+			//cnoid::pythonMainNamespace()["inputFromSimulator"](comp_name);
 		}
-		catch(const python::error_already_set&)
+		catch (const py::error_already_set&e)
 		{
 			PyErr_Print();
 		}
@@ -319,11 +385,22 @@ bool PyRTCItem::control()
 		PyGILock lock;
 		try
 		{
-			python::extract<std::string>(cnoid::pythonMainNamespace()["tickEC"](comp_name,execContextType.which()));
+#ifdef CNOID_USE_PYBIND11
+			getGlobalNamespace()["tickEC"](comp_name, execContextType.which());
+#else
+			python::extract<std::string>(cnoid::getGlobalNamespace()["tickEC"](comp_name, execContextType.which()));
+			//python::extract<std::string>(cnoid::pythonMainNamespace()["tickEC"](comp_name,execContextType.which()));
+#endif
+			
 		}
-		catch(const python::error_already_set&)
+		catch (const py::error_already_set&e)
 		{
+#ifdef CNOID_USE_PYBIND11
+			MessageView::instance()->putln(MessageView::ERROR,
+				format(_("%1%")) % e.what());
+#else
 			PyErr_Print();
+#endif
 		}
 		catch (...)
 		{
@@ -344,9 +421,10 @@ void PyRTCItem::output()
 		PyGILock lock;
 		try
 		{
-			cnoid::pythonMainNamespace()["outputToSimulator"](comp_name);
+			cnoid::getGlobalNamespace()["outputToSimulator"](comp_name);
+			//cnoid::pythonMainNamespace()["outputToSimulator"](comp_name);
 		}
-		catch(const python::error_already_set&)
+		catch (const py::error_already_set&e)
 		{
 			PyErr_Print();
 		}
@@ -365,11 +443,22 @@ void PyRTCItem::stop()
 		PyGILock lock;
 		try
 		{
-			python::extract<std::string>(cnoid::pythonMainNamespace()["stopSimulation"](comp_name,execContextType.which()));
+#ifdef CNOID_USE_PYBIND11
+			getGlobalNamespace()["stopSimulation"](comp_name, execContextType.which());
+#else
+			python::extract<std::string>(cnoid::getGlobalNamespace()["stopSimulation"](comp_name, execContextType.which()));
+			//python::extract<std::string>(cnoid::pythonMainNamespace()["stopSimulation"](comp_name,execContextType.which()));
+#endif
+			
 		}
-		catch(const python::error_already_set&)
+		catch (const py::error_already_set&e)
 		{
+#ifdef CNOID_USE_PYBIND11
+			MessageView::instance()->putln(MessageView::ERROR,
+				format(_("%1%")) % e.what());
+#else
 			PyErr_Print();
+#endif
 		}
 		catch (...)
 		{

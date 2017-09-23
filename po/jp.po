@@ -1,0 +1,54 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenRTMPythonPlugin\n"
+"POT-Creation-Date: 2017-09-23 02:38+0900\n"
+"PO-Revision-Date: 2017-09-23 02:40+0900\n"
+"Last-Translator: \n"
+"Language-Team: AIST <n-miyamoto@aist.go.jp>\n"
+"Language: Japanese\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;N_;putProperty;filter\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../OpenRTMPythonPlugin.cpp:213 ../OpenRTMPythonPlugin.cpp:235
+#: ../OpenRTMPythonPlugin.cpp:264 ../PyRTCItem.cpp:220 ../PyRTCItem.cpp:294
+#: ../PyRTCItem.cpp:334 ../PyRTCItem.cpp:399 ../PyRTCItem.cpp:457
+msgid "%1%"
+msgstr "%1%"
+
+#: ../PyRTCItem.cpp:96
+msgid "RTC directory"
+msgstr "RTCディレクトリ"
+
+#: ../PyRTCItem.cpp:97
+msgid "Project directory"
+msgstr "プロジェクトディレクトリ"
+
+#: ../PyRTCItem.cpp:100
+msgid "PeriodicExecutionContext"
+msgstr "PeriodicExecutionContext"
+
+#: ../PyRTCItem.cpp:101
+msgid "ChoreonoidExecutionContext"
+msgstr "ChoreonoidExecutionContext"
+
+#: ../PyRTCItem.cpp:127
+msgid "PyRTCItem"
+msgstr "PyRTCアイテム"
+
+#: ../PyRTCItem.cpp:151
+msgid "RTC module"
+msgstr "RTCモジュール"
+
+#: ../PyRTCItem.cpp:159
+msgid "Execution context"
+msgstr "実行コンテキスト"
+
+#: ../PyRTCItem.cpp:163
+msgid "Relative path base"
+msgstr "相対パスベース"

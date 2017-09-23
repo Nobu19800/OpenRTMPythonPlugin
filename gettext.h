@@ -8,7 +8,7 @@
 #ifdef CNOID_GETTEXT_DOMAIN_NAME
 #undef CNOID_GETTEXT_DOMAIN_NAME
 #endif
-#define CNOID_GETTEXT_DOMAIN_NAME "CnoidOpenRTMPYTHONPlugin-1.6"
+#define CNOID_GETTEXT_DOMAIN_NAME "CnoidOpenRTMPythonPlugin-1.6"
 
 #ifdef _
 #undef _

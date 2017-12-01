@@ -45,3 +45,140 @@ msgstr "実行コンテキスト"
 #: PyRTCItem.cpp:164
 msgid "Relative path base"
 msgstr "相対パスベース"
+
+
+msgid "Port Name"
+msgstr "ポート名"
+
+msgid "Port Type"
+msgstr "ポート"
+
+msgid "Data Type"
+msgstr "データ型"
+
+msgid "Create"
+msgstr "作成"
+
+
+msgid "Edit DataPort Dialog"
+msgstr "データポート編集ダイアログ"
+
+msgid "Interface Name"
+msgstr "インターフェース名"
+
+msgid "Direction"
+msgstr "方向"
+
+msgid "IDL File"
+msgstr "IDLファイル"
+
+msgid "Interface type"
+msgstr "インターフェース型"
+
+msgid "IDL Path"
+msgstr "IDLパス"
+
+msgid "Edit ServicePort Dialog"
+msgstr "サービスポート編集ダイアログ"
+
+msgid "DataPort"
+msgstr "データポート"
+
+msgid "DataPort Variable Name"
+msgstr "データポート変数名"
+
+msgid "Configuration Parameter"
+msgstr "コンフィギュレーションパラメータ"
+
+msgid "Configuration Parameter Variable Name"
+msgstr "コンフィギュレーションパラメータ変数名"
+
+msgid "ServicePort"
+msgstr "サービスポート"
+
+msgid "ServicePort Variable Name"
+msgstr "サービスポート変数名"
+
+msgid "Global"
+msgstr "グローバル"
+
+msgid "Update"
+msgstr "更新"
+
+
+msgid "Parameter Name"
+msgstr "パラメータ名"
+
+msgid "Parameter Type"
+msgstr "データ型"
+
+msgid "Default Value"
+msgstr "デフォルト値"
+
+msgid "Constraints"
+msgstr "制約条件"
+
+
+msgid "Creation Faild"
+msgstr "作成失敗"
+
+msgid "Please Input Name"
+msgstr "名前が入力されていません"
+
+
+msgid "Please Input Default Value"
+msgstr "デフォルト値が入力されていません"
+
+
+msgid "Open"
+msgstr "開く"
+
+msgid "Please Input Interface Name"
+msgstr "インターフェース名が入力されていません"
+
+msgid "Please Input IDL File Name"
+msgstr "IDLファイル名が入力されていません"
+
+msgid "Edit Configuration Parameter Dialog"
+msgstr "コンフィギュレーションパラメータ編集ダイアログ"
+
+msgid "Name"
+msgstr "名前"
+
+msgid "Variable Name"
+msgstr "変数名"
+
+msgid "Setting"
+msgstr "設定"
+
+msgid "Execution Context"
+msgstr "実行コンテキスト"
+
+msgid "Activate"
+msgstr "アクティブ"
+
+msgid "Deactivate"
+msgstr "非アクティブ"
+
+msgid "Reset"
+msgstr "リセット"
+
+
+msgid "Variable Name(Data)"
+msgstr "変数名(データ)"
+
+msgid "Variable Name(Port)"
+msgstr "変数名(ポート)"
+
+msgid "Function List"
+msgstr "関数一覧"
+
+msgid "Function"
+msgstr "関数"
+
+
+msgid "run(new Process)"
+msgstr "実行(別プロセス)"
+
+msgid "run(rtcd)"
+msgstr "実行(rtcd)"

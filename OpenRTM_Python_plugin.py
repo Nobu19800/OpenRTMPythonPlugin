@@ -8,6 +8,7 @@ import RTC
 import OpenRTM_aist
 import os
 import importlib
+import cnoid.EditRTC
 
 from cnoid.Body import *
 
@@ -16,6 +17,33 @@ try:
 except:
   pass
 
+
+def createEditComp(modulePath):
+  try:
+    modulePath = modulePath.encode('utf-8')
+  except:
+    pass
+  mgr = OpenRTM_aist.Manager.instance()
+  comp = mgr.createComponent("EditRTC"+"?execution_contexts=PeriodicExecutionContext,OpenHRPExecutionContext")
+  if comp:
+    comp.setModule(modulePath)
+    return comp.getInstanceName()
+  else:
+    return ""
+
+  
+
+def updateEditComp(rtcname, modulePath):
+
+  try:
+    rtcname = rtcname.encode('utf-8')
+  except:
+    pass
+  mgr = OpenRTM_aist.Manager.instance()
+  comp = mgr.getComponent(rtcname)
+  if comp and hasattr(comp, "setModule"):
+
+    comp.setModule(modulePath)
 
 def createComp(filepath):
   
@@ -64,6 +92,31 @@ def exitComp(rtcname):
     mgr.cleanupComponents()
 
 
+def addDataPort(rtcname, portname, porttype, datatype):
+  
+
+  try:
+    rtcname = rtcname.encode('utf-8')
+  except:
+    pass
+  try:
+    portname = portname.encode('utf-8')
+  except:
+    pass
+  try:
+    porttype = porttype.encode('utf-8')
+  except:
+    pass
+  try:
+    datatype = datatype.encode('utf-8')
+  except:
+    pass
+  mgr = OpenRTM_aist.Manager.instance()
+  comp = mgr.getComponent(rtcname)
+  if comp and hasattr(comp, "setDataPort"):
+    comp.setDataPort(portname, porttype, datatype)
+
+
 def getEC(comp, ecnum):
   if comp:
     if ecnum < 1000:
@@ -108,6 +161,39 @@ def deactivateComp(rtcname, ecnum):
   ec = getEC(comp, ecnum)
   if ec:
     ec.deactivate_component(comp.getObjRef())
+
+
+def resetComp(rtcname, ecnum):
+  try:
+    rtcname = rtcname.encode('utf-8')
+  except:
+    pass
+  mgr = OpenRTM_aist.Manager.instance()
+  comp = mgr.getComponent(rtcname)
+  ec = getEC(comp, ecnum)
+  if ec:
+    ec.reset_component(comp.getObjRef())
+
+
+def getStatus(rtcname, ecnum):
+  try:
+    rtcname = rtcname.encode('utf-8')
+  except:
+    pass
+  mgr = OpenRTM_aist.Manager.instance()
+  comp = mgr.getComponent(rtcname)
+  ec = getEC(comp, ecnum)
+  if ec:
+    status = ec.get_component_state(comp.getObjRef())
+    if status == RTC.CREATED_STATE:
+      return "CREATED"
+    elif status == RTC.INACTIVE_STATE:
+      return "INACTIVATE"
+    elif status == RTC.ACTIVE_STATE:
+      return "ACTIVATE"
+    elif status == RTC.ERROR_STATE:
+      return "ERROR"
+  return "CREATED"
 
 
 def startSimulation(rtcname, ecnum):
@@ -177,6 +263,7 @@ def tickEC(rtcname, ecnum):
 def runManager():
   mgr = OpenRTM_aist.Manager.init(["test","-o","manager.shutdown_on_nortcs:NO","-o","manager.shutdown_auto:NO", "-o", "naming.formats:%n.rtc"])
   mgr.activateManager()
+  cnoid.EditRTC.EditRTCInit(mgr)
   mgr.runManager(True)
 
 

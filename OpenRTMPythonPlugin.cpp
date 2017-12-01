@@ -18,6 +18,9 @@ namespace py = pybind11;
 namespace py = boost::python;
 #endif
 
+
+//#include <src/OpenRTMPlugin/RTSNameServerView.h>
+
 namespace cnoid {
 # if defined _WIN32 || defined __CYGWIN__
 	__declspec(dllimport) python::object getGlobalNamespace();
@@ -35,6 +38,9 @@ namespace cnoid {
 
 #include "exportdecl.h"
 #include "PyRTCItem.h"
+#include "RTCEditorItem.h"
+#include "ComponentListItem.h"
+
 #include "gettext.h"
 
 
@@ -172,7 +178,12 @@ Plugin("OpenRTMPython")
 {
 	require("Body");
 	require("Python");
+	require("Corba");
+	require("OpenRTM");
 	PyRTCItem::initialize(this);
+	RTCEditorItem::initialize(this);
+	ComponentListItem::initialize(this);
+	
 }
 
 OpenRTMPythonPlugin::~OpenRTMPythonPlugin()
@@ -212,7 +223,7 @@ bool OpenRTMPythonPlugin::initialize()
 		catch(const python::error_already_set&e)
 		{
 #ifdef CNOID_USE_PYBIND11
-			MessageView::instance()->putln(MessageView::ERROR,
+			MessageView::instance()->putln(0,
 				format(_("%1%")) % e.what());
 #else
 			PyErr_Print();
@@ -234,7 +245,7 @@ bool OpenRTMPythonPlugin::initialize()
 		catch(const python::error_already_set&e)
 		{
 #ifdef CNOID_USE_PYBIND11
-			MessageView::instance()->putln(MessageView::ERROR,
+			MessageView::instance()->putln(0,
 				format(_("%1%")) % e.what());
 #else
 			PyErr_Print();
@@ -263,7 +274,7 @@ bool OpenRTMPythonPlugin::finalize()
 		catch(const python::error_already_set&e)
 		{
 #ifdef CNOID_USE_PYBIND11
-			MessageView::instance()->putln(MessageView::ERROR,
+			MessageView::instance()->putln(0,
 				format(_("%1%")) % e.what());
 #else
 			PyErr_Print();

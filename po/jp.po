@@ -52,3 +52,38 @@ msgstr "実行コンテキスト"
 #: ../PyRTCItem.cpp:163
 msgid "Relative path base"
 msgstr "相対パスベース"
+
+
+msgid "Port Name"
+msgstr "ポート名"
+
+msgid "Port Type"
+msgstr "ポート"
+
+msgid "Data Type"
+msgstr "データ型"
+
+msgid "Create"
+msgstr "作成"
+
+
+msgid "Edit DataPort Dialog"
+msgstr "データポート編集ダイアログ"
+
+msgid "Interface Name"
+msgstr "インターフェース名"
+
+msgid "Direction"
+msgstr "方向"
+
+msgid "IDL File"
+msgstr "IDLファイル"
+
+msgid "Interface type"
+msgstr "インターフェース型"
+
+msgid "IDL Path"
+msgstr "IDLパス"
+
+msgid "Edit ServicePort Dialog"
+msgstr "データポート編集ダイアログ"

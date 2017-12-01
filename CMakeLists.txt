@@ -9,12 +9,63 @@ make_gettext_mofiles(${target} mofiles)
 
 set(srcdir ${PROJECT_SOURCE_DIR}/sample/OpenRTMPythonPlugin)
 #add_library(${target} SHARED ${srcdir}/OpenRTMPythonPlugin.cpp ${srcdir}/PyRTCItem.cpp ${srcdir}/PyRTCItem.h)
-#target_link_libraries(${target} CnoidBase CnoidPython CnoidBodyPlugin CnoidPythonPlugin)
+#target_link_libraries(${target} CnoidBase CnoidPython CnoidBodyPlugin CnoidPythonPlugin CnoidOpenRTMPlugin)
+
+include_directories(${OPENRTM_INCLUDE_DIRS})
+link_directories(${OPENRTM_LIBRARY_DIRS})
+message(STATUS ${OPENRTM_LIBRARY_DIRS})
+if(WIN32)
+  add_definitions(-D__WIN32__ -D__x86__ -D__NT__ -D__OSVERSION__=4 -D_CRT_SECURE_NO_DEPRECATE -D_WIN32_WINNT=0x0500 -DRTC_CORBA_CXXMAPPING11)
+endif()
+
+set(CMAKE_AUTOMOC ON)
+qt5_wrap_cpp(moc_mainwindow.cpp mainwindow.h)
+qt5_wrap_cpp(moc_Editor.cpp Editor.h)
+qt5_wrap_cpp(moc_BaseTab.cpp BaseTab.h)
+qt5_wrap_cpp(moc_RTCViewWidget.cpp RTCViewWidget.h)
 
 add_cnoid_plugin(${target} SHARED
   OpenRTMPythonPlugin.cpp
   PyRTCItem.cpp
   PyRTCItem.h
+  RTCEditorItem.cpp
+  RTCEditorItem.h
+  ActivityCode.cpp
+  ActivityCode.h
+  ActivityTab.cpp
+  ActivityTab.h
+  addConfigurationTab.cpp
+  addConfigurationTab.h
+  addDataPortTab.cpp
+  addDataPortTab.h
+  addServicePortTab.cpp
+  addServicePortTab.h
+  BaseTab.cpp
+  BaseTab.h
+  ConfigurationTable.cpp
+  ConfigurationTable.h
+  ControlCompWidget.cpp
+  ControlCompWidget.h
+  CreateDataObject.cpp
+  CreateDataObject.h
+  DataPortTable.cpp
+  DataPortTable.h
+  PythonEditor.cpp
+  PythonEditor.h
+  highlighter.cpp
+  highlighter.h
+  RTC_MainWindow.cpp
+  RTC_MainWindow.h
+  RTC_XML.cpp
+  RTC_XML.h
+  RTCViewWidget.cpp
+  RTCViewWidget.h
+  ServicePortTable.cpp
+  ServicePortTable.h
+  ComponentListItem.cpp
+  ComponentListItem.h
+  ComponentList.cpp
+  ComponentList.h
   ${mofiles}
   ${RC_SRCS}
   )
@@ -23,8 +74,11 @@ if(WIN32)
 #	set_target_properties(${target} PROPERTIES COMPILE_DEFINITIONS "BOOST_ASIO_DISABLE_STD_ARRAY")
 endif(WIN32)
 
+
+
+
 apply_common_setting_for_plugin(${target})
-target_link_libraries(${target} CnoidBase CnoidBodyPlugin CnoidPythonPlugin)
+target_link_libraries(${target} CnoidBase CnoidBodyPlugin CnoidPythonPlugin CnoidCorbaPlugin CnoidOpenRTM CnoidOpenRTMPlugin)
 
 
 
@@ -32,6 +86,9 @@ target_link_libraries(${target} CnoidBase CnoidBodyPlugin CnoidPythonPlugin)
 
 configure_file(OpenRTM_Python_plugin.py ${PROJECT_BINARY_DIR}/${CNOID_PLUGIN_SUBDIR}/python/cnoid/OpenRTM_Python_plugin.py COPYONLY)
 install(FILES OpenRTM_Python_plugin.py DESTINATION ${CNOID_PLUGIN_SUBDIR}/python/cnoid/)
+
+configure_file(EditRTC.py ${PROJECT_BINARY_DIR}/${CNOID_PLUGIN_SUBDIR}/python/cnoid/EditRTC.py COPYONLY)
+install(FILES EditRTC.py DESTINATION ${CNOID_PLUGIN_SUBDIR}/python/cnoid/)
 
 
 

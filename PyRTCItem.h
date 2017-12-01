@@ -1,3 +1,6 @@
+#ifndef PYRTCITEM_H
+#define PYRTCITEM_H
+
 #include <cnoid/Item>
 #include <cnoid/ItemManager>
 
@@ -25,19 +28,10 @@
 namespace rtmiddleware {
 
 
-	
-
-	
-	class CNOID_EXPORT PyRTCItem : public cnoid::ControllerItem
+	class CNOID_EXPORT PyRTCItemBase : public cnoid::ControllerItem
 	{
 	public:
-		PyRTCItem();
-		PyRTCItem(const PyRTCItem& org);
-		virtual ~PyRTCItem();
-		static void initialize(cnoid::ExtensionManager* ext);
-		void setExecContextType(int which);
-		void createComp(std::string name);
-		void setRelativePathBaseType(int which);
+		PyRTCItemBase();
 
 		virtual bool start();
 		virtual double timeStep() const;
@@ -50,20 +44,42 @@ namespace rtmiddleware {
 			RTC_DIRECTORY,
 			PROJECT_DIRECTORY,
 			N_RELATIVE_PATH_BASE_TYPES
-		    };
-	    	enum ExecContextType {
-	        	PERIODIC_EXECUTION_CONTEXT,
-	        	CHOREONOID_EXECUTION_CONTEXT,
-	        	N_EXEC_CONTEXT_TYPES
-	    	};
-	private:
-		//controlLink m_crl;
+		};
+		enum ExecContextType {
+			PERIODIC_EXECUTION_CONTEXT,
+			CHOREONOID_EXECUTION_CONTEXT,
+			N_EXEC_CONTEXT_TYPES
+		};
+
+	protected:
+		virtual bool initialize(cnoid::ControllerItemIO* io) override;
 		cnoid::BodyItem* body_item;
 		std::string comp_name;
+
 		std::string moduleNameProperty;
-		
+
 		cnoid::Selection relativePathBaseType;
 		cnoid::Selection execContextType;
+	};
+	
+	class CNOID_EXPORT PyRTCItem : public PyRTCItemBase
+	{
+	public:
+		PyRTCItem();
+		PyRTCItem(const PyRTCItem& org);
+		virtual ~PyRTCItem();
+		static void initialize(cnoid::ExtensionManager* ext);
+		void setExecContextType(int which);
+		void createComp(std::string name);
+		void setRelativePathBaseType(int which);
+
+		
+
+		
+	private:
+		//controlLink m_crl;
+		
+		
 		
 
 
@@ -81,7 +97,7 @@ namespace rtmiddleware {
 		
 
 
-		virtual bool initialize(cnoid::ControllerItemIO* io) override;
+		
 	    virtual void onPositionChanged();
 		
 
@@ -89,3 +105,6 @@ namespace rtmiddleware {
 	};
 
 };
+
+
+#endif

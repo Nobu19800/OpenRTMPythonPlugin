@@ -84,14 +84,17 @@ namespace cnoid {
 
 
 
-
-
-
-PyRTCItem::PyRTCItem():
-relativePathBaseType(N_RELATIVE_PATH_BASE_TYPES, CNOID_GETTEXT_DOMAIN_NAME),
-execContextType(N_EXEC_CONTEXT_TYPES, CNOID_GETTEXT_DOMAIN_NAME)
+PyRTCItemBase::PyRTCItemBase() :
+	relativePathBaseType(N_RELATIVE_PATH_BASE_TYPES, CNOID_GETTEXT_DOMAIN_NAME),
+	execContextType(N_EXEC_CONTEXT_TYPES, CNOID_GETTEXT_DOMAIN_NAME)
 {
 	body_item = NULL;
+}
+
+
+PyRTCItem::PyRTCItem()
+{
+	
 
 
 	relativePathBaseType.setSymbol(RTC_DIRECTORY, N_("RTC directory"));
@@ -270,7 +273,7 @@ bool PyRTCItem::restore(const Archive& archive)
 }
 
 
-bool PyRTCItem::initialize(ControllerItemIO* io)
+bool PyRTCItemBase::initialize(ControllerItemIO* io)
 {
 	
 	{
@@ -314,7 +317,7 @@ void PyRTCItem::onPositionChanged()
 }
 
 
-bool PyRTCItem::start()
+bool PyRTCItemBase::start()
 {
 	if(!comp_name.empty()){
 		PyGILock lock;
@@ -350,13 +353,13 @@ bool PyRTCItem::start()
 };
 
 
-double PyRTCItem::timeStep() const
+double PyRTCItemBase::timeStep() const
 {
 	return 0;
 };
 
 
-void PyRTCItem::input()
+void PyRTCItemBase::input()
 {
 	{
 		PyGILock lock;
@@ -379,7 +382,7 @@ void PyRTCItem::input()
 
 
 
-bool PyRTCItem::control()
+bool PyRTCItemBase::control()
 {
 	if(!comp_name.empty()){
 		PyGILock lock;
@@ -415,7 +418,7 @@ bool PyRTCItem::control()
 };
 
 
-void PyRTCItem::output()
+void PyRTCItemBase::output()
 {
 	{
 		PyGILock lock;
@@ -437,7 +440,7 @@ void PyRTCItem::output()
 };
 
 
-void PyRTCItem::stop()
+void PyRTCItemBase::stop()
 {
 	if(!comp_name.empty()){
 		PyGILock lock;

@@ -1,0 +1,396 @@
+﻿format: ChoreonoidBody
+formatVersion: 1.0
+angleUnit: degree
+name: QuadrupedRobot
+
+
+links:
+-
+  name: BODY
+  translation: [ 0, 0, 0.115 ]
+  jointType: free
+  centerOfMass: [ 0, 0, 0 ]
+  mass: 0.3
+  inertia: [
+    0.1, 0,   0,
+    0,   0.1, 0,
+    0,   0,   0.5 ]
+  elements:
+    Shape:
+      geometry:
+        type: Box
+        size: [ 0.07, 0.07, 0.005 ]
+      appearance: &BodyAppearance
+        material:
+          diffuseColor: [ 0.8, 0.4, 0.8 ]
+          specularColor: [ 0.2, 0.8, 0.2 ]
+          shinines: 0.6
+-
+  name: LEG00
+  parent: BODY
+  translation: [ 0.035, 0.035, 0 ]
+  jointType: revolute
+  jointAxis: Z
+  jointRange: unlimited
+  jointId: 0
+  elements:
+    RigidBody:
+      rotation: [ 1, 0, 0, 90 ]
+      centerOfMass: [ 0.0, 0, 0.00 ]
+      mass: 0.2
+      inertia: [
+        0.1, 0,   0,
+        0,   0.1, 0,
+        0,   0,   0.5 ]
+      elements:
+        Shape:
+          geometry:
+            type: Cylinder
+            height: 0.025
+            radius: 0.02
+          appearance: &LEGO0Appearance
+            material:
+              diffuseColor: [ 0, 0.6, 0.0 ]
+              specularColor: [ 0.2, 0.2, 0.2 ]
+              shinines: 0.6
+
+
+-
+  name: LEG01
+  parent: LEG00
+  translation: [ 0, 0.02, 0 ]
+  jointType: revolute
+  jointAxis: -X
+  jointRange: unlimited
+  jointId: 1
+
+  elements:
+    RigidBody:
+      translation: [ 0, 0.0275, 0 ]
+      centerOfMass: [ 0, 0.0, 0 ]
+      mass: 0.1
+      inertia: [
+       0.1, 0,   0,
+       0,   0.1, 0,
+       0,   0,   0.5 ]
+      elements:
+       Shape:
+         geometry:
+           type: Box
+           size: [ 0.005, 0.055, 0.01 ]
+         appearance: &LEGO1Appearance
+           material:
+             diffuseColor: [ 0.6, 0.6, 0 ]
+             specularColor: [ 0.2, 0.8, 0.2 ]
+             shinines: 0.6
+
+
+
+-
+  name: LEG02
+  parent: LEG01
+  translation: [ 0, 0.055, 0.0 ]
+  jointType: revolute
+  jointAxis: -X
+  jointRange: unlimited
+  jointId: 2
+
+  elements:
+    RigidBody:
+      translation: [ 0, 0, -0.04 ]
+      centerOfMass: [ 0, 0, 0.0 ]
+      mass: 0.1
+      inertia: [
+        0.1, 0,   0,
+        0,   0.1, 0,
+        0,   0,   0.01 ]
+      elements:
+       Shape:
+         geometry:
+           type: Box
+           size: [ 0.005, 0.005, 0.08 ]
+         appearance: &LEGO2Appearance
+           material:
+             diffuseColor: [ 0, 0.6, 0 ]
+             specularColor: [ 0.2, 0.8, 0.2 ]
+             shinines: 0.6
+
+
+
+
+
+-
+  name: LEG10
+  parent: BODY
+  translation: [ -0.035, 0.035, 0 ]
+  jointType: revolute
+  jointAxis: Z
+  jointRange: unlimited
+  jointId: 3
+  elements:
+    RigidBody:
+      rotation: [ 1, 0, 0, 90 ]
+      centerOfMass: [ 0.0, 0, 0.00 ]
+      mass: 0.2
+      inertia: [
+        0.1, 0,   0,
+        0,   0.1, 0,
+        0,   0,   0.5 ]
+      elements:
+        Shape:
+          geometry:
+            type: Cylinder
+            height: 0.025
+            radius: 0.02
+          appearance: &LEG10Appearance
+            material:
+              diffuseColor: [ 0, 0.6, 0 ]
+              specularColor: [ 0.2, 0.8, 0.2 ]
+              shinines: 0.6
+
+
+-
+  name: LEG11
+  parent: LEG10
+  translation: [ 0, 0.02, 0 ]
+  jointType: revolute
+  jointAxis: -X
+  jointRange: unlimited
+  jointId: 4
+
+  elements:
+    RigidBody:
+      translation: [ 0, 0.0275, 0 ]
+      centerOfMass: [ 0, 0.0, 0 ]
+      mass: 0.1
+      inertia: [
+       0.1, 0,   0,
+       0,   0.1, 0,
+       0,   0,   0.5 ]
+      elements:
+       Shape:
+         geometry:
+           type: Box
+           size: [ 0.005, 0.055, 0.01 ]
+         appearance: &LEG11Appearance
+           material:
+             diffuseColor: [ 0.6, 0.6, 0 ]
+             specularColor: [ 0.2, 0.8, 0.2 ]
+             shinines: 0.6
+
+
+
+-
+  name: LEG12
+  parent: LEG11
+  translation: [ 0, 0.055, 0.0 ]
+  jointType: revolute
+  jointAxis: -X
+  jointRange: unlimited
+  jointId: 5
+
+  elements:
+    RigidBody:
+      translation: [ 0, 0, -0.04 ]
+      centerOfMass: [ 0, 0, 0.0 ]
+      mass: 0.1
+      inertia: [
+        0.1, 0,   0,
+        0,   0.1, 0,
+        0,   0,   0.01 ]
+      elements:
+       Shape:
+         geometry:
+           type: Box
+           size: [ 0.005, 0.005, 0.08 ]
+         appearance: &LEG12Appearance
+           material:
+             diffuseColor: [ 0, 0.6, 0 ]
+             specularColor: [ 0.2, 0.8, 0.2 ]
+             shinines: 0.6
+
+
+
+-
+  name: LEG20
+  parent: BODY
+  translation: [ -0.035, -0.035, 0 ]
+  jointType: revolute
+  jointAxis: Z
+  jointRange: unlimited
+  jointId: 6
+  elements:
+    RigidBody:
+      rotation: [ 1, 0, 0, 90 ]
+      centerOfMass: [ 0.0, 0, 0.00 ]
+      mass: 0.2
+      inertia: [
+        0.1, 0,   0,
+        0,   0.1, 0,
+        0,   0,   0.5 ]
+      elements:
+        Shape:
+          geometry:
+            type: Cylinder
+            height: 0.025
+            radius: 0.02
+          appearance: &LEG20Appearance
+            material:
+              diffuseColor: [ 0.6, 0.6, 0 ]
+              specularColor: [ 0.2, 0.8, 0.2 ]
+              shinines: 0.6
+
+
+-
+  name: LEG21
+  parent: LEG20
+  translation: [ 0, -0.02, 0 ]
+  jointType: revolute
+  jointAxis: X
+  jointRange: unlimited
+  jointId: 7
+
+  elements:
+    RigidBody:
+      translation: [ 0, -0.0275, 0 ]
+      centerOfMass: [ 0, 0.0, 0 ]
+      mass: 0.1
+      inertia: [
+       0.1, 0,   0,
+       0,   0.1, 0,
+       0,   0,   0.5 ]
+      elements:
+       Shape:
+         geometry:
+           type: Box
+           size: [ 0.005, 0.055, 0.01 ]
+         appearance: &LEG21Appearance
+           material:
+             diffuseColor: [ 0.6, 0.6, 0 ]
+             specularColor: [ 0.2, 0.8, 0.2 ]
+             shinines: 0.6
+
+
+
+-
+  name: LEG22
+  parent: LEG21
+  translation: [ 0, -0.055, 0.0 ]
+  jointType: revolute
+  jointAxis: X
+  jointRange: unlimited
+  jointId: 8
+
+  elements:
+    RigidBody:
+      translation: [ 0, 0, -0.04 ]
+      centerOfMass: [ 0, 0, 0.0 ]
+      mass: 0.1
+      inertia: [
+        0.1, 0,   0,
+        0,   0.1, 0,
+        0,   0,   0.01 ]
+      elements:
+       Shape:
+         geometry:
+           type: Box
+           size: [ 0.005, 0.005, 0.08 ]
+         appearance: &LEG22Appearance
+           material:
+             diffuseColor: [ 0, 0.6, 0 ]
+             specularColor: [ 0.2, 0.8, 0.2 ]
+             shinines: 0.6
+
+
+
+
+
+-
+  name: LEG30
+  parent: BODY
+  translation: [ 0.035, -0.035, 0 ]
+  jointType: revolute
+  jointAxis: Z
+  jointRange: unlimited
+  jointId: 9
+  elements:
+    RigidBody:
+      rotation: [ 1, 0, 0, 90 ]
+      centerOfMass: [ 0.0, 0, 0.00 ]
+      mass: 0.2
+      inertia: [
+        0.1, 0,   0,
+        0,   0.1, 0,
+        0,   0,   0.5 ]
+      elements:
+        Shape:
+          geometry:
+            type: Cylinder
+            height: 0.025
+            radius: 0.02
+          appearance: &LEG30Appearance
+            material:
+              diffuseColor: [ 0, 0.6, 0 ]
+              specularColor: [ 0.2, 0.8, 0.2 ]
+              shinines: 0.6
+
+
+-
+  name: LEG31
+  parent: LEG30
+  translation: [ 0, -0.02, 0 ]
+  jointType: revolute
+  jointAxis: X
+  jointRange: unlimited
+  jointId: 10
+
+  elements:
+    RigidBody:
+      translation: [ 0, -0.0275, 0 ]
+      centerOfMass: [ 0, 0.0, 0 ]
+      mass: 0.1
+      inertia: [
+       0.1, 0,   0,
+       0,   0.1, 0,
+       0,   0,   0.5 ]
+      elements:
+       Shape:
+         geometry:
+           type: Box
+           size: [ 0.005, 0.055, 0.01 ]
+         appearance: &LEG31Appearance
+           material:
+             diffuseColor: [ 0.6, 0.6, 0 ]
+             specularColor: [ 0.2, 0.8, 0.2 ]
+             shinines: 0.6
+
+
+
+-
+  name: LEG32
+  parent: LEG31
+  translation: [ 0, -0.055, 0.0 ]
+  jointType: revolute
+  jointAxis: X
+  jointRange: unlimited
+  jointId: 11
+
+  elements:
+    RigidBody:
+      translation: [ 0, 0, -0.04 ]
+      centerOfMass: [ 0, 0, 0.0 ]
+      mass: 0.1
+      inertia: [
+        0.1, 0,   0,
+        0,   0.1, 0,
+        0,   0,   0.01 ]
+      elements:
+       Shape:
+         geometry:
+           type: Box
+           size: [ 0.005, 0.005, 0.08 ]
+         appearance: &LEG32Appearance
+           material:
+             diffuseColor: [ 0, 0.6, 0 ]
+             specularColor: [ 0.2, 0.8, 0.2 ]
+             shinines: 0.6

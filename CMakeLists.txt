@@ -109,3 +109,11 @@ configure_file(samples/JoystickPySDL2/JoystickPySDL2.conf ${PROJECT_BINARY_DIR}/
 install(FILES samples/JoystickPySDL2/JoystickPySDL2.conf DESTINATION ${CNOID_PLUGIN_SUBDIR}/rtc_python/)
 
 
+configure_file(samples/QuadrupedRobot_Choreonoid/QuadrupedRobot_Choreonoid.py ${PROJECT_BINARY_DIR}/${CNOID_PLUGIN_SUBDIR}/rtc_python/QuadrupedRobot_Choreonoid.py COPYONLY)
+install(FILES samples/QuadrupedRobot_Choreonoid/QuadrupedRobot_Choreonoid.py DESTINATION ${CNOID_PLUGIN_SUBDIR}/rtc_python/)
+configure_file(samples/QuadrupedRobot_Choreonoid/QuadrupedRobot_Choreonoid.conf ${PROJECT_BINARY_DIR}/${CNOID_PLUGIN_SUBDIR}/rtc_python/QuadrupedRobot_Choreonoid.conf COPYONLY)
+install(FILES samples/QuadrupedRobot_Choreonoid/QuadrupedRobot_Choreonoid.conf DESTINATION ${CNOID_PLUGIN_SUBDIR}/rtc_python/)
+
+
+configure_file(model/QuadrupedRobot/QuadrupedRobot.yaml ${PROJECT_BINARY_DIR}/${CNOID_SHARE_SUBDIR}/model/QuadrupedRobot/QuadrupedRobot.yaml COPYONLY)
+install(FILES model/QuadrupedRobot/QuadrupedRobot.yaml DESTINATION ${CNOID_SHARE_SUBDIR}/model/)

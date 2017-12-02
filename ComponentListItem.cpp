@@ -81,7 +81,7 @@ ComponentListItem::ComponentListItem(const ComponentListItem& org)
 	setName(org.name());
 	if (_mwin == NULL)
 	{
-		MessageView::instance()->putln(0, "test");
+		
 		_area = new ScrollArea();
 		_mwin = new ComponentList();
 

@@ -36,7 +36,7 @@ QString Activity_toString(ActivityCode id)
 	}
 	else if (id == code_onAborting)
 	{
-		return "code_onAborting";
+		return "onAborting";
 	}
 	else if(id == code_onError)
 	{

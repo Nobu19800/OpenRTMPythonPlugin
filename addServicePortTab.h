@@ -1,4 +1,8 @@
-
+/*!
+ * @file  addServicePortTab.h
+ * @brief サービスポート設定タブ
+ *
+ */
 
 #ifndef ADDSERVICEPORTTAB_H
 #define ADDSERVICEPORTTAB_H
@@ -28,15 +32,34 @@ QT_END_NAMESPACE
 
 
 
-
+/**
+ * @class addDataPortTab
+ * @brief サービスポート設定タブ
+ */
 class addServicePortTab : public BaseTab
 {
     Q_OBJECT
 
 public:
+	/**
+	 * @brief コンストラクタ
+	 * @param comp コンポーネントプロファイルオブジェクト
+	 * @param viewWidget RTC表示ウィジェット
+	 * @param listWidget サービスポート一覧表示ウィジェット
+	 * @param parent 親ウィジェット
+	 */
 	addServicePortTab(RTC_XML::RTC_ProfileRTP *comp, RTCViewWidget *viewWidget, ServicePortTable *listWidget, QWidget *parent = 0);
-
+	/**
+	 * @brief サービスポート検索
+	 * @param name ポート名
+	 * @param ret サービスタポートプロファイルオブジェクト
+	 * @param return true：指定ポート名のサービスポートが存在した false:存在しなかった
+	 */
 	bool searchPort(QString name, RTC_XML::ServicePorts &ret);
+	/**
+	 * @brief サービスポート追加
+	 * @param profile サービスポートプロファイルオブジェクト
+	 */
 	void addPort(RTC_XML::ServicePorts profile);
 	
 

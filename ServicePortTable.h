@@ -1,4 +1,8 @@
-
+/*!
+ * @file  ServicePortTable.h
+ * @brief サービスポート一覧表示クラス
+ *
+ */
 
 #ifndef SERVICEPORTTABLE_H
 #define SERVICEPORTTABLE_H
@@ -25,10 +29,18 @@ class QVBoxLayout;
 QT_END_NAMESPACE
 
 
+/**
+ * @class ServicePortOperationDialog
+ * @brief サービスポート設定ダイアログ
+ */
 class ServicePortOperationDialog : public QDialog
 {
 	Q_OBJECT
 public:
+	/**
+	 * @brief コンストラクタ
+	 * @param parent 親ウィジェット
+	 */
 	ServicePortOperationDialog(QWidget *parent = 0);
 private:
 	QVBoxLayout *_mainLayout;
@@ -36,23 +48,45 @@ private:
 };
 
 
+/**
+ * @class ServicePortSettingButton
+ * @brief サービスポート設定ボタン
+ */
 class ServicePortSettingButton : QPushButton
 {
 	Q_OBJECT
 public:
+	/**
+	 * @brief コンストラクタ
+	 * @param name 表示名
+	 */
 	ServicePortSettingButton(QString name);
+protected Q_SLOTS:
+	/**
+	 * @brief ボタン押下時スロット
+	 */
 	void pushSlot();
 private:
 	ServicePortOperationDialog *_dialog;
 };
 
-
+/**
+ * @class ServicePortTable
+ * @brief サービスポート一覧表示ウィジェット
+ */
 class ServicePortTable : public QTableWidget
 {
 	Q_OBJECT
 
 public:
+	/**
+	 * @brief コンストラクタ
+	 */
 	ServicePortTable();
+	/**
+	 * @brief リスト更新
+	 * @param ports データポート一覧
+	 */
 	void list_update(QVector<RTC_XML::ServicePorts> ports);
 
 	//    void fileNew();

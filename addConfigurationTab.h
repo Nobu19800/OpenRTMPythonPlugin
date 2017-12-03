@@ -1,4 +1,8 @@
-
+/*!
+ * @file  addConfigurationTab.h
+ * @brief コンフィギュレーション設定タブ
+ *
+ */
 
 #ifndef ADDCONFIGURATIONTAB_H
 #define ADDCONFIGURATIONTAB_H
@@ -29,19 +33,36 @@ QT_END_NAMESPACE
 
 
 
-
+/**
+ * @class addConfigurationTab
+ * @brief コンフィギュレーション設定タブ
+ */
 class addConfigurationTab : public ConfigParamWidgetBase
 {
     Q_OBJECT
 
 public:
+	/**
+	 * @brief コンストラクタ
+	 * @param comp コンポーネントプロファイルオブジェクト
+	 * @param viewWidget RTC表示ウィジェット
+	 * @param listWidget コンフィグレーションパラメータ一覧表示ウィジェット
+	 * @param parent 親ウィジェット
+	 */
 	addConfigurationTab(RTC_XML::RTC_ProfileRTP *comp, RTCViewWidget *viewWidget, ConfigurationTable *listWidget, QWidget *parent = 0);
 
 	
 
 
 public Q_SLOTS:
+	/**
+	 * @brief コンフィギュレーションパラメータ追加
+	 * @param profile コンフィグレーションパラメータプロファイルオブジェクト
+	 */
 	void addConfiguration(RTC_XML::ConfigurationSet profile);
+	/**
+	 * @brief 作成ボタン押下時のスロット
+	 */
 	void createButtonSlot();
 //    void fileNew();
 

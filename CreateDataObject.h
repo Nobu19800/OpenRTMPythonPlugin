@@ -1,4 +1,8 @@
-
+/*!
+ * @file  CreateDataObject.h
+ * @brief ƒf[ƒ^Œ^ˆê——
+ *
+ */
 
 #ifndef CREATEDATAOBJECT_H
 #define CREATEDATAOBJECT_H

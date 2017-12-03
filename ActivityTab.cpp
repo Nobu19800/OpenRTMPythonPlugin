@@ -1,4 +1,8 @@
-
+/*!
+ * @file  ActivityTab.cpp
+ * @brief 各コールバック関数編集タブ
+ *
+ */
 
 #include <QAction>
 #include <QLayout>
@@ -32,7 +36,12 @@
 
 
 
-
+/**
+ * @brief コンストラクタ
+ * @param name アクティビティのID
+ * @param text テキスト
+ * @param parent 親ウィジェット
+ */
 ActivityTab::ActivityTab(ActivityCode name, QString text, QWidget *parent)
 	: BaseTab(parent)
 {
@@ -59,7 +68,12 @@ ActivityTab::ActivityTab(ActivityCode name, QString text, QWidget *parent)
 
 }
 
-
+/**
+ * @brief コンストラクタ
+ * @param name アクティビティ名
+ * @param text テキスト
+ * @param parent 親ウィジェット
+ */
 ActivityTab::ActivityTab(QString name, QString text, QWidget *parent)
 	: BaseTab(parent)
 {
@@ -87,11 +101,20 @@ ActivityTab::ActivityTab(QString name, QString text, QWidget *parent)
 
 }
 
+/**
+ * @brief テキスト取得
+ * @return テキスト
+ */
 QString ActivityTab::getText()
 {
 	return _editor->toPlainText();
 }
 
+
+/**
+ * @brief フォントサイズ設定
+ * @param s フォントサイズ
+ */
 void ActivityTab::setFontSize(int s)
 {
 	_editor->setFontSize(s);

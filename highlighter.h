@@ -1,3 +1,10 @@
+/*!
+ * @file  highlighter.h
+ * @brief エディタのハイライト機能クラス
+ *        Qtのサンプル(http://doc.qt.io/qt-5/qtwidgets-richtext-syntaxhighlighter-example.html)を一部変更
+ *
+ */
+
 #ifndef HIGHLIGHTER_H
 #define HIGHLIGHTER_H
 
@@ -9,33 +16,41 @@ class QTextDocument;
 QT_END_NAMESPACE
 
 
+/**
+ * @class Highlighter
+ * @brief エディタのハイライト機能クラス
+ */
 class Highlighter : public QSyntaxHighlighter
 {
     Q_OBJECT
 
 public:
-    Highlighter(QTextDocument *parent = 0);
+	/**
+	 * @brief コンストラクタ
+	 * @param parent 親ウィジェット
+	 */
+	Highlighter(QTextDocument *parent = 0);
 
 protected:
-    void highlightBlock(const QString &text) override;
+	void highlightBlock(const QString &text) override;
 
 private:
-    struct HighlightingRule
-    {
-        QRegExp pattern;
-        QTextCharFormat format;
-    };
-    QVector<HighlightingRule> highlightingRules;
+	struct HighlightingRule
+	{
+		QRegExp pattern;
+		QTextCharFormat format;
+	};
+	QVector<HighlightingRule> highlightingRules;
 
-    QRegExp commentStartExpression;
-    QRegExp commentEndExpression;
+	QRegExp commentStartExpression;
+	QRegExp commentEndExpression;
 
-    QTextCharFormat keywordFormat;
-    QTextCharFormat classFormat;
-    QTextCharFormat singleLineCommentFormat;
-    QTextCharFormat multiLineCommentFormat;
-    QTextCharFormat quotationFormat;
-    QTextCharFormat functionFormat;
+	QTextCharFormat keywordFormat;
+	QTextCharFormat classFormat;
+	QTextCharFormat singleLineCommentFormat;
+	QTextCharFormat multiLineCommentFormat;
+	QTextCharFormat quotationFormat;
+	QTextCharFormat functionFormat;
 };
 
 

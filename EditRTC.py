@@ -58,7 +58,12 @@ editrtc_spec = ["implementation_id", "EditRTC",
 		 ""]
 # </rtc-template>
 
-
+##
+#
+# @brief データ変数生成
+# @param data_type データ型
+# @return データ変数
+#
 def create_data(data_type):
    if data_type == "RTC::Time":
        return RTC.Time(0,0)
@@ -632,7 +637,10 @@ class EditRTC(OpenRTM_aist.DataFlowComponentBase):
 				ret = RTC.RTC_ERROR
 		return ret
 
-
+	##
+	# @brief シミュレーション更新後実行関数
+	# @param self 
+	#
 	def inputFromSimulator(self):
 		guard = OpenRTM_aist.ScopedLock(self.exec_mutex)
 		ret = RTC.RTC_OK
@@ -645,6 +653,10 @@ class EditRTC(OpenRTM_aist.DataFlowComponentBase):
 				ret = RTC.RTC_ERROR
 		return ret
 
+	##
+	# @brief シミュレーション更新前実行関数
+	# @param self 
+	#
 	def outputToSimulator(self):
 		guard = OpenRTM_aist.ScopedLock(self.exec_mutex)
 		ret = RTC.RTC_OK
@@ -657,6 +669,11 @@ class EditRTC(OpenRTM_aist.DataFlowComponentBase):
 				ret = RTC.RTC_ERROR
 		return ret
 
+	##
+	# @brief ボディ設定関数
+	# @param self 
+	# @param body ボディオブジェクト
+	#
 	def setBody(self, body):
 		self.ioBody = body
 		guard = OpenRTM_aist.ScopedLock(self.exec_mutex)
@@ -672,8 +689,11 @@ class EditRTC(OpenRTM_aist.DataFlowComponentBase):
 
 
 	
-	#def setActivity(self, name, text):
-	#	self.activities[name].change(text)
+	##
+	# @brief モジュールファイル設定
+	# @param self 
+	# @param filepath ファイルパス
+	#
 	def setModule(self, filepath):
 		
 		guard = OpenRTM_aist.ScopedLock(self.exec_mutex)
@@ -689,7 +709,14 @@ class EditRTC(OpenRTM_aist.DataFlowComponentBase):
 			print(log)
 
 
-
+	##
+	# @brief コンフィギュレーションパラメータ値再設定
+	# @param self 
+	# @param conf コンフィギュレーション
+	# @param set_name コンフィギュレーションセット名
+	# @param param_name パラメータ名
+	# @param value 値
+	#
 	def setParam(self, conf, set_name, param_name, value=None):
 		
 		
@@ -715,7 +742,11 @@ class EditRTC(OpenRTM_aist.DataFlowComponentBase):
 
 
 
-
+	##
+	# @brief コンフィギュレーションパラメータ削除
+	# @param self 
+	# @param name パラメータ名
+	#
 	def deleteConfigParam(self, name):
 		conf = self.get_configuration()
 		#self.setParam(conf, "default",name)
@@ -723,7 +754,16 @@ class EditRTC(OpenRTM_aist.DataFlowComponentBase):
 		#self.setParam(conf, "__constraints__",name)
 		#conf.activate_configuration_set("default")
 		
-
+	##
+	# @brief コンフィギュレーションパラメータ追加
+	# @param self 
+	# @param name パラメータ名
+	# @param data_type データ型
+	# @param defalut_value デフォルト値
+	# @param constraints 制約
+	# @param widget ウィジェット
+	# @param step ステップ値
+	#
 	def setConfigParam(self, name, data_type, defalut_value, constraints, widget, step):
 		conf = self.get_configuration()
 		self.setParam(conf, "default",name,defalut_value)
@@ -742,6 +782,13 @@ class EditRTC(OpenRTM_aist.DataFlowComponentBase):
 		self.bindParameter(name, self.__dict__[data_name], defalut_value)
 		return data_name
 
+	##
+	# @brief コンフィギュレーションパラメータ値変換
+	# @param self 
+	# @param v 変換前の値
+	# @param type 返還後の型
+	# @return 変換後の値
+	#
 	def getValue(self ,v, type):
 		try:
 			if type == "int" or type == "short":
@@ -757,6 +804,13 @@ class EditRTC(OpenRTM_aist.DataFlowComponentBase):
 		except:
 			return v
 
+	##
+	# @brief サービス名一覧取得
+	# @param self 
+	# @param idl_file IDLファイル名
+	# @param dir_path ディレクトリパス
+	# @param idl_path IDLインクルードパス
+	#
 	def getServiceNameList(self, idl_file, dir_path, idl_path):
 		
 		if os.name == 'posix':
@@ -801,7 +855,14 @@ class EditRTC(OpenRTM_aist.DataFlowComponentBase):
 
 
 		return filelist, classlist
-
+	##
+	# @brief IDLコンパイル実行
+	# @param self 
+	# @param filelist ファイル一覧
+	# @param idl_path IDLインクルードパス
+	# @param dir_path ディレクトリパス
+	# @param workdir Iワークディレクトリ
+	#
 	def idlCompile(self, filelist, idl_path, dir_path, workdir):
 		if os.name == 'posix':
 			com = 'omniidl -I"$RTM_ROOT/rtm/idl" ' + '-C"' + workdir + '"'
@@ -828,7 +889,16 @@ class EditRTC(OpenRTM_aist.DataFlowComponentBase):
 				
 		sp = subprocess.Popen(com, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
 		sp.communicate()
-
+	##
+	# @brief サービスポート設定関数
+	# @param self 
+	# @param name ポート名
+	# @param interface_name インターフェース名
+	# @param interface_dir インターフェース方向
+	# @param idl_file IDLファイルパス
+	# @param interface_type インターフェース型
+	# @param idl_path IDLインクルードパス
+	#
 	def setServicePort(self, name, interface_name, interface_dir, idl_file, interface_type, idl_path):
 		guard = OpenRTM_aist.ScopedLock(self.exec_mutex)
 		data_name = "_i_" + interface_name
@@ -883,7 +953,13 @@ class EditRTC(OpenRTM_aist.DataFlowComponentBase):
 		return data_name, port_name, filelist, classlist, import_name
 
 
-				
+	##
+	# @brief データポート設定関数
+	# @param self 
+	# @param name ポート名
+	# @param port_type ポート型
+	# @param data_type データ型
+	#
 	def setDataPort(self, name, port_type, data_type):
 		guard = OpenRTM_aist.ScopedLock(self.exec_mutex)
 		data_name = "_d_"+name
@@ -901,7 +977,11 @@ class EditRTC(OpenRTM_aist.DataFlowComponentBase):
 		return data_name, port_name
 
 
-
+	##
+	# @brief 外部モジュール再読み込み
+	# @param self 
+	# @param module_names モジュールリスト
+	#
 	def update_modulelist(self, module_names):
 		self.module_list = {}
 		for k,m in module_names.items():

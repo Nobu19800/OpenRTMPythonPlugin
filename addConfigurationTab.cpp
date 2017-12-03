@@ -34,7 +34,13 @@
 
 
 
-
+/**
+ * @brief コンストラクタ
+ * @param comp コンポーネントプロファイルオブジェクト
+ * @param viewWidget RTC表示ウィジェット
+ * @param listWidget コンフィグレーションパラメータ一覧表示ウィジェット
+ * @param parent 親ウィジェット
+ */
 addConfigurationTab::addConfigurationTab(RTC_XML::RTC_ProfileRTP *comp, RTCViewWidget *viewWidget, ConfigurationTable *listWidget, QWidget *parent)
 	: ConfigParamWidgetBase(parent)
 {
@@ -63,7 +69,10 @@ addConfigurationTab::addConfigurationTab(RTC_XML::RTC_ProfileRTP *comp, RTCViewW
 
 }
 
-
+/**
+ * @brief コンフィギュレーションパラメータ追加
+ * @param profile コンフィグレーションパラメータプロファイルオブジェクト
+ */
 void addConfigurationTab::addConfiguration(RTC_XML::ConfigurationSet profile)
 {
 	if (_comp != NULL)
@@ -75,7 +84,9 @@ void addConfigurationTab::addConfiguration(RTC_XML::ConfigurationSet profile)
 	}
 }
 
-
+/**
+ * @brief 作成ボタン押下時のスロット
+ */
 void addConfigurationTab::createButtonSlot()
 {
 	RTC_XML::ConfigurationSet profile;

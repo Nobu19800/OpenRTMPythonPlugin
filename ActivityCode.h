@@ -1,4 +1,8 @@
-
+/*!
+ * @file  ActivityCode.h
+ * @brief アクティビティの定義
+ *
+ */
 
 #ifndef ACTIVITYCODE_H
 #define ACTIVITYCODE_H
@@ -6,6 +10,10 @@
 #include <QString>
 
 
+/**
+ * @enum ActivityCode
+ * @brief アクティビティ一覧
+ */
 enum ActivityCode
 {
 	code_onInitialize = 0,
@@ -26,5 +34,11 @@ enum ActivityCode
 	code_num = 15
 };
 
+/**
+ * @fn
+ * @brief アクティビティのIDを文字列に変換する
+ * @param id アクティビティのID
+ * @return 文字列
+ */
 QString Activity_toString(ActivityCode id);
 #endif // TEXTEDIT_H

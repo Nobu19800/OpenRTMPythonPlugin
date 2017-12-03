@@ -1,4 +1,8 @@
-
+/*!
+ * @file  RTC_MainWindow.h
+ * @brief RTCEditorメインウィンドウクラス
+ *
+ */
 
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
@@ -32,10 +36,18 @@ QT_END_NAMESPACE
 class ToolBar;
 QT_FORWARD_DECLARE_CLASS(QMenu)
 
+/**
+ * @class ModuleSettingWidget
+ * @brief 
+ */
 class ModuleSettingWidget : public QWidget
 {
 	Q_OBJECT
 public:
+	/**
+	 * @brief コンストラクタ
+	 * @param parent 親ウィジェット
+	 */
 	ModuleSettingWidget(QWidget *parent = Q_NULLPTR);
 private:
 	PythonEditor *textEdit;
@@ -43,24 +55,59 @@ private:
 	QHBoxLayout *editLayout;
 };
 
+
+/**
+ * @class RTC_MainWindow
+ * @brief RTCEditorメインウィンドウクラス
+ */
 class RTC_MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-
-    explicit RTC_MainWindow(QWidget *parent = Q_NULLPTR,
+	/**
+	 * @brief コンストラクタ
+	 * @param parent 親ウィジェット
+	 * @param flags 
+	 */
+	explicit RTC_MainWindow(QWidget *parent = Q_NULLPTR,
                         Qt::WindowFlags flags = 0);
+	/**
+	 * @brief アクティビティ編集タブ追加
+	 * @param name 名前
+	 * @param text テキスト
+	 */
 	void addActivityTab(ActivityCode name, QString text);
-
+	/**
+	 * @brief サービスポート削除
+	 * @param name サービスポート名
+	 */
 	void deleteServicePort(QString name);
+	/**
+	 * @brief データポート削除
+	 * @param name データポート名
+	 */
 	void deleteDataPort(QString name);
+	/**
+	 * @brief コンフィグレーションパラメータ削除
+	 * @param name コンフィグレーションパラメータ名
+	 */
 	void deleteConfig(QString name);
+	/**
+	 * @brief メニュー作成
+	 */
 	void createMenus();
+	/**
+	 * @brief 編集中のPythonファイルパス取得
+	 * @return Pythonファイルのパス
+	 */
 	QString getFileName();
 	cnoid::Signal<void(std::string)>  sigSaveButton;
 	
 public Q_SLOTS:
+	/**
+	 * @brief 保存ボタン押下時のスロット
+	 */
 	void save_button_slot();
 //public Q_SIGNAL:
 //	void save_button_signal(QString filename);

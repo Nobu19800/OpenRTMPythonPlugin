@@ -1,3 +1,8 @@
+/*!
+ * @file  DataPortTable.h
+ * @brief データポート一覧表示クラス
+ *
+ */
 
 
 #ifndef DATAPORTTABLE_H
@@ -29,12 +34,23 @@ QT_END_NAMESPACE
 
 
 
+/**
+ * @class DataPortTable
+ * @brief データポート一覧表示ウィジェット
+ */
 class DataPortTable : public QTableWidget
 {
     Q_OBJECT
 
 public:
+	/**
+	 * @brief コンストラクタ
+	 */
 	DataPortTable();
+	/**
+	 * @brief リスト更新
+	 * @param ports データポート一覧
+	 */
 	void list_update(QVector<RTC_XML::DataPorts> ports);
 public Q_SLOTS:
 //    void fileNew();

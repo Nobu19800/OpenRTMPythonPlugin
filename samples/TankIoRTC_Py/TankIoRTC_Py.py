@@ -131,36 +131,44 @@ class TankIoRTC_Py(OpenRTM_aist.DataFlowComponentBase):
 		
 		# </rtc-template>
 
-
+	#ボディオブジェクト設定関数
 	def setBody(self, body):
+		
 		self.ioBody = body
-		#self.ControlLink = ControlLinkObj
-
+		
+		#Linkオブジェクト取得
 		self.cannonY = self.ioBody.link("CANNON_Y")
 		self.cannonP = self.ioBody.link("CANNON_P")
 		self.crawlerL = self.ioBody.link("CRAWLER_TRACK_L")
 		self.crawlerR = self.ioBody.link("CRAWLER_TRACK_R")
 		
-		
+		#Lightオブジェクト取得
 		self.light = self.ioBody.getLight("MainLight")
 		
 		
-
+	#センサの計測値などをアウトポートから出力する処理等を記述する関数
+	#シミュレーションステップ後に実行される
 	def inputFromSimulator(self):
 		if self.ioBody:
+			#砲台の角度取得、格納
 			self._d_angles.pan = self.cannonY.q
 			self._d_angles.tilt = self.cannonP.q
-			
+
+			#砲台の角度出力
 			OpenRTM_aist.setTimestamp(self._d_angles)
 			self._anglesOut.write()
 
 
+	#アクチュエータのトルクなどをインポートから入力する処理等を記述する関数
+	#シミュレーションステップ前に実行される
 	def outputToSimulator(self):
 		if self.ioBody:
+			#砲台のトルク入力
 			if self._torquesIn.isNew():
 				data = self._torquesIn.read()
 				self.cannonY.u = data.data[0]
 				self.cannonP.u = data.data[1]
+			#車体の速度入力
 			if self._velocitiesIn.isNew():
 				data = self._velocitiesIn.read()
 				vx = data.data.vx
@@ -169,8 +177,10 @@ class TankIoRTC_Py(OpenRTM_aist.DataFlowComponentBase):
 				rms = (vx + va*self._wheel_distance[0])/self._wheel_radius[0]
 				lms = (vx - va*self._wheel_distance[0])/self._wheel_radius[0]
 				
+				#クローラーの速度入力
 				self.crawlerL.dq = lms
 				self.crawlerR.dq = rms
+			#ライトのオンオフ入力
 			if self._lightSwitchIn.isNew():
 				data = self._lightSwitchIn.read()
 				

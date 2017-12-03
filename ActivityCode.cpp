@@ -1,9 +1,18 @@
-
+/*!
+ * @file  ActivityCode.cpp
+ * @brief アクティビティの定義
+ *
+ */
 
 #include "ActivityCode.h"
 
 
-
+/**
+ * @fn
+ * @brief アクティビティのIDを文字列に変換する
+ * @param id アクティビティのID
+ * @return 文字列
+ */
 QString Activity_toString(ActivityCode id)
 {
 	if(id == code_onInitialize)

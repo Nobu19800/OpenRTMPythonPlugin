@@ -1,3 +1,9 @@
+/*!
+ * @file  addDataPortTab.h
+ * @brief データポート設定タブ
+ *
+ */
+
 
 
 #ifndef ADDDATAPORTTAB_H
@@ -30,15 +36,34 @@ QT_END_NAMESPACE
 
 
 
-
+/**
+ * @class addDataPortTab
+ * @brief データポート設定タブ
+ */
 class addDataPortTab : public BaseTab
 {
     Q_OBJECT
 
 public:
+	/**
+	 * @brief コンストラクタ
+	 * @param comp コンポーネントプロファイルオブジェクト
+	 * @param viewWidget RTC表示ウィジェット
+	 * @param listWidget データポート一覧表示ウィジェット
+	 * @param parent 親ウィジェット
+	 */
 	addDataPortTab(RTC_XML::RTC_ProfileRTP *comp, RTCViewWidget *viewWidget, DataPortTable *listWidget, QWidget *parent = 0);
-
+	/**
+	 * @brief データポート検索
+	 * @param name ポート名
+	 * @param ret データポートプロファイルオブジェクト
+	 * @param return true：指定ポート名のデータポートが存在した false:存在しなかった
+	 */
 	bool searchPort(QString name, RTC_XML::DataPorts &ret);
+	/**
+	 * @brief データポート追加
+	 * @param profile データポートプロファイルオブジェクト
+	 */
 	void addPort(RTC_XML::DataPorts profile);
 	cnoid::Signal<void(RTC_XML::DataPorts)>  sigAddPort;
 

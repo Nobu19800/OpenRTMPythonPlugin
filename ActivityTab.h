@@ -1,3 +1,8 @@
+/*!
+ * @file  ActivityTab.h
+ * @brief 各コールバック関数編集タブ
+ *
+ */
 
 
 #ifndef ACTIVITYTAB_H
@@ -29,16 +34,39 @@ QT_END_NAMESPACE
 
 
 
-
+/**
+ * @class ActivityTab
+ * @brief 各コールバック関数編集タブ
+ */
 class ActivityTab : public BaseTab
 {
     Q_OBJECT
 
 public:
+	/**
+	 * @brief コンストラクタ
+	 * @param name アクティビティのID
+	 * @param text テキスト
+	 * @param parent 親ウィジェット
+	 */
 	ActivityTab(ActivityCode name, QString text, QWidget *parent = 0);
+	/**
+	 * @brief コンストラクタ
+	 * @param name アクティビティ名
+	 * @param text テキスト
+	 * @param parent 親ウィジェット
+	 */
 	ActivityTab(QString name, QString text, QWidget *parent = 0);
 
+	/**
+	 * @brief テキスト取得
+	 * @return テキスト
+	 */
 	QString getText();
+	/**
+	 * @brief フォントサイズ設定
+	 * @param s フォントサイズ
+	 */
 	void setFontSize(int s);
 	
 

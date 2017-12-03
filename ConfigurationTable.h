@@ -1,4 +1,8 @@
-
+/*!
+ * @file  ConfigurationTable.h
+ * @brief コンフィギュレーションパラメータ一覧表示クラス
+ *
+ */
 
 #ifndef CONFIGURATIONTABLE_H
 #define CONFIGURATIONTABLE_H
@@ -33,12 +37,19 @@ class ConfigParamDialog;
 class RTC_MainWindow;
 
 
-
+/**
+ * @class ConfigParamWidgetBase
+ * @brief コンフィギュレーションパラメータ設定ウィンドウベースクラス
+ */
 class ConfigParamWidgetBase : public BaseTab
 {
 	Q_OBJECT
 
 public:
+	/**
+	 * @brief コンストラクタ
+	 * @param parent 親ウィジェット
+	 */
 	ConfigParamWidgetBase(QWidget *parent = 0);
 
 
@@ -55,22 +66,42 @@ private:
 };
 
 
+/**
+ * @class ConfigParamWidget
+ * @brief コンフィギュレーションパラメータ編集ウィジェット
+ */
 class ConfigParamWidget : public ConfigParamWidgetBase
 {
 	Q_OBJECT
 public:
+	/**
+	 * @brief コンストラクタ
+	 * @param dialog コンフィグレーションパラメータ編集ダイアログ
+	 * @param parent 親ウィジェット
+	 */
 	ConfigParamWidget(ConfigParamDialog *dialog, QWidget *parent = 0);
 private:
 	ConfigParamDialog *_dialog;
 
 };
 
+/**
+ * @class ConfigParamDialog
+ * @brief コンフィグレーションパラメータ編集ダイアログ
+ */
 class ConfigParamDialog : public QDialog
 {
 	Q_OBJECT
 public:
+	/**
+	 * @brief コンストラクタ
+	 * @param parent 親ウィジェット
+	 */
 	ConfigParamDialog(QWidget *parent = 0);
 private Q_SLOTS:
+	/**
+	 * @brief 削除ボタン押下時のスロット
+	 */
 	void deleteButtonSlot();
 private:
 	QVBoxLayout *_mainLayout;
@@ -79,12 +110,25 @@ private:
 };
 
 
+/**
+ * @class ConfigSettingButton
+ * @brief コンフィグレーションパラメータ編集ダイアログ起動ボタン
+ */
 class ConfigSettingButton : public QPushButton
 {
 	Q_OBJECT
 public:
+	/**
+	 * @brief コンストラクタ
+	 * @param name 表示名
+	 * @param profile コンフィグレーションパラメータプロファイルオブジェクト
+	 * @param parent 親ウィジェット
+	 */
 	ConfigSettingButton(QString name, RTC_XML::ConfigurationSet profile, RTC_MainWindow *parent = 0);
 private Q_SLOTS:
+	/**
+	 * @brief ボタン押下時のスロット
+	 */
 	void pushSlot();
 private:
 	RTC_MainWindow *_mainwindow;
@@ -93,12 +137,24 @@ private:
 };
 
 
+/**
+ * @class ConfigurationTable
+ * @brief コンフィグレーションパラメータ一覧表示ウィジェット
+ */
 class ConfigurationTable : public QTableWidget
 {
     Q_OBJECT
 
 public:
+	/**
+	 * @brief コンストラクタ
+	 * @param parent 親ウィジェット
+	 */
 	ConfigurationTable(RTC_MainWindow *parent = 0);
+	/**
+	 * @brief リスト更新
+	 * @param confsets コンフィグレーションパラメータ一覧
+	 */
 	virtual void list_update(QVector<RTC_XML::ConfigurationSet> confsets);
 public Q_SLOTS:
 //    void fileNew();
@@ -118,13 +174,24 @@ private:
 
 };
 
-
+/**
+ * @class ConfigurationTableRTP
+ * @brief コンフィグレーションパラメータ一覧表示ウィジェット(動的編集対応)
+ */
 class ConfigurationTableRTP : public ConfigurationTable
 {
 	Q_OBJECT
 
 public:
+	/**
+	 * @brief コンストラクタ
+	 * @param parent 親ウィジェット
+	 */
 	ConfigurationTableRTP(RTC_MainWindow *mainwindow, RTC_MainWindow *parent = 0);
+	/**
+	 * @brief リスト更新
+	 * @param confsets コンフィグレーションパラメータ一覧
+	 */
 	virtual void list_update(QVector<RTC_XML::ConfigurationSet> confsets);
 private:
 	RTC_MainWindow *_mainwindow;

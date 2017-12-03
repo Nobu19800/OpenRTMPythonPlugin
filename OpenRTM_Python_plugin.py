@@ -17,7 +17,11 @@ try:
 except:
   pass
 
-
+##
+# @brief RTCEditor対応RTC生成
+# @param modulePath モジュールパス
+# @return RTC名
+#
 def createEditComp(modulePath):
   try:
     modulePath = modulePath.encode('utf-8')
@@ -32,7 +36,11 @@ def createEditComp(modulePath):
     return ""
 
   
-
+##
+# @brief RTCEditor対応RTC更新
+# @param rtcname RTC名
+# @param modulePath モジュールパス
+#
 def updateEditComp(rtcname, modulePath):
 
   try:
@@ -45,6 +53,11 @@ def updateEditComp(rtcname, modulePath):
 
     comp.setModule(modulePath)
 
+##
+# @brief RTC生成
+# @param filepath モジュールパス
+# @return RTC名
+#
 def createComp(filepath):
   
   try:
@@ -79,7 +92,10 @@ def createComp(filepath):
     return ""
 
   
-
+##
+# @brief RTC終了
+# @param rtcname RTC名
+#
 def exitComp(rtcname):
   try:
     rtcname = rtcname.encode('utf-8')
@@ -92,6 +108,13 @@ def exitComp(rtcname):
     mgr.cleanupComponents()
 
 
+##
+# @brief EditRTCにデータポート追加
+# @param rtcname RTC名
+# @param portname ポート名
+# @param porttype ポート型
+# @param datatype データ型
+#
 def addDataPort(rtcname, portname, porttype, datatype):
   
 
@@ -116,7 +139,12 @@ def addDataPort(rtcname, portname, porttype, datatype):
   if comp and hasattr(comp, "setDataPort"):
     comp.setDataPort(portname, porttype, datatype)
 
-
+##
+# @brief 実行コンテキスト取得
+# @param comp RTC
+# @param ecnum 実行コンテキストID
+# @return 実行コンテキスト
+#
 def getEC(comp, ecnum):
   if comp:
     if ecnum < 1000:
@@ -128,6 +156,11 @@ def getEC(comp, ecnum):
         return ecs[ecnum]
   return None
 
+##
+# @brief ボディ設定関数呼び出し
+# @param body ボディオブジェクト
+# @param rtcname RTC名
+#
 def setBody(body, rtcname):
   try:
     rtcname = rtcname.encode('utf-8')
@@ -139,7 +172,11 @@ def setBody(body, rtcname):
     comp.setBody(body)
     
 
-
+##
+# @brief RTCのアクティブ化
+# @param rtcname RTC名
+# @param ecnum 実行コンテキストID
+#
 def activateComp(rtcname, ecnum):
   try:
     rtcname = rtcname.encode('utf-8')
@@ -151,6 +188,11 @@ def activateComp(rtcname, ecnum):
   if ec:
     ec.activate_component(comp.getObjRef())
 
+##
+# @brief RTCの非アクティブ化
+# @param rtcname RTC名
+# @param ecnum 実行コンテキストID
+#
 def deactivateComp(rtcname, ecnum):
   try:
     rtcname = rtcname.encode('utf-8')
@@ -162,7 +204,11 @@ def deactivateComp(rtcname, ecnum):
   if ec:
     ec.deactivate_component(comp.getObjRef())
 
-
+##
+# @brief RTCのリセット
+# @param rtcname RTC名
+# @param ecnum 実行コンテキストID
+#
 def resetComp(rtcname, ecnum):
   try:
     rtcname = rtcname.encode('utf-8')
@@ -174,7 +220,12 @@ def resetComp(rtcname, ecnum):
   if ec:
     ec.reset_component(comp.getObjRef())
 
-
+##
+# @brief RTCの状態取得
+# @param rtcname RTC名
+# @param ecnum 実行コンテキストID
+# @return 状態
+#
 def getStatus(rtcname, ecnum):
   try:
     rtcname = rtcname.encode('utf-8')
@@ -195,7 +246,11 @@ def getStatus(rtcname, ecnum):
       return "ERROR"
   return "CREATED"
 
-
+##
+# @brief シミュレーション開始時実行関数
+# @param rtcname RTC名
+# @param ecnum 実行コンテキストID
+#
 def startSimulation(rtcname, ecnum):
   try:
     rtcname = rtcname.encode('utf-8')
@@ -210,7 +265,11 @@ def startSimulation(rtcname, ecnum):
 
 
 
-
+##
+# @brief シミュレーション終了時実行関数
+# @param rtcname RTC名
+# @param ecnum 実行コンテキストID
+#
 def stopSimulation(rtcname, ecnum):
   try:
     rtcname = rtcname.encode('utf-8')
@@ -227,7 +286,10 @@ def stopSimulation(rtcname, ecnum):
 
 
 
-
+##
+# @brief inputFromSimulator関数の実行
+# @param rtcname RTC名
+#
 def inputFromSimulator(rtcname):
   try:
     rtcname = rtcname.encode('utf-8')
@@ -238,7 +300,10 @@ def inputFromSimulator(rtcname):
   if comp and hasattr(comp, "inputFromSimulator"):
     comp.inputFromSimulator()
 
-
+##
+# @brief outputToSimulator
+# @param rtcname RTC名
+#
 def outputToSimulator(rtcname):
   try:
     rtcname = rtcname.encode('utf-8')
@@ -249,6 +314,11 @@ def outputToSimulator(rtcname):
   if comp and hasattr(comp, "outputToSimulator"):
     comp.outputToSimulator()
 
+##
+# @brief 実行コンテキストのtick駆動
+# @param rtcname RTC名
+# @param ecnum 実行コンテキストID
+#
 def tickEC(rtcname, ecnum):
   try:
     rtcname = rtcname.encode('utf-8')
@@ -260,13 +330,18 @@ def tickEC(rtcname, ecnum):
   if ec and hasattr(ec, "tick"):
     ec.tick()
 
+##
+# @brief マネージャ開始
+#
 def runManager():
   mgr = OpenRTM_aist.Manager.init(["test","-o","manager.shutdown_on_nortcs:NO","-o","manager.shutdown_auto:NO", "-o", "naming.formats:%n.rtc"])
   mgr.activateManager()
   cnoid.EditRTC.EditRTCInit(mgr)
   mgr.runManager(True)
 
-
+##
+# @brief マネージャ終了
+#
 def shutdownManager():
   mgr = OpenRTM_aist.Manager.instance()
   mgr.shutdown()

@@ -1,4 +1,8 @@
-
+/*!
+ * @file  ComponentList.cpp
+ * @brief RTCランチャー表示クラス
+ *
+ */
 
 #include <QAction>
 #include <QLayout>
@@ -33,6 +37,12 @@
 #include "ComponentList.h"
 #include "gettext.h"
 
+
+
+/**
+ * @brief コンストラクタ
+ * @param parent 親ウィジェット
+ */
 ComponentList::ComponentList(QWidget *parent)
 	: QTabWidget(parent)
 {
@@ -48,7 +58,10 @@ ComponentList::ComponentList(QWidget *parent)
 }
 
 
-
+/**
+ * @brief RTC追加
+ * @param path モジュールパス
+ */
 void ComponentList::addComponent(QString path)
 {
 	//std::cout << path.toStdString() << std::endl;
@@ -73,7 +86,10 @@ void ComponentList::addComponent(QString path)
 }
 
 
-
+/**
+ * @brief モジュール一覧をロード
+ * @param path モジュールリストのパス
+ */
 void ComponentList::load(QString path)
 {
 	
@@ -104,7 +120,11 @@ void ComponentList::load(QString path)
 	
 }
 
-
+/**
+ * @brief コンストラクタ
+ * @param path モジュールパス
+ * @param parent 親ウィジェット
+ */
 ComponentWidget::ComponentWidget(QString path, QWidget *parent)
 	: QGroupBox(parent)
 {
@@ -118,7 +138,10 @@ ComponentWidget::ComponentWidget(QString path, QWidget *parent)
 	_process = new QProcess();
 }
 
-
+/**
+ * @brief モジュールパス設定
+ * @param path モジュールパス
+ */
 void ComponentWidget::setModulePath(QString path)
 {
 	_path = path;
@@ -155,7 +178,9 @@ void ComponentWidget::setModulePath(QString path)
 
 
 
-
+/**
+ * @brief RTCを別プロセスで起動
+ */
 void ComponentWidget::run_process()
 {
 	QDir::Filters filters = QDir::Files;
@@ -188,6 +213,10 @@ void ComponentWidget::run_process()
 	}
 
 }
+
+/**
+ * @brief RTCをマネージャで起動
+ */
 void ComponentWidget::run_rtcd()
 {
 	QDir::Filters filters = QDir::Files;
@@ -212,11 +241,20 @@ void ComponentWidget::run_rtcd()
 	
 }
 
+/**
+ * @brief カテゴリ取得
+ * @return カテゴリ
+ */
 QString ComponentWidget::getCategory()
 {
 	return _comp.get_info().getCategory();
 }
 
+
+
+/**
+ * @brief コンストラクタ
+ */
 ComponentTabWidgwt::ComponentTabWidgwt()
 {
 	_mainLayout = new QVBoxLayout();
@@ -227,6 +265,10 @@ ComponentTabWidgwt::ComponentTabWidgwt()
 	
 }
 
+/**
+ * @brief RTC追加
+ * @param cw RTC表示ウィジェット
+ */
 void ComponentTabWidgwt::addComponent(ComponentWidget *cw)
 {
 	
@@ -252,11 +294,19 @@ void ComponentTabWidgwt::addComponent(ComponentWidget *cw)
 	
 }
 
+/**
+ * @brief メインレイアウトの伸縮幅設定
+ * @param v 伸縮幅
+ */
 void ComponentTabWidgwt::addStretchMain(int v)
 {
 	_mainLayout->addStretch(v);
 }
 
+/**
+ * @brief サブレイアウトの伸縮幅設定
+ * @param v 伸縮幅
+ */
 void ComponentTabWidgwt::addStretchSub(int v)
 {
 	if (!_subLayouts.empty())
@@ -265,7 +315,10 @@ void ComponentTabWidgwt::addStretchSub(int v)
 	}
 }
 
-
+/**
+ * @brief コンストラクタ
+ * @param parent 親ウィジェット
+ */
 ScrollArea::ScrollArea(QWidget *parent)
 	: QScrollArea(parent)
 {
@@ -275,7 +328,10 @@ ScrollArea::ScrollArea(QWidget *parent)
 	QObject::connect(bar, SIGNAL(valueChanged(int)), this, SLOT(valueChanged(int)));
 }
 
-
+/**
+ * @brief スクロール時のスロット
+ * @param v 移動量
+ */
 void ScrollArea::valueChanged(int v)
 {
 	widget()->update();

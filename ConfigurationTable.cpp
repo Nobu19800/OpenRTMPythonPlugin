@@ -1,4 +1,8 @@
-
+/*!
+ * @file  ConfigurationTable.cpp
+ * @brief コンフィギュレーションパラメータ一覧表示クラス
+ *
+ */
 
 #include <QAction>
 #include <QLayout>
@@ -32,7 +36,10 @@
 #include "gettext.h"
 
 
-
+/**
+ * @brief コンストラクタ
+ * @param parent 親ウィジェット
+ */
 ConfigParamWidgetBase::ConfigParamWidgetBase(QWidget *parent)
 	: BaseTab(parent)
 {
@@ -50,13 +57,21 @@ ConfigParamWidgetBase::ConfigParamWidgetBase(QWidget *parent)
 
 }
 
-
+/**
+ * @brief コンストラクタ
+ * @param dialog コンフィグレーションパラメータ編集ダイアログ
+ * @param parent 親ウィジェット
+ */
 ConfigParamWidget::ConfigParamWidget(ConfigParamDialog *dialog, QWidget *parent)
 	: ConfigParamWidgetBase(parent)
 {
 	_dialog = dialog;
 }
 
+/**
+ * @brief コンストラクタ
+ * @param parent 親ウィジェット
+ */
 ConfigParamDialog::ConfigParamDialog(QWidget *parent)
 	: QDialog(parent)
 {
@@ -67,11 +82,20 @@ ConfigParamDialog::ConfigParamDialog(QWidget *parent)
 	_mainLayout->addWidget(_cfwidget);
 }
 
+/**
+ * @brief 削除ボタン押下時のスロット
+ */
 void ConfigParamDialog::deleteButtonSlot()
 {
 
 }
 
+/**
+ * @brief コンストラクタ
+ * @param name 表示名
+ * @param profile コンフィグレーションパラメータプロファイルオブジェクト
+ * @param parent 親ウィジェット
+ */
 ConfigSettingButton::ConfigSettingButton(QString name, RTC_XML::ConfigurationSet profile, RTC_MainWindow *parent)
 	: QPushButton()
 {
@@ -80,6 +104,9 @@ ConfigSettingButton::ConfigSettingButton(QString name, RTC_XML::ConfigurationSet
 	QObject::connect(this, SIGNAL(clicked()), this, SLOT(pushSlot()));
 }
 
+/**
+ * @brief ボタン押下時のスロット
+ */
 void ConfigSettingButton::pushSlot()
 {
 	ConfigParamDialog dialog;
@@ -91,12 +118,20 @@ void ConfigSettingButton::pushSlot()
 	}
 }
 
+/**
+ * @brief コンストラクタ
+ * @param parent 親ウィジェット
+ */
 ConfigurationTableRTP::ConfigurationTableRTP(RTC_MainWindow *mainwindow, RTC_MainWindow *parent)
 	: ConfigurationTable(parent)
 {
 	_mainwindow = mainwindow;
 }
 
+/**
+ * @brief コンストラクタ
+ * @param parent 親ウィジェット
+ */
 ConfigurationTable::ConfigurationTable(RTC_MainWindow *parent)
 	: QTableWidget(5, 3)
 {
@@ -124,6 +159,10 @@ void ConfigurationTable::list_update(QVector<RTC_XML::ConfigurationSet> confsets
 	}
 }
 
+/**
+ * @brief リスト更新
+ * @param confsets コンフィグレーションパラメータ一覧
+ */
 void ConfigurationTableRTP::list_update(QVector<RTC_XML::ConfigurationSet> confsets)
 {
 	setRowCount(confsets.size());

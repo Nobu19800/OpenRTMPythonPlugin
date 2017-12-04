@@ -105,7 +105,9 @@ namespace rtmiddleware {
 		 * @param archive 
 		 */
 		virtual bool restore(const cnoid::Archive& archive) override;
-
+		/**
+		 * @brief 
+		 */
 		virtual void onPositionChanged();
 
 		ScrollArea *_area;

@@ -52,13 +52,7 @@ public:
 	 * @param layout レイアウト
 	 * @param t ウィジェット種別
 	 */
-	BaseWidget(QWidget *widget=NULL, QLayout *layout = NULL, WidgetType t= TextBox)
-	: _widget(widget),
-	  _layout(layout),
-	  _type(t)
-	{
-		
-	};
+	BaseWidget(QWidget *widget=NULL, QLayout *layout = NULL, WidgetType t= TextBox);
 	QWidget *_widget;
 	QLayout *_layout;
 	WidgetType _type;

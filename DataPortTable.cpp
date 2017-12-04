@@ -1,4 +1,8 @@
-
+/*!
+ * @file  DataPortTable.cpp
+ * @brief データポート一覧表示クラス
+ *
+ */
 
 #include <QAction>
 #include <QLayout>
@@ -30,6 +34,9 @@
 #include "gettext.h"
 
 
+/**
+ * @brief コンストラクタ
+ */
 DataPortTable::DataPortTable()
 	: QTableWidget(5,3)
 {
@@ -42,6 +49,10 @@ DataPortTable::DataPortTable()
 	
 }
 
+/**
+ * @brief リスト更新
+ * @param ports データポート一覧
+ */
 void DataPortTable::list_update(QVector<RTC_XML::DataPorts> ports)
 {
 	setRowCount(ports.size());

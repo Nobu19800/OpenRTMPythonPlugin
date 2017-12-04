@@ -1,4 +1,8 @@
-
+/*!
+ * @file  addServicePortTab.cpp
+ * @brief サービスポート設定タブ
+ *
+ */
 
 #include <QAction>
 #include <QLayout>
@@ -35,6 +39,13 @@
 
 
 
+/**
+ * @brief コンストラクタ
+ * @param comp コンポーネントプロファイルオブジェクト
+ * @param viewWidget RTC表示ウィジェット
+ * @param listWidget サービスポート一覧表示ウィジェット
+ * @param parent 親ウィジェット
+ */
 addServicePortTab::addServicePortTab(RTC_XML::RTC_ProfileRTP *comp, RTCViewWidget *viewWidget, ServicePortTable *listWidget, QWidget *parent)
 	: BaseTab(parent)
 {
@@ -78,7 +89,9 @@ addServicePortTab::addServicePortTab(RTC_XML::RTC_ProfileRTP *comp, RTCViewWidge
 
 }
 
-
+/**
+ * @brief IDLファイル設定ボタン押下時のスロット
+ */
 void addServicePortTab::IDLFileButtonSlot()
 {
 	QString fileName = QFileDialog::getOpenFileName(this,
@@ -93,7 +106,9 @@ void addServicePortTab::IDLFileButtonSlot()
 
 }
 
-
+/**
+ * @brief IDLインクルードパス設定ボタン押下時のスロット
+ */
 void addServicePortTab::IDLPathButtonSlot()
 {
 	QString dirName = QFileDialog::getExistingDirectory(this, _("Open"));
@@ -107,7 +122,12 @@ void addServicePortTab::IDLPathButtonSlot()
 }
 
 
-
+/**
+ * @brief サービスポート検索
+ * @param name ポート名
+ * @param ret サービスタポートプロファイルオブジェクト
+ * @param return true：指定ポート名のサービスポートが存在した false:存在しなかった
+ */
 bool addServicePortTab::searchPort(QString name, RTC_XML::ServicePorts &ret)
 {
 	QVector<RTC_XML::ServicePorts> ports = _comp->get_svcports();
@@ -122,6 +142,10 @@ bool addServicePortTab::searchPort(QString name, RTC_XML::ServicePorts &ret)
 	return false;
 }
 
+/**
+ * @brief サービスポート追加
+ * @param profile サービスポートプロファイルオブジェクト
+ */
 void addServicePortTab::addPort(RTC_XML::ServicePorts profile)
 {
 	if (_comp != NULL)
@@ -140,6 +164,9 @@ void addServicePortTab::addPort(RTC_XML::ServicePorts profile)
 	}
 }
 
+/**
+ * @brief 生成ボタン押下時のスロット
+ */
 void addServicePortTab::createButtonSlot()
 {
 	RTC_XML::ServicePorts profile;

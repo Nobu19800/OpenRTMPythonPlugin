@@ -1,4 +1,8 @@
-
+/*!
+ * @file  addDataPortTab.cpp
+ * @brief データポート設定タブ
+ *
+ */
 
 #include <QAction>
 #include <QLayout>
@@ -34,7 +38,13 @@
 #include "gettext.h"
 
 
-
+/**
+ * @brief コンストラクタ
+ * @param comp コンポーネントプロファイルオブジェクト
+ * @param viewWidget RTC表示ウィジェット
+ * @param listWidget データポート一覧表示ウィジェット
+ * @param parent 親ウィジェット
+ */
 addDataPortTab::addDataPortTab(RTC_XML::RTC_ProfileRTP *comp, RTCViewWidget *viewWidget, DataPortTable *listWidget, QWidget *parent)
 	: BaseTab(parent)
 {
@@ -66,7 +76,12 @@ addDataPortTab::addDataPortTab(RTC_XML::RTC_ProfileRTP *comp, RTCViewWidget *vie
 
 
 
-
+/**
+ * @brief データポート検索
+ * @param name ポート名
+ * @param ret データポートプロファイルオブジェクト
+ * @param return true：指定ポート名のデータポートが存在した false:存在しなかった
+ */
 bool addDataPortTab::searchPort(QString name, RTC_XML::DataPorts &ret)
 {
 	QVector<RTC_XML::DataPorts> ports = _comp->get_dataports();
@@ -81,6 +96,10 @@ bool addDataPortTab::searchPort(QString name, RTC_XML::DataPorts &ret)
 	return false;
 }
 
+/**
+ * @brief データポート追加
+ * @param profile データポートプロファイルオブジェクト
+ */
 void addDataPortTab::addPort(RTC_XML::DataPorts profile)
 {
 
@@ -100,6 +119,10 @@ void addDataPortTab::addPort(RTC_XML::DataPorts profile)
 	}
 }
 
+
+/**
+ * @brief 生成ボタン押下時のスロット
+ */
 void addDataPortTab::createButtonSlot()
 {
 	RTC_XML::DataPorts profile;

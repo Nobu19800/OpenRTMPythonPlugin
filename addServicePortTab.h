@@ -65,8 +65,17 @@ public:
 
 
 public Q_SLOTS:
+	/**
+	 * @brief IDLファイル設定ボタン押下時のスロット
+	 */
 	void IDLFileButtonSlot();
+	/**
+	 * @brief IDLインクルードパス設定ボタン押下時のスロット
+	 */
 	void IDLPathButtonSlot();
+	/**
+	 * @brief 生成ボタン押下時のスロット
+	 */
 	void createButtonSlot();
 //    void fileNew();
 

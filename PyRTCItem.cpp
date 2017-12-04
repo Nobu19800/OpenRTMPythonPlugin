@@ -1,3 +1,9 @@
+/*!
+ * @file  PyRTCItem.cpp
+ * @brief PyRTCアイテム
+ *
+ */
+
 #include <cnoid/MenuManager>
 #include <cnoid/MessageView>
 #include <boost/bind.hpp>
@@ -55,17 +61,26 @@ using namespace boost;
 using namespace rtmiddleware;
 
 
-
+/**
+ * @class PyGILock
+ * @brief Python実行時のロックオブジェクト
+ */
 class PyGILock
 {
 	PyGILState_STATE gstate;
 public:
+	/**
+	 * @brief コンストラクタ
+	 */
 	PyGILock() {
 		gstate = PyGILState_Ensure();
-	}
+	};
+	/**
+	 * @brief デストラクタ
+	 */
 	~PyGILock() {
 		PyGILState_Release(gstate);
-	}
+	};
 };
 
 
@@ -83,7 +98,9 @@ namespace cnoid {
 
 
 
-
+/**
+ * @brief コンストラクタ
+ */
 PyRTCItemBase::PyRTCItemBase() :
 	relativePathBaseType(N_RELATIVE_PATH_BASE_TYPES, CNOID_GETTEXT_DOMAIN_NAME),
 	execContextType(N_EXEC_CONTEXT_TYPES, CNOID_GETTEXT_DOMAIN_NAME)
@@ -91,7 +108,9 @@ PyRTCItemBase::PyRTCItemBase() :
 	body_item = NULL;
 }
 
-
+/**
+ * @brief コンストラクタ
+ */
 PyRTCItem::PyRTCItem()
 {
 	
@@ -107,7 +126,10 @@ PyRTCItem::PyRTCItem()
 
 };
 
-
+/**
+ * @brief コピーコンストラクタ
+ * @param org コピー元
+ */
 PyRTCItem::PyRTCItem(const PyRTCItem& org)
 {
 	setName(org.name());
@@ -116,14 +138,19 @@ PyRTCItem::PyRTCItem(const PyRTCItem& org)
 	execContextType = org.execContextType;
 };
 
-
+/**
+ * @brief デストラクタ
+ */
 PyRTCItem::~PyRTCItem()
 {
 }
 
 
 
-
+/**
+ * @brief 初期化関数
+ * @param ext 
+ */
 void PyRTCItem::initialize(ExtensionManager* ext)
 {
 	static bool initialized = false;
@@ -134,7 +161,10 @@ void PyRTCItem::initialize(ExtensionManager* ext)
 	}
 }
 
-
+/**
+ * @brief プロパティ設定
+ * @param putProperty プロパティ 
+ */
 void PyRTCItem::doPutProperties(PutPropertyFunction& putProperty)
 {
 	FileDialogFilter filter;
@@ -169,7 +199,10 @@ void PyRTCItem::doPutProperties(PutPropertyFunction& putProperty)
 
 }
 
-
+/**
+ * @brief 実行コンテキスト設定
+ * @param which 実行コンテキストID 
+ */
 void PyRTCItem::setExecContextType(int which)
 {
 	if(which != execContextType.which()){
@@ -178,7 +211,10 @@ void PyRTCItem::setExecContextType(int which)
 }
 
 
-
+/**
+ * @brief 相対パス設定
+ * @param which ID
+ */
 void PyRTCItem::setRelativePathBaseType(int which)
 {
 	if(which != relativePathBaseType.which()){
@@ -186,7 +222,10 @@ void PyRTCItem::setRelativePathBaseType(int which)
 	}
 }
 
-
+/**
+ * @brief RTC生成
+ * @param name 名前
+ */
 void PyRTCItem::createComp(std::string name)
 {
 	//MessageView::instance()->putln(MessageView::ERROR,
@@ -237,7 +276,10 @@ void PyRTCItem::createComp(std::string name)
 	}
 }
 
-
+/**
+ * @brief 複製する
+ * @return 複製オブジェクト
+ */
 Item* PyRTCItem::doDuplicate() const
 {
 	return new PyRTCItem(*this);
@@ -245,7 +287,10 @@ Item* PyRTCItem::doDuplicate() const
 
 
 
-
+/**
+ * @brief 保存する
+ * @param archive 
+ */
 bool PyRTCItem::store(Archive& archive)
 {
 	archive.writeRelocatablePath("moduleName", moduleNameProperty);
@@ -256,7 +301,10 @@ bool PyRTCItem::store(Archive& archive)
 
 
 
-
+/**
+ * @brief 復元する
+ * @param archive 
+ */
 bool PyRTCItem::restore(const Archive& archive)
 {
 	std::string value;
@@ -272,7 +320,10 @@ bool PyRTCItem::restore(const Archive& archive)
     return ControllerItem::restore(archive);
 }
 
-
+/**
+ * @brief 初期化時実行関数
+ * @param ext 
+ */
 bool PyRTCItemBase::initialize(ControllerItemIO* io)
 {
 	
@@ -310,13 +361,17 @@ bool PyRTCItemBase::initialize(ControllerItemIO* io)
 	return true;
 }
 
-
+/**
+ * @brief 
+ */
 void PyRTCItem::onPositionChanged()
 {
 	
 }
 
-
+/**
+ * @brief シミュレーション開始時実行関数
+ */
 bool PyRTCItemBase::start()
 {
 	if(!comp_name.empty()){
@@ -352,13 +407,18 @@ bool PyRTCItemBase::start()
 	return true;
 };
 
-
+/**
+ * @brief 刻み幅取得
+ * @return 刻み幅
+ */
 double PyRTCItemBase::timeStep() const
 {
 	return 0;
 };
 
-
+/**
+ * @brief シミュレーション更新前実行関数
+ */
 void PyRTCItemBase::input()
 {
 	{
@@ -381,7 +441,9 @@ void PyRTCItemBase::input()
 };
 
 
-
+/**
+ * @brief シミュレーション更新中実行関数
+ */
 bool PyRTCItemBase::control()
 {
 	if(!comp_name.empty()){
@@ -417,7 +479,9 @@ bool PyRTCItemBase::control()
 	return true;
 };
 
-
+/**
+ * @brief シミュレーション更新後実行関数
+ */
 void PyRTCItemBase::output()
 {
 	{
@@ -439,7 +503,9 @@ void PyRTCItemBase::output()
 
 };
 
-
+/**
+ * @brief シミュレーション終了時実行関数
+ */
 void PyRTCItemBase::stop()
 {
 	if(!comp_name.empty()){

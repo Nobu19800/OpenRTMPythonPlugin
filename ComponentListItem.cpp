@@ -1,3 +1,9 @@
+/*!
+ * @file  ComponentListItem.cpp
+ * @brief コンポーネントリストアイテム
+ *
+ */
+
 #include <cnoid/MenuManager>
 #include <cnoid/MessageView>
 #include <boost/bind.hpp>
@@ -67,7 +73,9 @@ using namespace rtmiddleware;
 
 
 
-
+/**
+ * @brief コンストラクタ
+ */
 ComponentListItem::ComponentListItem()
 	: _mwin(NULL),
 	  _area(NULL)
@@ -75,7 +83,10 @@ ComponentListItem::ComponentListItem()
 
 };
 
-
+/**
+ * @brief コピーコンストラクタ
+ * @param org コピー元
+ */
 ComponentListItem::ComponentListItem(const ComponentListItem& org)
 {
 	setName(org.name());
@@ -95,11 +106,18 @@ ComponentListItem::ComponentListItem(const ComponentListItem& org)
 	
 };
 
-
+/**
+ * @brief デストラクタ
+ */
 ComponentListItem::~ComponentListItem()
 {
 }
 
+
+/**
+ * @brief 初期化関数
+ * @param ext 
+ */
 void ComponentListItem::initialize(ExtensionManager* ext)
 {
 	static bool initialized = false;
@@ -113,23 +131,44 @@ void ComponentListItem::initialize(ExtensionManager* ext)
 
 
 
-
+/**
+ * @brief プロパティ設定
+ * @param putProperty プロパティ 
+ */
 void ComponentListItem::doPutProperties(cnoid::PutPropertyFunction& putProperty)
 {
 }
+
+/**
+ * @brief 複製する
+ * @return 複製オブジェクト
+ */
 cnoid::Item* ComponentListItem::doDuplicate() const
 {
 	return new ComponentListItem(*this);
 }
+
+/**
+ * @brief 保存する
+ * @param archive 
+ */
 bool ComponentListItem::store(cnoid::Archive& archive)
 {
 	return true;
 }
+
+/**
+ * @brief 復元する
+ * @param archive 
+ */
 bool ComponentListItem::restore(const cnoid::Archive& archive)
 {
 	return true;
 }
 
+/**
+ * @brief 
+ */
 void ComponentListItem::onPositionChanged()
 {
 

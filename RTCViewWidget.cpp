@@ -1,4 +1,8 @@
-
+/*!
+ * @file  RTCViewWidget.cpp
+ * @brief RTC表示ウィジェット
+ *
+ */
 
 #include <QAction>
 #include <QLayout>
@@ -37,7 +41,11 @@
 #include "gettext.h"
 
 
-
+/**
+ * @brief コンストラクタ
+ * @param scene シーンオブジェクト
+ * @param parent 親ウィジェット
+ */
 RenderPath::RenderPath(QGraphicsScene* scene, QWidget *parent)
     : QGraphicsItem(),
 	_penWidth(1),
@@ -56,63 +64,108 @@ RenderPath::RenderPath(QGraphicsScene* scene, QWidget *parent)
 	scene->addItem(this);
 }
 
-
+/**
+ * @brief コピーコンストラクタ
+ * @param obj コピー元
+ */
 RenderPath::RenderPath(const RenderPath &obj)
 {
 
 }
 
-
+/**
+ * @brief 描画パス設定
+ * @param path 描画パス設定
+ */
 void RenderPath::setPath(QPainterPath path)
 {
 	_path = path;
 }
 
-
+/**
+ * @brief FillRuleの設定
+ * @param rule FillRule
+ */
 void RenderPath::setFillRule(Qt::FillRule rule)
 {
 	_path.setFillRule(rule);
 }
 
+/**
+ * @brief FillGradientの設定
+ * @param color1 
+ * @param color2 
+ */
 void RenderPath::setFillGradient(QColor color1, QColor color2)
 {
 	_fillColor1 = color1;
 	_fillColor2 = color2;
 }
 
+/**
+ * @brief ペン太さの設定
+ * @param width 太さ
+ */
 void RenderPath::setPenWidth(int width)
 {
 	_penWidth = width;
 }
 
+/**
+ * @brief ペンの色設定
+ * @param color 色
+ */
 void RenderPath::setPenColor(QColor color)
 {
 	_penColor = color;
 }
 
+/**
+ * @brief 回転角度設定
+ * @param degrees 角度
+ */
 void RenderPath::setRotationAngle(int degrees)
 {
 	_rotationAngle = degrees;
 }
 
+/**
+ * @brief 中心位置設定
+ * @param x 位置(X)
+ * @param y 位置(Y)
+ */
 void RenderPath::setCenterPoint(int x, int y)
 {
 	_centerPoint_x = x;
 	_centerPoint_y = y;
 }
 
+/**
+ * @brief 位置設定
+ * @param x 位置(X)
+ * @param y 位置(Y)
+ */
 void RenderPath::setPosition(int x, int y)
 {
 	_pos_x = x;
 	_pos_y = y;
 }
 
+/**
+ * @brief サイズ設定
+ * @param width 幅
+ * @param height 高さ
+ */
 void RenderPath::setSize(int width, int height)
 {
 	_width = width;
 	_height = height;
 }
 
+/**
+ * @brief 矩形取得
+ * @param obj コピー元
+ */
 QRectF RenderPath::boundingRect() const
 {
 	int pos_x = _pos_x*scene()->width() / 100.0;
@@ -137,11 +190,21 @@ QRectF RenderPath::boundingRect() const
 	return QRectF(pos_x, pos_y, width, height);
 }
 
+/**
+ * @brief 描画実行
+ * @param painter 
+ * @param option 
+ * @param widget 
+ */
 void RenderPath::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
 	updatePaint(painter);
 }
 
+/**
+ * @brief 描画更新
+ * @param painter 
+ */
 void RenderPath::updatePaint(QPainter *painter)
 {
 	painter->setRenderHint(QPainter::Antialiasing);
@@ -165,6 +228,10 @@ void RenderPath::updatePaint(QPainter *painter)
 
 }
 
+/**
+ * @brief コンストラクタ
+ * @param parent 親ウィジェット
+ */
 RTCViewWidgetBase::RTCViewWidgetBase(QWidget *parent)
 	: QWidget(parent)
 {
@@ -178,6 +245,11 @@ RTCViewWidgetBase::RTCViewWidgetBase(QWidget *parent)
 	_mainLayout->addWidget(_view);
 }
 
+/**
+ * @brief コンストラクタ
+ * @param profile RTCプロファイル
+ * @param parent 親ウィジェット
+ */
 RTCViewWidget::RTCViewWidget(RTC_XML::RTC_Profile* profile,  QWidget *parent) :
 	RTCViewWidgetBase(parent)
 {
@@ -187,7 +259,11 @@ RTCViewWidget::RTCViewWidget(RTC_XML::RTC_Profile* profile,  QWidget *parent) :
 	_scene->update();
 }
 
-
+/**
+ * @brief コンストラクタ
+ * @param comp RTCプロファイル
+ * @param parent 親ウィジェット
+ */
 RTCViewWidgetRTP::RTCViewWidgetRTP(RTC_XML::RTC_ProfileRTP* profile, QWidget *parent)
 	: RTCViewWidget(profile, parent)
 {
@@ -196,13 +272,23 @@ RTCViewWidgetRTP::RTCViewWidgetRTP(RTC_XML::RTC_ProfileRTP* profile, QWidget *pa
 }
 
 
-
+/**
+ * @brief コンストラクタ
+ * @param scene シーンオブジェクト
+ * @param parent 親ウィジェット
+ */
 GraphicsView::GraphicsView(QGraphicsScene * scene, QWidget * parent):
 	QGraphicsView(scene, parent)
 {
 
 }
 
+/**
+ * @brief コンストラクタ
+ * @param scene シーンオブジェクト
+ * @param comp RTCプロファイル
+ * @param parent 親ウィジェット
+ */
 RenderRTC::RenderRTC(QGraphicsScene* scene, RTC_XML::RTC_Profile* comp, QWidget* parent)
 	: RenderPath(scene, parent),
 	_penWidth(1),
@@ -224,6 +310,9 @@ RenderRTC::RenderRTC(QGraphicsScene* scene, RTC_XML::RTC_Profile* comp, QWidget*
 
 }
 
+/**
+ * @brief RTC描画設定更新
+ */
 void RenderRTC::setRTC()
 {
 	int num = getPortNum();
@@ -265,6 +354,10 @@ void RenderRTC::setRTC()
 	_path.closeSubpath();
 }
 
+/**
+ * @brief データポート追加
+ * @param profile データポートプロファイル
+ */
 void RenderRTC::addDataPort(RTC_XML::DataPorts profile)
 {
 	
@@ -284,6 +377,10 @@ void RenderRTC::addDataPort(RTC_XML::DataPorts profile)
 	scene()->update();
 }
 
+/**
+ * @brief サービスポート追加
+ * @param profile サービスポートプロファイル
+ */
 void RenderRTC::addServicePort(RTC_XML::ServicePorts profile)
 {
 	ServicePort *sp = new ServicePort(profile, _port_size, scene());
@@ -296,6 +393,10 @@ void RenderRTC::addServicePort(RTC_XML::ServicePorts profile)
 	scene()->update();
 }
 
+/**
+ * @brief ポート削除
+ * @param name ポート名
+ */
 void RenderRTC::removePort(QString name)
 {
 	if (_ports.keys().indexOf(name) >= 0)
@@ -306,6 +407,10 @@ void RenderRTC::removePort(QString name)
 		scene()->update();
 	}
 }
+
+/**
+ * @brief 全ポート削除
+ */
 void RenderRTC::removeAllPort()
 {
 	for (QMap <QString, Port*>::iterator itr = _ports.begin(); itr != _ports.end(); itr++)
@@ -319,7 +424,10 @@ void RenderRTC::removeAllPort()
 
 }
 
-
+/**
+ * @brief ポート総数取得
+ * @return ポート総数
+ */
 int RenderRTC::getPortNum()
 {
 	int l_count = 0;
@@ -346,7 +454,10 @@ int RenderRTC::getPortNum()
 	}
 }
 
-
+/**
+ * @brief RTCプロファイル設定
+ * @param comp RTCプロファイル
+ */
 void RenderRTC::load(RTC_XML::RTC_Profile* comp)
 {
 	removeAllPort();
@@ -370,6 +481,13 @@ void RenderRTC::load(RTC_XML::RTC_Profile* comp)
 	}
 }
 
+/**
+ * @brief コンストラクタ
+ * @param mainwindow RTCメインウインドウ
+ * @param scene シーンオブジェクト
+ * @param comp RTCプロファイル
+ * @param parent 親ウィジェット
+ */
 RenderRTCRTP::RenderRTCRTP(QGraphicsScene* scene, RTC_MainWindow *mainwindow, RTC_XML::RTC_ProfileRTP* comp, QWidget* parent)
 	: RenderRTC(scene, comp, parent),
 	current_state(RTC_XML::RTC_ProfileRTP::RTP_Created),
@@ -394,6 +512,10 @@ RenderRTCRTP::RenderRTCRTP(QGraphicsScene* scene, RTC_MainWindow *mainwindow, RT
 	
 }
 
+/**
+ * @brief データポート追加
+ * @param profile データポートプロファイル
+ */
 void RenderRTCRTP::addDataPort(RTC_XML::DataPorts profile)
 {
 
@@ -407,6 +529,10 @@ void RenderRTCRTP::addDataPort(RTC_XML::DataPorts profile)
 	scene()->update();
 }
 
+/**
+ * @brief サービスポート追加
+ * @param profile サービスポートプロファイル
+ */
 void RenderRTCRTP::addServicePort(RTC_XML::ServicePorts profile)
 {
 	
@@ -423,18 +549,32 @@ void RenderRTCRTP::addServicePort(RTC_XML::ServicePorts profile)
 	
 }
 
+/**
+ * @brief コンストラクタ
+ * @param defsize デフォルトサイズ
+ * @param scene シーンオブジェクト
+ * @param parent 親ウィジェット
+ */
 Port::Port(int defsize, QGraphicsScene* scene, QWidget* parent)
 	: RenderPath(scene, parent)
 {
 	_size = defsize;
 }
 
+/**
+ * @brief コピーコンストラクタ
+ * @param obj コピー元
+ */
 Port::Port(const Port &obj)
 	: RenderPath(obj)
 {
 
 }
 
+/**
+ * @brief サイズ設定
+ * @param size サイズ
+ */
 void Port::setBoxSize(int size)
 {
 	_size = size;
@@ -443,6 +583,12 @@ void Port::setBoxSize(int size)
 }
 
 
+/**
+ * @brief コンストラクタ
+ * @param dport データポート描画オブジェクト
+ * @param dialog データポート編集ダイアログ
+ * @param parent 親ウィジェット
+ */
 DataPortWidget::DataPortWidget(DataPortRTP *dport, DataPortDialog *dialog, QWidget * parent)
 	: BaseTab(parent)
 {
@@ -463,12 +609,20 @@ DataPortWidget::DataPortWidget(DataPortRTP *dport, DataPortDialog *dialog, QWidg
 	mainLayout->addStretch();
 }
 
-
+/**
+ * @brief 削除ボタン押下時スロット
+ */
 void DataPortWidget::deleteButtonSlot()
 {
 	_dialog->accept();
 }
 
+
+/**
+ * @brief コンストラクタ
+ * @param dport データポート描画オブジェクト
+ * @param parent 親ウィジェット
+ */
 DataPortDialog::DataPortDialog(DataPortRTP *dport, QWidget * parent)
 {
 	setWindowTitle(_("Edit DataPort Dialog"));
@@ -481,6 +635,14 @@ DataPortDialog::DataPortDialog(DataPortRTP *dport, QWidget * parent)
 
 }
 
+
+/**
+ * @brief コンストラクタ
+ * @param profile データポートプロファイル
+ * @param defsize デフォルトサイズ
+ * @param scene シーンオブジェクト
+ * @param parent 親ウィジェット
+ */
 DataPort::DataPort(RTC_XML::DataPorts profile, int defsize, QGraphicsScene* scene, QWidget* parent)
 	:Port(defsize, scene, parent)
 {
@@ -498,6 +660,10 @@ DataPort::DataPort(RTC_XML::DataPorts profile, int defsize, QGraphicsScene* scen
 
 }
 
+/**
+ * @brief コピーコンストラクタ
+ * @param obj コピー元
+ */
 DataPort::DataPort(const DataPort &obj)
 	: Port(obj)
 {
@@ -505,6 +671,10 @@ DataPort::DataPort(const DataPort &obj)
 
 }
 
+/**
+ * @brief 描画パス取得
+ * @return 描画パス
+ */
 QPainterPath DataPort::getPath()
 {
 	QPainterPath rectPath;
@@ -547,13 +717,26 @@ QPainterPath DataPort::getPath()
 
 
 
-
+/**
+ * @brief 描画実行
+ * @param painter 
+ * @param option 
+ * @param widget 
+ */
 void DataPort::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
 	updatePaint(painter);
 }
 
 
+/**
+ * @brief コンストラクタ
+ * @param profile データポートプロファイル
+ * @param defsize デフォルトサイズ
+ * @param scene シーンオブジェクト
+ * @param mainwindow RTCEditorメインウインドウ
+ * @param parent 親ウィジェット
+ */
 DataPortRTP::DataPortRTP(RTC_XML::DataPorts profile, int size, QGraphicsScene* scene, RTC_MainWindow *mainwindow, QWidget* parent)
 	: DataPort(profile, size, scene, parent)
 {
@@ -561,6 +744,10 @@ DataPortRTP::DataPortRTP(RTC_XML::DataPorts profile, int size, QGraphicsScene* s
 	
 }
 
+/**
+ * @brief マウスダブルクリック時のスロット
+ * @param event イベント内容
+ */
 void DataPortRTP::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
 	//std::cout << "mouseDoubleClickEvent" << std::endl;
@@ -578,7 +765,12 @@ void DataPortRTP::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 
 
 
-
+/**
+ * @brief コンストラクタ
+ * @param sport サービスポートプロファイル
+ * @param dialog サービスポート設定ダイアログ
+ * @param parent 親ウィジェット
+ */
 ServicePortWidget::ServicePortWidget(ServicePortRTP *sport, ServicePortDialog *dialog, QWidget * parent)
 {
 	_dialog = dialog;
@@ -602,13 +794,19 @@ ServicePortWidget::ServicePortWidget(ServicePortRTP *sport, ServicePortDialog *d
 
 }
 
-
+/**
+ * @brief 削除ボタン押下時スロット
+ */
 void ServicePortWidget::deleteButtonSlot()
 {
 	_dialog->accept();
 }
 
-
+/**
+ * @brief コンストラクタ
+ * @param sport サービスポート描画オブジェクト
+ * @param parent 親ウィジェット
+ */
 ServicePortDialog::ServicePortDialog(ServicePortRTP *sport, QWidget * parent)
 {
 	setWindowTitle(_("Edit ServicePort Dialog"));
@@ -622,6 +820,14 @@ ServicePortDialog::ServicePortDialog(ServicePortRTP *sport, QWidget * parent)
 }
 
 
+
+/**
+ * @brief コンストラクタ
+ * @param profile サービスポートプロファイル
+ * @param defsize デフォルトサイズ
+ * @param scene シーンオブジェクト
+ * @param parent 親ウィジェット
+ */
 ServicePort::ServicePort(RTC_XML::ServicePorts profile, int defsize, QGraphicsScene* scene, QWidget* parent)
 	: Port(defsize, scene, parent)
 {
@@ -641,7 +847,10 @@ ServicePort::ServicePort(RTC_XML::ServicePorts profile, int defsize, QGraphicsSc
 	
 }
 
-
+/**
+ * @brief 描画パス取得
+ * @return 描画パス
+ */
 QPainterPath ServicePort::getPath()
 {
 	QPainterPath rectPath;
@@ -668,14 +877,26 @@ QPainterPath ServicePort::getPath()
 	return rectPath;
 }
 
-
+/**
+ * @brief 描画実行
+ * @param painter 
+ * @param option 
+ * @param widget 
+ */
 void ServicePort::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
 	updatePaint(painter);
 }
 
 
-
+/**
+ * @brief コンストラクタ
+ * @param profile サービスポートプロファイル
+ * @param defsize デフォルトサイズ
+ * @param scene シーンオブジェクト
+ * @param mainwindow RTCEditorメインウインドウ
+ * @param parent 親ウィジェット
+ */
 ServicePortRTP::ServicePortRTP(RTC_XML::ServicePorts profile, int size, QGraphicsScene* scene, RTC_MainWindow *mainwindow, QWidget* parent)
 	: ServicePort(profile, size, scene, parent)
 {
@@ -684,7 +905,10 @@ ServicePortRTP::ServicePortRTP(RTC_XML::ServicePorts profile, int size, QGraphic
 
 }
 
-
+/**
+ * @brief マウスダブルクリック時のスロット
+ * @param event イベント内容
+ */
 void ServicePortRTP::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
 	//std::cout << "mouseDoubleClickEvent" << std::endl;
@@ -699,13 +923,18 @@ void ServicePortRTP::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 
 }
 
-
+/**
+ * @brief 描画RTCオブジェクト取得
+ * @return 描画RTCオブジェクト
+ */
 RenderRTC *RTCViewWidgetBase::getRenderRTC()
 {
 	return _renderWindow;
 }
 
-
+/**
+ * @brief RTC状態確認スロット
+ */
 void RenderRTCRTP::check_rtc()
 {
 	//cnoid::MessageView::instance()->putln(0, _("test1"));
@@ -769,7 +998,10 @@ void RenderRTCRTP::check_rtc()
 	}
 }
 
-
+/**
+ * @brief 描画RTCオブジェクト取得
+ * @return 描画RTCオブジェクト
+ */
 RenderRTCRTP* RTCViewWidgetRTP::getRenderRTC()
 {
 	return dynamic_cast<RenderRTCRTP *>(_renderWindow);

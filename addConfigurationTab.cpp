@@ -1,4 +1,8 @@
-
+/*!
+ * @file  addConfigurationTab.cpp
+ * @brief コンフィギュレーション設定タブ
+ *
+ */
 
 #include <QAction>
 #include <QLayout>

@@ -1,4 +1,8 @@
-
+/*!
+ * @file  ControlCompWidget.cpp
+ * @brief コンポーネント監視ウィジェット
+ *
+ */
 
 #include <QAction>
 #include <QLayout>
@@ -32,7 +36,10 @@
 #include "gettext.h"
 
 
-
+/**
+ * @brief コンストラクタ
+ * @param parent 親ウィジェット
+ */
 ControlCompWidget::ControlCompWidget(QWidget *parent)
 	: BaseTab(parent)
 {
@@ -61,22 +68,34 @@ ControlCompWidget::ControlCompWidget(QWidget *parent)
 	subLayouts.back()->addStretch();
 }
 
-
+/**
+ * @brief 設定している実行コンテキストのID取得
+ * @retuen 実行コンテキストのID
+ */
 int ControlCompWidget::getECNum()
 {
 	return _ECCombox.getItemText().toInt();
 }
 
+/**
+ * @brief アクティブボタンのスロット
+ */
 void ControlCompWidget::activeButtonSlot()
 {
 	sigActiveButton();
 }
 
+/**
+ * @brief 非アクティブボタンのスロット
+ */
 void ControlCompWidget::deactiveButtonSlot()
 {
 	sigDeactiveButton();
 }
 
+/**
+ * @brief リセットボタンのスロット
+ */
 void ControlCompWidget::resetButtonSlot()
 {
 	sigResetButton();

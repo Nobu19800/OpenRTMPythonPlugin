@@ -1,3 +1,9 @@
+/*!
+ * @file  RTC_MainWindow.cpp
+ * @brief RTCEditorメインウィンドウクラス
+ *
+ */
+
 #include <cnoid/MenuManager>
 #include <cnoid/MessageView>
 #include <boost/bind.hpp>
@@ -57,17 +63,26 @@ using namespace rtmiddleware;
 
 
 
-
+/**
+ * @class PyGILock
+ * @brief Python実行時のロックオブジェクト
+ */
 class PyGILock
 {
 	PyGILState_STATE gstate;
 public:
+	/**
+	 * @brief コンストラクタ
+	 */
 	PyGILock() {
 		gstate = PyGILState_Ensure();
-	}
+	};
+	/**
+	 * @brief デストラクタ
+	 */
 	~PyGILock() {
 		PyGILState_Release(gstate);
-	}
+	};
 };
 
 
@@ -82,14 +97,19 @@ namespace cnoid {
 
 
 
-
+/**
+ * @brief コンストラクタ
+ */
 RTCEditorItem::RTCEditorItem()
 	: mwin(NULL)
 {
 
 };
 
-
+/**
+ * @brief コピーコンストラクタ
+ * @param org コピー元
+ */
 RTCEditorItem::RTCEditorItem(const RTCEditorItem& org)
 {
 	setName(org.name());
@@ -119,11 +139,17 @@ RTCEditorItem::RTCEditorItem(const RTCEditorItem& org)
 	
 };
 
-
+/**
+ * @brief デストラクタ
+ */
 RTCEditorItem::~RTCEditorItem()
 {
 }
 
+/**
+ * @brief RTCのファイル更新
+ * @param filename Pythonファイルのパス
+ */
 void RTCEditorItem::update_comp(std::string filename)
 {
 	//MessageView::instance()->putln(0, name);
@@ -173,7 +199,9 @@ void RTCEditorItem::update_comp(std::string filename)
 	}
 }
 
-
+/**
+ * @brief RTCのアクティブ化
+ */
 void RTCEditorItem::activate_comp()
 {
 
@@ -217,7 +245,9 @@ void RTCEditorItem::activate_comp()
 	}
 }
 
-
+/**
+ * @brief RTCの非アクティブ化
+ */
 void RTCEditorItem::deactivate_comp()
 {
 
@@ -261,7 +291,9 @@ void RTCEditorItem::deactivate_comp()
 	}
 }
 
-
+/**
+ * @brief RTCのリセット
+ */
 void RTCEditorItem::reset_comp()
 {
 
@@ -305,6 +337,10 @@ void RTCEditorItem::reset_comp()
 	}
 }
 
+/**
+ * @brief データポート追加
+ * @param port データポートプロファイル
+ */
 void RTCEditorItem::add_dataport(RTC_XML::DataPorts port)
 {
 	if (comp_name.empty())
@@ -346,7 +382,10 @@ void RTCEditorItem::add_dataport(RTC_XML::DataPorts port)
 	}
 }
 
-
+/**
+ * @brief 初期化関数
+ * @param ext 
+ */
 void RTCEditorItem::initialize(ExtensionManager* ext)
 {
 	static bool initialized = false;
@@ -358,13 +397,19 @@ void RTCEditorItem::initialize(ExtensionManager* ext)
 }
 
 
-
+/**
+ * @brief RTCダイアグラム上の選択アイテム変更時実行関数
+ * @param item RTCダイアグラム上で選択中のRTC
+ */
 void RTCEditorItem::onItemSelectionChanged(RTSComp* item)
 {
 	//MessageView::instance()->putln(0, item->name);
 }
 
-
+/**
+ * @brief RTC生成
+ * @param name RTC名
+ */
 void RTCEditorItem::createEditComp(std::string name)
 {
 	
@@ -417,7 +462,10 @@ void RTCEditorItem::createEditComp(std::string name)
 	}
 }
 
-
+/**
+ * @brief RTCの状態取得
+ * @param status RTCプロファイル
+ */
 void RTCEditorItem::get_status(RTC_XML::RTC_ProfileRTP::RTC_State& status)
 {
 	if (comp_name.empty())
@@ -478,29 +526,53 @@ void RTCEditorItem::get_status(RTC_XML::RTC_ProfileRTP::RTC_State& status)
 }
 
 
-
+/**
+ * @brief プロパティ設定
+ * @param putProperty プロパティ 
+ */
 void RTCEditorItem::doPutProperties(cnoid::PutPropertyFunction& putProperty)
 {
 }
+
+/**
+ * @brief 複製する
+ * @return 複製オブジェクト
+ */
 cnoid::Item* RTCEditorItem::doDuplicate() const
 {
 	return new RTCEditorItem(*this);
 }
+
+/**
+ * @brief 保存する
+ * @param archive 
+ */
 bool RTCEditorItem::store(cnoid::Archive& archive)
 {
 	return true;
 }
+
+/**
+ * @brief 復元する
+ * @param archive 
+ */
 bool RTCEditorItem::restore(const cnoid::Archive& archive)
 {
 	return true;
 }
 
-
+/**
+ * @brief 初期化時実行関数
+ * @param ext 
+ */
 bool RTCEditorItem::initialize(cnoid::ControllerItemIO* io)
 {
 	return true;
 }
 
+/**
+ * @brief 
+ */
 void RTCEditorItem::onPositionChanged()
 {
 

@@ -68,6 +68,9 @@ public:
 	cnoid::Signal<void(RTC_XML::DataPorts)>  sigAddPort;
 
 public Q_SLOTS:
+	/**
+	 * @brief 生成ボタン押下時のスロット
+	 */
 	void createButtonSlot();
 //    void fileNew();
 

@@ -1,3 +1,9 @@
+/*!
+ * @file  OpenRTMPythonPlugin.cpp
+ * @brief OpenRTM連携プラグインPython版
+ *
+ */
+
 #include <cnoid/Plugin>
 #include <cnoid/MenuManager>
 #include <cnoid/MessageView>
@@ -51,16 +57,26 @@ using namespace boost;
 using namespace rtmiddleware;
 
 
+/**
+ * @class PyGILock
+ * @brief Python実行時のロックオブジェクト
+ */
 class PyGILock
 {
 	PyGILState_STATE gstate;
 public:
+	/**
+	 * @brief コンストラクタ
+	 */
 	PyGILock() {
 		gstate = PyGILState_Ensure();
-	}
+	};
+	/**
+	 * @brief デストラクタ
+	 */
 	~PyGILock() {
 		PyGILState_Release(gstate);
-	}
+	};
 };
 
 
@@ -158,21 +174,38 @@ BOOST_PYTHON_MODULE(CnoidLink)
 
 
 
-
+/**
+ * @class OpenRTMPythonPlugin
+ * @brief OpenRTM連携プラグインPython版
+ */
 class CNOID_EXPORT OpenRTMPythonPlugin : public Plugin
 {
 public:
-
-    OpenRTMPythonPlugin();
+	/**
+	 * @brief コンストラクタ
+	 */
+	OpenRTMPythonPlugin();
+	/**
+	 * @brief デストラクタ
+	 */
 	virtual ~OpenRTMPythonPlugin();
-
-    virtual bool initialize();
-    virtual bool finalize();
+	/**
+	 * @brief 初期化関数
+	 * @return true:成功 false:失敗
+	 */
+	virtual bool initialize();
+	/**
+	 * @brief 終了関数
+	 * @return true:成功 false:失敗
+	 */
+	virtual bool finalize();
 
 
 };
 
-
+/**
+ * @brief コンストラクタ
+ */
 OpenRTMPythonPlugin::OpenRTMPythonPlugin() :
 Plugin("OpenRTMPython")
 {
@@ -186,11 +219,18 @@ Plugin("OpenRTMPython")
 	
 }
 
+/**
+ * @brief デストラクタ
+ */
 OpenRTMPythonPlugin::~OpenRTMPythonPlugin()
 {
 	
 }
 
+/**
+ * @brief 初期化関数
+ * @return true:成功 false:失敗
+ */
 bool OpenRTMPythonPlugin::initialize()
 {
 	//itemManager().registerClass<PyRTCItem>(N_("PyRTCItem"));
@@ -261,7 +301,10 @@ bool OpenRTMPythonPlugin::initialize()
         return true;
 }
 
-
+/**
+ * @brief 終了関数
+ * @return true:成功 false:失敗
+ */
 bool OpenRTMPythonPlugin::finalize()
 {
 	{

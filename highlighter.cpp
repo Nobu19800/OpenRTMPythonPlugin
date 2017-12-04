@@ -1,7 +1,16 @@
+/*!
+ * @file  highlighter.cpp
+ * @brief エディタのハイライト機能クラス
+ *        Qtのサンプル(http://doc.qt.io/qt-5/qtwidgets-richtext-syntaxhighlighter-example.html)を一部変更
+ *
+ */
 
 #include "highlighter.h"
 
-//! [0]
+/**
+ * @brief コンストラクタ
+ * @param parent 親ウィジェット
+ */
 Highlighter::Highlighter(QTextDocument *parent)
     : QSyntaxHighlighter(parent)
 {
@@ -56,6 +65,10 @@ Highlighter::Highlighter(QTextDocument *parent)
     commentEndExpression = QRegExp("\\*/");
 }
 
+/**
+ * @brief 
+ * @param text 
+ */
 void Highlighter::highlightBlock(const QString &text)
 {
 	Q_FOREACH(const HighlightingRule &rule, highlightingRules) {

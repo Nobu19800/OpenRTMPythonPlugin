@@ -32,6 +32,10 @@ public:
 	Highlighter(QTextDocument *parent = 0);
 
 protected:
+	/**
+	 * @brief 
+	 * @param text 
+	 */
 	void highlightBlock(const QString &text) override;
 
 private:

@@ -1,4 +1,8 @@
-
+/*!
+ * @file  ServicePortTable.cpp
+ * @brief サービスポート一覧表示クラス
+ *
+ */
 
 #include <QAction>
 #include <QLayout>
@@ -30,6 +34,10 @@
 #include "gettext.h"
 
 
+/**
+ * @brief コンストラクタ
+ * @param parent 親ウィジェット
+ */
 ServicePortOperationDialog::ServicePortOperationDialog(QWidget *parent)
 {
 	setWindowTitle(_("Function List"));
@@ -39,6 +47,10 @@ ServicePortOperationDialog::ServicePortOperationDialog(QWidget *parent)
 }
 
 
+/**
+ * @brief コンストラクタ
+ * @param name 表示名
+ */
 ServicePortSettingButton::ServicePortSettingButton(QString name)
 	:QPushButton(name),
 	_dialog(0)
@@ -46,6 +58,9 @@ ServicePortSettingButton::ServicePortSettingButton(QString name)
 	QObject::connect(this, SIGNAL(clicked()), this, SLOT(pushSlot()));
 }
 
+/**
+ * @brief ボタン押下時スロット
+ */
 void ServicePortSettingButton::pushSlot()
 {
 	_dialog = new ServicePortOperationDialog();
@@ -53,6 +68,9 @@ void ServicePortSettingButton::pushSlot()
 }
 
 
+/**
+ * @brief コンストラクタ
+ */
 ServicePortTable::ServicePortTable()
 	: QTableWidget(5,3)
 {
@@ -64,6 +82,11 @@ ServicePortTable::ServicePortTable()
 	setSelectionMode(QAbstractItemView::NoSelection);
 }
 
+
+/**
+ * @brief リスト更新
+ * @param ports データポート一覧
+ */
 void ServicePortTable::list_update(QVector<RTC_XML::ServicePorts> ports)
 {
 	setRowCount(ports.size());

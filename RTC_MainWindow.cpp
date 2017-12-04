@@ -1,4 +1,8 @@
-
+/*!
+ * @file  RTC_MainWindow.cpp
+ * @brief RTCEditorメインウィンドウクラス
+ *
+ */
 
 #include "RTC_MainWindow.h"
 
@@ -32,6 +36,11 @@
 #include "gettext.h"
 
 
+
+/**
+ * @brief コンストラクタ
+ * @param parent 親ウィジェット
+ */
 ModuleSettingWidget::ModuleSettingWidget(QWidget *parent)
 	: QWidget(parent)
 {
@@ -50,6 +59,12 @@ ModuleSettingWidget::ModuleSettingWidget(QWidget *parent)
 	Highlighter *highlighter = new Highlighter(textEdit->document());
 }
 
+
+/**
+ * @brief コンストラクタ
+ * @param parent 親ウィジェット
+ * @param flags 
+ */
 RTC_MainWindow::RTC_MainWindow(QWidget *parent, Qt::WindowFlags flags)
     : QMainWindow(parent, flags)
 {
@@ -145,7 +160,10 @@ RTC_MainWindow::RTC_MainWindow(QWidget *parent, Qt::WindowFlags flags)
 
 }
 
-
+/**
+ * @brief 編集中のPythonファイルパス取得
+ * @return Pythonファイルのパス
+ */
 QString RTC_MainWindow::getFileName()
 {
 	QString filename = "rtc_module.py";
@@ -153,6 +171,9 @@ QString RTC_MainWindow::getFileName()
 	return _tmp_dir.path() + "/" + filename;
 }
 
+/**
+ * @brief 保存ボタン押下時のスロット
+ */
 void RTC_MainWindow::save_button_slot()
 {
 
@@ -208,7 +229,11 @@ void RTC_MainWindow::save_button_slot()
 
 
 
-
+/**
+ * @brief アクティビティ編集タブ追加
+ * @param name 名前
+ * @param text テキスト
+ */
 void RTC_MainWindow::addActivityTab(ActivityCode name, QString text)
 {
 	tab_list[name] = new ActivityTab(name, text);
@@ -219,7 +244,10 @@ void RTC_MainWindow::addActivityTab(ActivityCode name, QString text)
 
 }
 
-
+/**
+ * @brief サービスポート削除
+ * @param name サービスポート名
+ */
 void RTC_MainWindow::deleteServicePort(QString name)
 {
 	vw->getRenderRTC()->removePort(name);
@@ -231,6 +259,11 @@ void RTC_MainWindow::deleteServicePort(QString name)
 		_serviceport_widget->list_update(_comp->get_svcports());
 	}
 }
+
+/**
+ * @brief データポート削除
+ * @param name データポート名
+ */
 void RTC_MainWindow::deleteDataPort(QString name)
 {
 	vw->getRenderRTC()->removePort(name);
@@ -242,6 +275,11 @@ void RTC_MainWindow::deleteDataPort(QString name)
 		_dataport_widget->list_update(_comp->get_dataports());
 	}
 }
+
+/**
+ * @brief コンフィグレーションパラメータ削除
+ * @param name コンフィグレーションパラメータ名
+ */
 void RTC_MainWindow::deleteConfig(QString name)
 {
 
@@ -254,6 +292,9 @@ void RTC_MainWindow::deleteConfig(QString name)
 	}
 }
 
+/**
+ * @brief メニュー作成
+ */
 void RTC_MainWindow::createMenus()
 {
 

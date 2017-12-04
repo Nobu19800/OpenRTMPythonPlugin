@@ -1,4 +1,8 @@
-
+/*!
+ * @file  PythonEditor.cpp
+ * @brief Python用エディタ
+ *
+ */
 
 #include <QAction>
 #include <QApplication>
@@ -32,7 +36,10 @@ const int PythonEditor::tab_keywords_size = 2;
 const char *PythonEditor::tab_keywords[tab_keywords_size] = { "break", "return" };
 
 
-
+/**
+ * @brief コンストラクタ
+ * @param parent 親ウィジェット
+ */
 PythonEditor::PythonEditor(QWidget *parent)
     : QTextEdit(parent),
 	fontSize(12),
@@ -44,7 +51,11 @@ PythonEditor::PythonEditor(QWidget *parent)
 }
 
 
-
+/**
+ * @brief フォント設定
+ * @param fontSize フォントサイズ
+ * @param wrapColumn 行の文字数
+ */
 void PythonEditor::createFont(const int fontSize, const int wrapColumn)
 {
 	QFont font("monospace", fontSize);
@@ -56,7 +67,10 @@ void PythonEditor::createFont(const int fontSize, const int wrapColumn)
 	setLineWrapColumnOrWidth(fontSize * wrapColumn);
 }
 
-
+/**
+ * @brief 
+ * @param source 
+ */
 void PythonEditor::insertFromMimeData(const QMimeData * source)
 {
 
@@ -66,13 +80,19 @@ void PythonEditor::insertFromMimeData(const QMimeData * source)
 	}
 }
 
-
+/**
+ * @brief フォントサイズ設定
+ * @param s フォントサイズ
+ */
 void PythonEditor::setFontSize(const int s)
 {
 	createFont(s, wrapColumn);
 }
 
-
+/**
+ * @brief キー押下時のイベント
+ * @param e イベント内容  
+ */
 void PythonEditor::keyPressEvent(QKeyEvent *e)
 {
 	QTextEdit::keyPressEvent(e);

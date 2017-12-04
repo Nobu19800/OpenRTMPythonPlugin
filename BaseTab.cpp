@@ -1,3 +1,8 @@
+/*!
+ * @file  BaseTab.cpp
+ * @brief タブの基本クラス
+ *
+ */
 
 
 #include <QAction>
@@ -28,7 +33,10 @@
 #include "BaseTab.h"
 
 
-
+/**
+ * @brief コンストラクタ
+ * @param parent 親ウィジェット
+ */
 BaseTab::BaseTab(QWidget *parent)
     : QWidget(parent)
 {
@@ -40,7 +48,14 @@ BaseTab::BaseTab(QWidget *parent)
 }
 
 
-
+/**
+ * @brief ウィジェット追加
+ * @param wid 追加ウィジェット
+ * @param name 名前
+ * @param label ラベル名
+ * @param t ウィジェットの種別
+ * @return ウィジェット格納クラス
+ */
 BaseWidget BaseTab::apendWidget(QWidget *wid, QString name, QString label, WidgetType t)
 {
 	QGroupBox *widget = new QGroupBox(label);
@@ -59,7 +74,15 @@ BaseWidget BaseTab::apendWidget(QWidget *wid, QString name, QString label, Widge
 
 
 
-
+/**
+ * @brief コンボボックス追加
+ * @param name 名前
+ * @param label ラベル名
+ * @param value 初期の値
+ * @param ls アイテムリスト
+ * @param default_s デフォルト値
+ * @return ウィジェット格納クラス
+ */
 BaseWidget BaseTab::addCombox(QString name, QString label, QVector<QString> value, QVector<QString> ls, QString default_s)
 {
 	QComboBox *wid_combo = new QComboBox();
@@ -95,7 +118,14 @@ BaseWidget BaseTab::addCombox(QString name, QString label, QVector<QString> valu
 }
 
 
-
+/**
+ * @brief ラインテキストボックス追加
+ * @param name 名前
+ * @param label ラベル名
+ * @param value 初期の値
+ * @param default_s デフォルト値
+ * @return ウィジェット格納クラス
+ */
 BaseWidget BaseTab::addTextBox(QString name, QString label, QVector<QString> value, QString default_s)
 {
 	QLineEdit *wid_line = new QLineEdit();
@@ -125,6 +155,23 @@ BaseWidget BaseTab::addTextBox(QString name, QString label, QVector<QString> val
 }
 
 
+/**
+ * @brief コンストラクタ
+ * @param widget ウィジェット
+ * @param layout レイアウト
+ * @param t ウィジェット種別
+ */
+BaseWidget::BaseWidget(QWidget *widget, QLayout *layout, WidgetType t)
+	: _widget(widget),
+	  _layout(layout),
+	  _type(t)
+{
+}
+
+/**
+ * @brief ラインテキストボックスにテキスト設定
+ * @param text テキスト
+ */
 void BaseWidget::setText(QString text)
 {
 	QLineEdit *wid = dynamic_cast<QLineEdit*>(_widget);
@@ -134,7 +181,10 @@ void BaseWidget::setText(QString text)
 	}
 }
 
-
+/**
+ * @brief ラインテキストボックスのテキスト取得
+ * @return テキスト
+ */
 QString BaseWidget::getText()
 {
 	QLineEdit *wid = dynamic_cast<QLineEdit*>(_widget);
@@ -144,6 +194,11 @@ QString BaseWidget::getText()
 	}
 	return "";
 }
+
+/**
+ * @brief コンボボックスのテキスト取得
+ * @return テキスト
+ */
 QString BaseWidget::getItemText()
 {
 	QComboBox *wid = dynamic_cast<QComboBox*>(_widget);

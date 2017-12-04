@@ -116,4 +116,4 @@ install(FILES samples/QuadrupedRobot_Choreonoid/QuadrupedRobot_Choreonoid.conf D
 
 
 configure_file(model/QuadrupedRobot/QuadrupedRobot.yaml ${PROJECT_BINARY_DIR}/${CNOID_SHARE_SUBDIR}/model/QuadrupedRobot/QuadrupedRobot.yaml COPYONLY)
-install(FILES model/QuadrupedRobot/QuadrupedRobot.yaml DESTINATION ${CNOID_SHARE_SUBDIR}/model/)
+install(FILES model/QuadrupedRobot/QuadrupedRobot.yaml DESTINATION ${CNOID_SHARE_SUBDIR}/model/QuadrupedRobot/)

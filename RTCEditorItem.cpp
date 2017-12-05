@@ -1,12 +1,14 @@
-/*!
+ï»¿/*!
  * @file  RTC_MainWindow.cpp
- * @brief RTCEditorƒƒCƒ“ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX
+ * @brief RTCEditorãƒ¡ã‚¤ãƒ³ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹
  *
  */
 
 #include <cnoid/MenuManager>
 #include <cnoid/MessageView>
 #include <boost/bind.hpp>
+
+#include <QTextCodec>
 
 //#include <src/OpenRTMPlugin/RTSItem.h>
 
@@ -20,6 +22,9 @@
 #include <cnoid/Item>
 #include <cnoid/ItemManager>
 
+
+
+#include <cnoid/LazyCaller>
 
 #include <cnoid/BodyItem>
 #include <cnoid/ControllerItem>
@@ -65,20 +70,20 @@ using namespace rtmiddleware;
 
 /**
  * @class PyGILock
- * @brief PythonÀs‚ÌƒƒbƒNƒIƒuƒWƒFƒNƒg
+ * @brief Pythonå®Ÿè¡Œæ™‚ã®ãƒ­ãƒƒã‚¯ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 class PyGILock
 {
 	PyGILState_STATE gstate;
 public:
 	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	 */
 	PyGILock() {
 		gstate = PyGILState_Ensure();
 	};
 	/**
-	 * @brief ƒfƒXƒgƒ‰ƒNƒ^
+	 * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	 */
 	~PyGILock() {
 		PyGILState_Release(gstate);
@@ -98,7 +103,7 @@ namespace cnoid {
 
 
 /**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+ * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
  */
 RTCEditorItem::RTCEditorItem()
 	: mwin(NULL)
@@ -107,8 +112,8 @@ RTCEditorItem::RTCEditorItem()
 };
 
 /**
- * @brief ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @param org ƒRƒs[Œ³
+ * @brief ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+ * @param org ã‚³ãƒ”ãƒ¼å…ƒ
  */
 RTCEditorItem::RTCEditorItem(const RTCEditorItem& org)
 {
@@ -121,43 +126,54 @@ RTCEditorItem::RTCEditorItem(const RTCEditorItem& org)
 			selectionChangedConnection = rtsView->sigDoubleClickEvent().connect(std::bind(&RTCEditorItem::onItemSelectionChanged, this, std::placeholders::_1));
 		}
 	}
-	if (mwin == NULL)
+	//if (mwin == NULL)
 	{
-		mwin = new RTC_MainWindow();
-		mwin->show();
-		mwin->save_button_slot();
-		mwin->sigSaveButton.connect(std::bind(&RTCEditorItem::update_comp, this, std::placeholders::_1));
-		mwin->_controlCompWidget->sigActiveButton.connect(std::bind(&RTCEditorItem::activate_comp, this));
-		mwin->_controlCompWidget->sigDeactiveButton.connect(std::bind(&RTCEditorItem::deactivate_comp, this));
-		mwin->_controlCompWidget->sigResetButton.connect(std::bind(&RTCEditorItem::reset_comp, this));
-		mwin->vw->getRenderRTC()->updateStatus.connect(std::bind(&RTCEditorItem::get_status, this, std::placeholders::_1));
-		mwin->_addDataPortTab->sigAddPort.connect(std::bind(&RTCEditorItem::add_dataport, this, std::placeholders::_1));
+		
+		
+		callLater([&] {
+			mwin = new RTC_MainWindow();
+			mwin->save_button_slot();
+			createEditComp(mwin->getFileName().toLocal8Bit());
+			mwin->sigSaveButton.connect(std::bind(&RTCEditorItem::update_comp, this, std::placeholders::_1));
+			mwin->_controlCompWidget->sigActiveButton.connect(std::bind(&RTCEditorItem::activate_comp, this));
+			mwin->_controlCompWidget->sigDeactiveButton.connect(std::bind(&RTCEditorItem::deactivate_comp, this));
+			mwin->_controlCompWidget->sigResetButton.connect(std::bind(&RTCEditorItem::reset_comp, this));
+			mwin->vw->getRenderRTC()->updateStatus.connect(std::bind(&RTCEditorItem::get_status, this, std::placeholders::_1));
+			mwin->_addDataPortTab->sigAddPort.connect(std::bind(&RTCEditorItem::add_dataport, this, std::placeholders::_1));
+			
+			mwin->show(); 
+
+			
+		});
+		
+		
 		
 		//QObject::connect(mwin, SIGNAL(save_button_signal(QString)), this, SLOT(update(QString)));
 	}
-	createEditComp(mwin->getFileName().toStdString());
+	
+	
 	
 };
 
 /**
- * @brief ƒfƒXƒgƒ‰ƒNƒ^
+ * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
  */
 RTCEditorItem::~RTCEditorItem()
 {
 }
 
 /**
- * @brief RTC‚Ìƒtƒ@ƒCƒ‹XV
- * @param filename Pythonƒtƒ@ƒCƒ‹‚ÌƒpƒX
+ * @brief RTCã®ãƒ•ã‚¡ã‚¤ãƒ«æ›´æ–°
+ * @param filename Pythonãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹
  */
-void RTCEditorItem::update_comp(std::string filename)
+void RTCEditorItem::update_comp(const char* filename)
 {
 	//MessageView::instance()->putln(0, name);
 	//MessageView::instance()->putln(0, item->name);
-	if (filename.empty())
+	/*if (filename.empty())
 	{
 		return;
-	}
+	}*/
 
 	if (comp_name.empty())
 	{
@@ -172,10 +188,10 @@ void RTCEditorItem::update_comp(std::string filename)
 		try
 		{
 #ifdef CNOID_USE_PYBIND11
-			getGlobalNamespace()["updateEditComp"](comp_name.c_str(), filename.c_str());
+			getGlobalNamespace()["updateEditComp"](comp_name.c_str(), filename);
 #else
-			python::extract<std::string>(cnoid::getGlobalNamespace()["updateEditComp"](name.c_str(), filename.c_str()));
-			//comp_name = python::extract<std::string>(cnoid::pythonMainNamespace()["createComp"](name.c_str()));
+			python::extract<std::string>(cnoid::getGlobalNamespace()["updateEditComp"](name.c_str(), filename));
+			//comp_name = python::extract<std::string>(cnoid::pythonMainNamespace()["createComp"](name));
 #endif
 
 		}
@@ -200,7 +216,7 @@ void RTCEditorItem::update_comp(std::string filename)
 }
 
 /**
- * @brief RTC‚ÌƒAƒNƒeƒBƒu‰»
+ * @brief RTCã®ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–
  */
 void RTCEditorItem::activate_comp()
 {
@@ -246,7 +262,7 @@ void RTCEditorItem::activate_comp()
 }
 
 /**
- * @brief RTC‚Ì”ñƒAƒNƒeƒBƒu‰»
+ * @brief RTCã®éã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–
  */
 void RTCEditorItem::deactivate_comp()
 {
@@ -292,7 +308,7 @@ void RTCEditorItem::deactivate_comp()
 }
 
 /**
- * @brief RTC‚ÌƒŠƒZƒbƒg
+ * @brief RTCã®ãƒªã‚»ãƒƒãƒˆ
  */
 void RTCEditorItem::reset_comp()
 {
@@ -338,8 +354,8 @@ void RTCEditorItem::reset_comp()
 }
 
 /**
- * @brief ƒf[ƒ^ƒ|[ƒg’Ç‰Á
- * @param port ƒf[ƒ^ƒ|[ƒgƒvƒƒtƒ@ƒCƒ‹
+ * @brief ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆè¿½åŠ 
+ * @param port ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
  */
 void RTCEditorItem::add_dataport(RTC_XML::DataPorts port)
 {
@@ -383,7 +399,7 @@ void RTCEditorItem::add_dataport(RTC_XML::DataPorts port)
 }
 
 /**
- * @brief ‰Šú‰»ŠÖ”
+ * @brief åˆæœŸåŒ–é–¢æ•°
  * @param ext 
  */
 void RTCEditorItem::initialize(ExtensionManager* ext)
@@ -398,25 +414,37 @@ void RTCEditorItem::initialize(ExtensionManager* ext)
 
 
 /**
- * @brief RTCƒ_ƒCƒAƒOƒ‰ƒ€ã‚Ì‘I‘ğƒAƒCƒeƒ€•ÏXÀsŠÖ”
- * @param item RTCƒ_ƒCƒAƒOƒ‰ƒ€ã‚Å‘I‘ğ’†‚ÌRTC
+ * @brief RTCãƒ€ã‚¤ã‚¢ã‚°ãƒ©ãƒ ä¸Šã®é¸æŠã‚¢ã‚¤ãƒ†ãƒ å¤‰æ›´æ™‚å®Ÿè¡Œé–¢æ•°
+ * @param item RTCãƒ€ã‚¤ã‚¢ã‚°ãƒ©ãƒ ä¸Šã§é¸æŠä¸­ã®RTC
  */
 void RTCEditorItem::onItemSelectionChanged(RTSComp* item)
 {
 	//MessageView::instance()->putln(0, item->name);
+	//MessageView::instance()->putln(0, comp_name);
+	
+	if (item->name == comp_name)
+	{
+		if (mwin)
+		{
+			mwin->hide();
+			mwin->show();
+
+		}
+	}
 }
 
 /**
- * @brief RTC¶¬
- * @param name RTC–¼
+ * @brief RTCç”Ÿæˆ
+ * @param name RTCå
  */
-void RTCEditorItem::createEditComp(std::string name)
+void RTCEditorItem::createEditComp(const char* name)
 {
-	
+	/*
 	if (name.empty())
 	{
 		return;
 	}
+	*/
 
 	
 
@@ -435,10 +463,17 @@ void RTCEditorItem::createEditComp(std::string name)
 #endif
 			}
 #ifdef CNOID_USE_PYBIND11
-			comp_name = pybind11::str(getGlobalNamespace()["createEditComp"](name.c_str())).cast<std::string>();
+			comp_name = pybind11::str(getGlobalNamespace()["createEditComp"](name)).cast<std::string>();
+			/*
+			QString fileName = QFileDialog::getOpenFileName(NULL,
+				_("Open Address Book"), "",
+				_("Address Book (*.txt);;All Files (*)"));
+
+			getGlobalNamespace()["testFunc"]((const char*)fileName.toStdString().c_str());
+			*/
 #else
-			comp_name = python::extract<std::string>(cnoid::getGlobalNamespace()["createEditComp"](name.c_str()));
-			//comp_name = python::extract<std::string>(cnoid::pythonMainNamespace()["createComp"](name.c_str()));
+			comp_name = python::extract<std::string>(cnoid::getGlobalNamespace()["createEditComp"](name));
+			//comp_name = python::extract<std::string>(cnoid::pythonMainNamespace()["createComp"](name));
 #endif
 			moduleNameProperty = name;
 		}
@@ -463,8 +498,8 @@ void RTCEditorItem::createEditComp(std::string name)
 }
 
 /**
- * @brief RTC‚Ìó‘Ôæ“¾
- * @param status RTCƒvƒƒtƒ@ƒCƒ‹
+ * @brief RTCã®çŠ¶æ…‹å–å¾—
+ * @param status RTCãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
  */
 void RTCEditorItem::get_status(RTC_XML::RTC_ProfileRTP::RTC_State& status)
 {
@@ -527,16 +562,16 @@ void RTCEditorItem::get_status(RTC_XML::RTC_ProfileRTP::RTC_State& status)
 
 
 /**
- * @brief ƒvƒƒpƒeƒBİ’è
- * @param putProperty ƒvƒƒpƒeƒB 
+ * @brief ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£è¨­å®š
+ * @param putProperty ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ 
  */
 void RTCEditorItem::doPutProperties(cnoid::PutPropertyFunction& putProperty)
 {
 }
 
 /**
- * @brief •¡»‚·‚é
- * @return •¡»ƒIƒuƒWƒFƒNƒg
+ * @brief è¤‡è£½ã™ã‚‹
+ * @return è¤‡è£½ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 cnoid::Item* RTCEditorItem::doDuplicate() const
 {
@@ -544,7 +579,7 @@ cnoid::Item* RTCEditorItem::doDuplicate() const
 }
 
 /**
- * @brief •Û‘¶‚·‚é
+ * @brief ä¿å­˜ã™ã‚‹
  * @param archive 
  */
 bool RTCEditorItem::store(cnoid::Archive& archive)
@@ -553,7 +588,7 @@ bool RTCEditorItem::store(cnoid::Archive& archive)
 }
 
 /**
- * @brief •œŒ³‚·‚é
+ * @brief å¾©å…ƒã™ã‚‹
  * @param archive 
  */
 bool RTCEditorItem::restore(const cnoid::Archive& archive)
@@ -562,7 +597,7 @@ bool RTCEditorItem::restore(const cnoid::Archive& archive)
 }
 
 /**
- * @brief ‰Šú‰»ÀsŠÖ”
+ * @brief åˆæœŸåŒ–æ™‚å®Ÿè¡Œé–¢æ•°
  * @param ext 
  */
 bool RTCEditorItem::initialize(cnoid::ControllerItemIO* io)

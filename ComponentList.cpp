@@ -33,6 +33,11 @@
 #include <QProcess>
 
 
+#include <cnoid/ViewManager>
+#include <cnoid/FileUtil>
+
+#include <cnoid/ExecutablePath>
+
 
 #include "ComponentList.h"
 #include "gettext.h"
@@ -234,11 +239,23 @@ void ComponentWidget::run_rtcd()
 
 	while (it.hasNext())
 	{
-		QString file = it.next();
-		//std::cout << file.toStdString() << std::endl;
-		return;
+QString file = it.next();
+//std::cout << file.toStdString() << std::endl;
+return;
 	}
-	
+
+}
+
+
+/**
+* @brief 終了処理
+*/
+void ComponentWidget::killprocess()
+{
+	if (_process->state() == QProcess::Running)
+	{
+		_process->kill();
+	}
 }
 
 /**
@@ -260,9 +277,9 @@ ComponentTabWidgwt::ComponentTabWidgwt()
 	_mainLayout = new QVBoxLayout();
 	setLayout(_mainLayout);
 
-	
-	
-	
+
+
+
 }
 
 /**
@@ -271,27 +288,27 @@ ComponentTabWidgwt::ComponentTabWidgwt()
  */
 void ComponentTabWidgwt::addComponent(ComponentWidget *cw)
 {
-	
-	if (_complist.count()%3==0)
+
+	if (_complist.count() % 3 == 0)
 	{
-		
+
 		QHBoxLayout *subLayout = new QHBoxLayout();
 		_mainLayout->addLayout(subLayout);
 		_subLayouts.push_back(subLayout);
-		
-		
+
+
 	}
-	
-	
+
+
 	_subLayouts.back()->addWidget(cw);
 	_complist.push_back(cw);
 
 	if (_complist.count() % 3 == 0)
 	{
-		
+
 		_subLayouts.back()->addStretch();
 	}
-	
+
 }
 
 /**
@@ -315,6 +332,29 @@ void ComponentTabWidgwt::addStretchSub(int v)
 	}
 }
 
+
+/**
+* @brief 終了処理
+*/
+void ComponentTabWidgwt::killprocess()
+{
+	for(QVector<ComponentWidget *>::iterator itr = _complist.begin(); itr != _complist.end(); itr++)
+	{
+		(*itr)->killprocess();
+	}
+}
+
+/**
+* @brief 終了処理
+*/
+void ComponentList::killprocess()
+{
+	for (QMap<QString, ComponentTabWidgwt*>::iterator itr = tabList.begin(); itr != tabList.end(); itr++)
+	{
+		(*itr)->killprocess();
+	}
+}
+
 /**
  * @brief コンストラクタ
  * @param parent 親ウィジェット
@@ -322,8 +362,8 @@ void ComponentTabWidgwt::addStretchSub(int v)
 ScrollArea::ScrollArea(QWidget *parent)
 	: QScrollArea(parent)
 {
-	setFixedWidth(1050);
-	setFixedHeight(1050);
+	//setFixedWidth(1050);
+	//setFixedHeight(1050);
 	QScrollBar *bar = verticalScrollBar();
 	QObject::connect(bar, SIGNAL(valueChanged(int)), this, SLOT(valueChanged(int)));
 }
@@ -335,4 +375,59 @@ ScrollArea::ScrollArea(QWidget *parent)
 void ScrollArea::valueChanged(int v)
 {
 	widget()->update();
+}
+
+
+/**
+* @brief コンストラクタ
+*/
+ComponentListView::ComponentListView()
+{
+	_area = new ScrollArea();
+	_mwin = new ComponentList();
+
+	std::string dir = (boost::filesystem::path(cnoid::executableTopDirectory()) / CNOID_SHARE_SUBDIR / "rtc").generic_string();
+	_mwin->load(dir.c_str());
+	_area->setWidget(_mwin);
+
+	QHBoxLayout *mainLayout = new QHBoxLayout();
+	mainLayout->addWidget(_area);
+	this->setLayout(mainLayout);
+}
+
+
+/**
+* @brief デストラクタ
+*/
+ComponentListView::~ComponentListView()
+{
+
+}
+
+/**
+* @brief 初期化
+* @param ext
+*/
+void ComponentListView::initializeClass(cnoid::ExtensionManager* ext)
+{
+	ext->viewManager().registerClass<ComponentListView>(
+		"ComponentListView", N_("Component List"), cnoid::ViewManager::SINGLE_OPTIONAL);
+}
+
+/**
+* @brief インスタンス取得
+* @return インスタンス
+*/
+ComponentListView* ComponentListView::instance()
+{
+	return cnoid::ViewManager::findView<ComponentListView>();
+}
+
+
+/**
+* @brief 終了処理
+*/
+void ComponentListView::killprocess()
+{
+	_mwin->killprocess();
 }

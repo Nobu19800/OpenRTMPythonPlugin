@@ -93,7 +93,14 @@ RTC_MainWindow::RTC_MainWindow(QWidget *parent, Qt::WindowFlags flags)
 
 	tabLayout->addWidget(tab_widget);
 
+	/*
+	QHBoxLayout *mlayout = new QHBoxLayout();
+	mlayout->addWidget(cw);
+	setLayout(mlayout);
+	*/
 	setCentralWidget(cw);
+
+	//setCentralWidget(cw);
 	cw->setLayout(ml);
 	//setCentralWidget(textEdit);
 
@@ -188,7 +195,7 @@ void RTC_MainWindow::save_button_slot()
 	//std::cout << (_tmp_dir.path() + "/" + filename).toStdString() << std::endl;
 	if (!file.open(QIODevice::WriteOnly))
 	{
-		std::cout << "test" << std::endl;
+		//std::cout << "test" << std::endl;
 		return;
 	}
 	QTextStream stream(&file);
@@ -223,7 +230,7 @@ void RTC_MainWindow::save_button_slot()
 	}
 	file.close();
 	//Q_EMIT save_button_signal(file_name);
-	sigSaveButton(file_name.toStdString());
+	sigSaveButton((const char*)file_name.toLocal8Bit());
 	
 }
 

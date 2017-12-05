@@ -70,8 +70,7 @@ public:
 	 * @param parent 親ウィジェット
 	 * @param flags 
 	 */
-	explicit RTC_MainWindow(QWidget *parent = Q_NULLPTR,
-                        Qt::WindowFlags flags = 0);
+	explicit RTC_MainWindow(QWidget *parent = Q_NULLPTR, Qt::WindowFlags flags = 0);
 	/**
 	 * @brief アクティビティ編集タブ追加
 	 * @param name 名前
@@ -102,7 +101,7 @@ public:
 	 * @return Pythonファイルのパス
 	 */
 	QString getFileName();
-	cnoid::Signal<void(std::string)>  sigSaveButton;
+	cnoid::Signal<void(const char*)>  sigSaveButton;
 	
 public Q_SLOTS:
 	/**

@@ -92,7 +92,7 @@ ComponentListItem::ComponentListItem(const ComponentListItem& org)
 	setName(org.name());
 	if (_mwin == NULL)
 	{
-		
+		/*
 		_area = new ScrollArea();
 		_mwin = new ComponentList();
 
@@ -100,6 +100,8 @@ ComponentListItem::ComponentListItem(const ComponentListItem& org)
 		_mwin->load(dir.c_str());
 		_area->setWidget(_mwin);
 		_area->show();
+		*/
+		
 
 	}
 

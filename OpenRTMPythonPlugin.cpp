@@ -46,6 +46,7 @@ namespace cnoid {
 #include "PyRTCItem.h"
 #include "RTCEditorItem.h"
 #include "ComponentListItem.h"
+#include "ComponentList.h"
 
 #include "gettext.h"
 
@@ -213,9 +214,8 @@ Plugin("OpenRTMPython")
 	require("Python");
 	require("Corba");
 	require("OpenRTM");
-	PyRTCItem::initialize(this);
-	RTCEditorItem::initialize(this);
-	ComponentListItem::initialize(this);
+	
+	
 	
 }
 
@@ -296,7 +296,11 @@ bool OpenRTMPythonPlugin::initialize()
 		
 		}
 	}
+	PyRTCItem::initialize(this);
+	RTCEditorItem::initialize(this);
+	ComponentListItem::initialize(this);
 
+	ComponentListView::initializeClass(this);
 
         return true;
 }

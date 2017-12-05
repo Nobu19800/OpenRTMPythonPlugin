@@ -13,6 +13,9 @@
 #include <QPushButton>
 #include <QGroupBox>
 
+#include <cnoid/View>
+#include <cnoid/CorbaUtil>
+
 #include "RTC_XML.h"
 #include "RTCViewWidget.h"
 
@@ -57,6 +60,10 @@ public:
 	 * @return カテゴリ
 	 */
 	QString getCategory();
+	/**
+	* @brief 終了処理
+	*/
+	void killprocess();
 private Q_SLOTS:
 	/**
 	 * @brief RTCを別プロセスで起動
@@ -66,6 +73,7 @@ private Q_SLOTS:
 	 * @brief RTCをマネージャで起動
 	 */
 	void run_rtcd();
+
 private:
 	QString _path;
 	RTC_XML::RTC_Profile _comp;
@@ -103,6 +111,10 @@ public:
 	 * @param v 伸縮幅
 	 */
 	void addStretchSub(int v = 0);
+	/**
+	* @brief 終了処理
+	*/
+	void killprocess();
 private:
 	QVector<ComponentWidget *> _complist;
 	QVBoxLayout *_mainLayout;
@@ -132,6 +144,10 @@ public:
 	 * @param path モジュールリストのパス
 	 */
 	void load(QString path);
+	/**
+	* @brief 終了処理
+	*/
+	void killprocess();
 private:
 	QMap<QString, ComponentTabWidgwt*> tabList;
 
@@ -159,5 +175,36 @@ private Q_SLOTS:
 	void valueChanged(int v);
 };
 
+
+class ComponentListView : public cnoid::View
+{
+	Q_OBJECT
+public:
+	/**
+	* @brief コンストラクタ
+	*/
+	ComponentListView();
+	/**
+	* @brief デストラクタ
+	*/
+	virtual ~ComponentListView();
+	/**
+	* @brief 初期化
+	* @param ext 
+	*/
+	static void initializeClass(cnoid::ExtensionManager* ext);
+	/**
+	* @brief インスタンス取得
+	* @return インスタンス
+	*/
+	static ComponentListView* instance();
+	/**
+	* @brief 終了処理
+	*/
+	void killprocess();
+private:
+	ScrollArea *_area;
+	ComponentList *_mwin;
+};
 
 #endif // TEXTEDIT_H

@@ -68,12 +68,12 @@ namespace rtmiddleware {
 		 * @brief RTC生成
 		 * @param name RTC名
 		 */
-		void createEditComp(std::string name);
+		void createEditComp(const char* name);
 		/**
 		 * @brief RTCのファイル更新
 		 * @param filename Pythonファイルのパス
 		 */
-		void update_comp(std::string filename);
+		void update_comp(const char *filename);
 		/**
 		 * @brief RTCのアクティブ化
 		 */

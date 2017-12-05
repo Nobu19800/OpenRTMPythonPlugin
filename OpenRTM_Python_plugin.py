@@ -19,10 +19,12 @@ except:
 
 
 def createEditComp(modulePath):
+  
   try:
     modulePath = modulePath.encode('utf-8')
   except:
     pass
+  
   mgr = OpenRTM_aist.Manager.instance()
   comp = mgr.createComponent("EditRTC"+"?execution_contexts=PeriodicExecutionContext,OpenHRPExecutionContext")
   if comp:
@@ -31,7 +33,13 @@ def createEditComp(modulePath):
   else:
     return ""
 
-  
+def testFunc(v):
+  print type(v),v
+  try:
+    v = v.encode('utf-8')
+  except:
+    pass
+  print v
 
 def updateEditComp(rtcname, modulePath):
 

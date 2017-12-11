@@ -41,7 +41,7 @@ public:
 	 * @brief コンストラクタ
 	 * @param parent 親ウィジェット
 	 */
-	ServicePortOperationDialog(QWidget *parent = 0);
+	ServicePortOperationDialog(QWidget *parent = Q_NULLPTR);
 private:
 	QVBoxLayout *_mainLayout;
 

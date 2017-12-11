@@ -49,14 +49,14 @@ public:
 	 * @param text テキスト
 	 * @param parent 親ウィジェット
 	 */
-	ActivityTab(ActivityCode name, QString text, QWidget *parent = 0);
+	ActivityTab(ActivityCode name, QString text, QWidget *parent = Q_NULLPTR);
 	/**
 	 * @brief コンストラクタ
 	 * @param name アクティビティ名
 	 * @param text テキスト
 	 * @param parent 親ウィジェット
 	 */
-	ActivityTab(QString name, QString text, QWidget *parent = 0);
+	ActivityTab(QString name, QString text, QWidget *parent = Q_NULLPTR);
 
 	/**
 	 * @brief テキスト取得

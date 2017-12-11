@@ -38,7 +38,8 @@
  * @param parent 親ウィジェット
  */
 BaseTab::BaseTab(QWidget *parent)
-    : QWidget(parent)
+    : QWidget(parent),
+	widNum(0)
 {
 
 	mainLayout = new QVBoxLayout();

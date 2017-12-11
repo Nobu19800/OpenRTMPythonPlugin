@@ -110,8 +110,8 @@ namespace rtmiddleware {
 		 */
 		virtual void onPositionChanged();
 
-		ScrollArea *_area;
-		ComponentList *_mwin;
+		//ScrollArea *_area;
+		//ComponentList *_mwin;
 	};
 
 };

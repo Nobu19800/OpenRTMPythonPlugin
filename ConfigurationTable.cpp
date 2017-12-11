@@ -97,10 +97,10 @@ void ConfigParamDialog::deleteButtonSlot()
  * @param parent 親ウィジェット
  */
 ConfigSettingButton::ConfigSettingButton(QString name, RTC_XML::ConfigurationSet profile, RTC_MainWindow *parent)
-	: QPushButton()
+	: QPushButton(),
+	_profile(profile)
 {
 	_mainwindow = parent;
-	_profile = profile;
 	QObject::connect(this, SIGNAL(clicked()), this, SLOT(pushSlot()));
 }
 

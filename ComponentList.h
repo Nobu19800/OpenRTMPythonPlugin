@@ -49,7 +49,7 @@ public:
 	 * @param path モジュールパス
 	 * @param parent 親ウィジェット
 	 */
-	ComponentWidget(QString path, QWidget *parent = 0);
+	ComponentWidget(QString path, QWidget *parent = Q_NULLPTR);
 	/**
 	 * @brief モジュールパス設定
 	 * @param path モジュールパス
@@ -133,7 +133,7 @@ public:
 	 * @brief コンストラクタ
 	 * @param parent 親ウィジェット
 	 */
-	ComponentList(QWidget *parent = 0);
+	ComponentList(QWidget *parent = Q_NULLPTR);
 	/**
 	 * @brief RTC追加
 	 * @param path モジュールパス
@@ -166,7 +166,7 @@ public:
 	 * @brief コンストラクタ
 	 * @param parent 親ウィジェット
 	 */
-	ScrollArea(QWidget *parent = 0);
+	ScrollArea(QWidget *parent = Q_NULLPTR);
 private Q_SLOTS:
 	/**
 	 * @brief スクロール時のスロット

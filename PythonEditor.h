@@ -32,7 +32,7 @@ public:
 	 * @brief コンストラクタ
 	 * @param parent 親ウィジェット
 	 */
-	PythonEditor(QWidget *parent = 0);
+	PythonEditor(QWidget *parent = Q_NULLPTR);
 
 	/**
 	 * @brief フォントサイズ設定

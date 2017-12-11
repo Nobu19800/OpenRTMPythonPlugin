@@ -15,7 +15,7 @@
 
 """
 import sys
-import time
+
 import os
 sys.path.append(".")
 
@@ -29,6 +29,7 @@ import threading
 import importlib
 import traceback
 import shutil
+import subprocess
 
 
 
@@ -313,22 +314,6 @@ def create_data(data_type):
        return RTC.RangeData(RTC.Time(0,0), [], RTC.RangerGeometry(RTC.Geometry3D(RTC.Pose3D(RTC.Point3D(0.0,0.0,0.0), RTC.Orientation3D(0.0,0.0,0.0)), RTC.Size3D(0.0,0.0,0.0)), []), RTC.RangerConfig(*([0.0]*7)))
    elif data_type == "RTC::IntensityData":
        return RTC.IntensityData(RTC.Time(0,0), [], RTC.RangerGeometry(RTC.Geometry3D(RTC.Pose3D(RTC.Point3D(0.0,0.0,0.0), RTC.Orientation3D(0.0,0.0,0.0)), RTC.Size3D(0.0,0.0,0.0)), []), RTC.RangerConfig(*([0.0]*7)))
-   elif data_type == "Img::ImageData":
-       return Img.ImageData(0,0, Img.CF_UNKNOWN, "")
-   elif data_type == "Img::CameraIntrinsicParameter":
-       return Img.CameraIntrinsicParameter([0.0]*5, [])
-   elif data_type == "Img::CameraImage":
-       return Img.CameraImage(RTC.Time(0,0), Img.ImageData(0,0, Img.CF_UNKNOWN, ""), Img.CameraIntrinsicParameter([0.0]*5, []), [[0.0]*4]*4)
-   elif data_type == "Img::TimedCameraImage":
-       return Img.TimedCameraImage(RTC.Time(0,0), Img.CameraImage(RTC.Time(0,0), Img.ImageData(0,0, Img.CF_UNKNOWN, ""), Img.CameraIntrinsicParameter([0.0]*5, []), [[0.0]*4]*4), 0)
-   elif data_type == "Img::MultiCameraImage":
-       return Img.MultiCameraImage([],0)
-   elif data_type == "Img::TimedMultiCameraImage":
-       return Img.TimedMultiCameraImage(RTC.Time(0,0), Img.MultiCameraImage([],0), 0)
-   elif data_type == "Img::NamedValue":
-       return Img.NamedValue("","")
-   elif data_type == "Img::CameraDeviceProfile":
-       return Img.CameraDeviceProfile("","",0,"","",Img.CameraIntrinsicParameter([0.0]*5, []),[])
    else:
        return None
 

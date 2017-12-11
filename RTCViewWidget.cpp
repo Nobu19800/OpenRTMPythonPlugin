@@ -70,7 +70,12 @@ RenderPath::RenderPath(QGraphicsScene* scene, QWidget *parent)
  */
 RenderPath::RenderPath(const RenderPath &obj)
 {
-
+	_penWidth = obj._penWidth;
+	_rotationAngle = obj._rotationAngle;
+	_pos_x = obj._pos_x;
+	_pos_y = obj._pos_y;
+	_width = obj._width;
+	_height = obj._height;
 }
 
 /**
@@ -678,12 +683,12 @@ DataPort::DataPort(const DataPort &obj)
 QPainterPath DataPort::getPath()
 {
 	QPainterPath rectPath;
-	int spx = _pos_x;
+	/*int spx = _pos_x;
 	int spy = _pos_y;
 	int epx = _pos_x;
 	int epy = _pos_y;
 	int cofx = 0;
-	int cofy = 0;
+	int cofy = 0;*/
 	
 	if (_profile.get_portType() == "DataInPort")
 	{
@@ -855,12 +860,12 @@ QPainterPath ServicePort::getPath()
 {
 	QPainterPath rectPath;
 	
-	int spx = _pos_x;
+	/*int spx = _pos_x;
 	int spy = _pos_y;
 	int epx = _pos_x;
 	int epy = _pos_y;
 	int cofx = 0;
-	int cofy = 0;
+	int cofy = 0;*/
 	
 	rectPath.moveTo(0, 0);
 	rectPath.lineTo(_size, 0);

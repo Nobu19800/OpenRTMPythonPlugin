@@ -52,7 +52,7 @@ public:
 	 * @param listWidget データポート一覧表示ウィジェット
 	 * @param parent 親ウィジェット
 	 */
-	addDataPortTab(RTC_XML::RTC_ProfileRTP *comp, RTCViewWidget *viewWidget, DataPortTable *listWidget, QWidget *parent = 0);
+	addDataPortTab(RTC_XML::RTC_ProfileRTP *comp, RTCViewWidget *viewWidget, DataPortTable *listWidget, QWidget *parent = Q_NULLPTR);
 	/**
 	 * @brief データポート検索
 	 * @param name ポート名

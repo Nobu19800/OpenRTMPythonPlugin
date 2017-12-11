@@ -172,7 +172,7 @@ public:
 	 * @brief コンストラクタ
 	 * @param parent 親ウィジェット
 	 */
-	RTCViewWidgetBase(QWidget *parent = 0);
+	RTCViewWidgetBase(QWidget *parent = Q_NULLPTR);
 	/**
 	 * @brief 描画RTCオブジェクト取得
 	 * @return 描画RTCオブジェクト
@@ -198,7 +198,7 @@ public:
 	 * @param profile RTCプロファイル
 	 * @param parent 親ウィジェット
 	 */
-	RTCViewWidget(RTC_XML::RTC_Profile* profile, QWidget *parent = 0);
+	RTCViewWidget(RTC_XML::RTC_Profile* profile, QWidget *parent = Q_NULLPTR);
 protected:
 
 
@@ -218,7 +218,7 @@ public:
 	 * @param comp RTCプロファイル
 	 * @param parent 親ウィジェット
 	 */
-	RTCViewWidgetRTP(RTC_XML::RTC_ProfileRTP* comp, QWidget *parent = 0);
+	RTCViewWidgetRTP(RTC_XML::RTC_ProfileRTP* comp, QWidget *parent = Q_NULLPTR);
 	/**
 	 * @brief 描画RTCオブジェクト取得
 	 * @return 描画RTCオブジェクト
@@ -241,7 +241,7 @@ public:
 	 * @param scene シーンオブジェクト
 	 * @param parent 親ウィジェット
 	 */
-	GraphicsView(QGraphicsScene * scene, QWidget * parent = 0);
+	GraphicsView(QGraphicsScene * scene, QWidget * parent = Q_NULLPTR);
 };
 
 /**
@@ -258,7 +258,7 @@ public:
 	 * @param scene シーンオブジェクト
 	 * @param parent 親ウィジェット
 	 */
-	Port(int defsize, QGraphicsScene* scene, QWidget* parent = 0);
+	Port(int defsize, QGraphicsScene* scene, QWidget* parent = Q_NULLPTR);
 	/**
 	 * @brief コピーコンストラクタ
 	 * @param obj コピー元
@@ -306,7 +306,7 @@ public:
 	 * @param dialog サービスポート設定ダイアログ
 	 * @param parent 親ウィジェット
 	 */
-	ServicePortWidget(ServicePortRTP *sport, ServicePortDialog *dialog, QWidget * parent = 0);
+	ServicePortWidget(ServicePortRTP *sport, ServicePortDialog *dialog, QWidget * parent = Q_NULLPTR);
 	BaseWidget _portNameTextbox;
 	BaseWidget _interfaceNameTextbox;
 	BaseWidget _dinterfaceDirCombox;
@@ -339,7 +339,7 @@ public:
 	 * @param sport サービスポート描画オブジェクト
 	 * @param parent 親ウィジェット
 	 */
-	ServicePortDialog(ServicePortRTP *sport, QWidget * parent = 0);
+	ServicePortDialog(ServicePortRTP *sport, QWidget * parent = Q_NULLPTR);
 };
 
 /**
@@ -357,7 +357,7 @@ public:
 	 * @param scene シーンオブジェクト
 	 * @param parent 親ウィジェット
 	 */
-	ServicePort(RTC_XML::ServicePorts profile, int defsize, QGraphicsScene* scene, QWidget* parent = 0);
+	ServicePort(RTC_XML::ServicePorts profile, int defsize, QGraphicsScene* scene, QWidget* parent = Q_NULLPTR);
 	/**
 	 * @brief 描画パス取得
 	 * @return 描画パス
@@ -391,7 +391,7 @@ public:
 	 * @param mainwindow RTCEditorメインウインドウ
 	 * @param parent 親ウィジェット
 	 */
-	ServicePortRTP(RTC_XML::ServicePorts profile, int size, QGraphicsScene* scene, RTC_MainWindow *mainwindow, QWidget* parent = 0);
+	ServicePortRTP(RTC_XML::ServicePorts profile, int size, QGraphicsScene* scene, RTC_MainWindow *mainwindow, QWidget* parent = Q_NULLPTR);
 protected:
 	/**
 	 * @brief マウスダブルクリック時のスロット
@@ -417,7 +417,7 @@ public:
 	 * @param dialog データポート編集ダイアログ
 	 * @param parent 親ウィジェット
 	 */
-	DataPortWidget(DataPortRTP *dport, DataPortDialog *dialog, QWidget * parent = 0);
+	DataPortWidget(DataPortRTP *dport, DataPortDialog *dialog, QWidget * parent = Q_NULLPTR);
 	BaseWidget _portNameTextbox;
 	BaseWidget _portTypeCombox;
 	BaseWidget _dataTypeCombox;
@@ -447,7 +447,7 @@ public:
 	 * @param dport データポート描画オブジェクト
 	 * @param parent 親ウィジェット
 	 */
-	DataPortDialog(DataPortRTP *dport, QWidget * parent = 0);
+	DataPortDialog(DataPortRTP *dport, QWidget * parent = Q_NULLPTR);
 };
 
 /**
@@ -465,7 +465,7 @@ public:
 	 * @param scene シーンオブジェクト
 	 * @param parent 親ウィジェット
 	 */
-	DataPort(RTC_XML::DataPorts profile, int defsize, QGraphicsScene* scene, QWidget* parent = 0);
+	DataPort(RTC_XML::DataPorts profile, int defsize, QGraphicsScene* scene, QWidget* parent = Q_NULLPTR);
 	/**
 	 * @brief コピーコンストラクタ
 	 * @param obj コピー元
@@ -505,7 +505,7 @@ public:
 	 * @param mainwindow RTCEditorメインウインドウ
 	 * @param parent 親ウィジェット
 	 */
-	DataPortRTP(RTC_XML::DataPorts profile, int size, QGraphicsScene* scene, RTC_MainWindow *mainwindow, QWidget* parent = 0);
+	DataPortRTP(RTC_XML::DataPorts profile, int size, QGraphicsScene* scene, RTC_MainWindow *mainwindow, QWidget* parent = Q_NULLPTR);
 protected:
 	/**
 	 * @brief マウスダブルクリック時のスロット
@@ -566,14 +566,9 @@ public:
 	 */
 	int getPortNum();
 	
-	int _penWidth;
-	int _rotationAngle;
-	int _centerPoint_x;
-	int _centerPoint_y;
-	int _pos_x;
-	int _pos_y;
-	int _width;
-	int _height;
+
+
+
 	int _port_size;
 
 	QMap <QString, Port*> _ports;
@@ -598,7 +593,7 @@ public:
 	 * @param comp RTCプロファイル
 	 * @param parent 親ウィジェット
 	 */
-	RenderRTCRTP(QGraphicsScene* scene, RTC_MainWindow *mainwindow, RTC_XML::RTC_ProfileRTP* comp, QWidget* parent = 0);
+	RenderRTCRTP(QGraphicsScene* scene, RTC_MainWindow *mainwindow, RTC_XML::RTC_ProfileRTP* comp, QWidget* parent = Q_NULLPTR);
 	/**
 	 * @brief データポート追加
 	 * @param profile データポートプロファイル

@@ -47,7 +47,7 @@ public:
 	 * @brief コンストラクタ
 	 * @param parent 親ウィジェット
 	 */
-	ControlCompWidget(QWidget *parent = 0);
+	ControlCompWidget(QWidget *parent = Q_NULLPTR);
 	/**
 	 * @brief 設定している実行コンテキストのID取得
 	 * @retuen 実行コンテキストのID

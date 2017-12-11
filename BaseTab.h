@@ -87,7 +87,7 @@ public:
 	 * @brief コンストラクタ
 	 * @param parent 親ウィジェット
 	 */
-	BaseTab(QWidget *parent = 0);
+	BaseTab(QWidget *parent = Q_NULLPTR);
 
 	/**
 	 * @brief ウィジェット追加

@@ -48,7 +48,7 @@ public:
 	 * @param listWidget サービスポート一覧表示ウィジェット
 	 * @param parent 親ウィジェット
 	 */
-	addServicePortTab(RTC_XML::RTC_ProfileRTP *comp, RTCViewWidget *viewWidget, ServicePortTable *listWidget, QWidget *parent = 0);
+	addServicePortTab(RTC_XML::RTC_ProfileRTP *comp, RTCViewWidget *viewWidget, ServicePortTable *listWidget, QWidget *parent = Q_NULLPTR);
 	/**
 	 * @brief サービスポート検索
 	 * @param name ポート名

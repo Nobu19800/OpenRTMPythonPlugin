@@ -77,8 +77,6 @@ using namespace rtmiddleware;
  * @brief コンストラクタ
  */
 ComponentListItem::ComponentListItem()
-	: _mwin(NULL),
-	  _area(NULL)
 {
 
 };
@@ -88,6 +86,8 @@ ComponentListItem::ComponentListItem()
  * @param org コピー元
  */
 ComponentListItem::ComponentListItem(const ComponentListItem& org)
+//	: _area(NULL),
+//	  _mwin(NULL)
 {
 	setName(org.name());
 	if (_mwin == NULL)

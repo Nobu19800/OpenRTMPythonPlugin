@@ -49,7 +49,7 @@ public:
 	 * @param listWidget コンフィグレーションパラメータ一覧表示ウィジェット
 	 * @param parent 親ウィジェット
 	 */
-	addConfigurationTab(RTC_XML::RTC_ProfileRTP *comp, RTCViewWidget *viewWidget, ConfigurationTable *listWidget, QWidget *parent = 0);
+	addConfigurationTab(RTC_XML::RTC_ProfileRTP *comp, RTCViewWidget *viewWidget, ConfigurationTable *listWidget, QWidget *parent = Q_NULLPTR);
 
 	
 

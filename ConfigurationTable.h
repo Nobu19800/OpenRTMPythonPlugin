@@ -50,7 +50,7 @@ public:
 	 * @brief コンストラクタ
 	 * @param parent 親ウィジェット
 	 */
-	ConfigParamWidgetBase(QWidget *parent = 0);
+	ConfigParamWidgetBase(QWidget *parent = Q_NULLPTR);
 
 
 
@@ -79,7 +79,7 @@ public:
 	 * @param dialog コンフィグレーションパラメータ編集ダイアログ
 	 * @param parent 親ウィジェット
 	 */
-	ConfigParamWidget(ConfigParamDialog *dialog, QWidget *parent = 0);
+	ConfigParamWidget(ConfigParamDialog *dialog, QWidget *parent = Q_NULLPTR);
 private:
 	ConfigParamDialog *_dialog;
 
@@ -97,7 +97,7 @@ public:
 	 * @brief コンストラクタ
 	 * @param parent 親ウィジェット
 	 */
-	ConfigParamDialog(QWidget *parent = 0);
+	ConfigParamDialog(QWidget *parent = Q_NULLPTR);
 private Q_SLOTS:
 	/**
 	 * @brief 削除ボタン押下時のスロット
@@ -124,7 +124,7 @@ public:
 	 * @param profile コンフィグレーションパラメータプロファイルオブジェクト
 	 * @param parent 親ウィジェット
 	 */
-	ConfigSettingButton(QString name, RTC_XML::ConfigurationSet profile, RTC_MainWindow *parent = 0);
+	ConfigSettingButton(QString name, RTC_XML::ConfigurationSet profile, RTC_MainWindow *parent = Q_NULLPTR);
 private Q_SLOTS:
 	/**
 	 * @brief ボタン押下時のスロット
@@ -150,7 +150,7 @@ public:
 	 * @brief コンストラクタ
 	 * @param parent 親ウィジェット
 	 */
-	ConfigurationTable(RTC_MainWindow *parent = 0);
+	ConfigurationTable(RTC_MainWindow *parent = Q_NULLPTR);
 	/**
 	 * @brief リスト更新
 	 * @param confsets コンフィグレーションパラメータ一覧
@@ -187,7 +187,7 @@ public:
 	 * @brief コンストラクタ
 	 * @param parent 親ウィジェット
 	 */
-	ConfigurationTableRTP(RTC_MainWindow *mainwindow, RTC_MainWindow *parent = 0);
+	ConfigurationTableRTP(RTC_MainWindow *mainwindow, RTC_MainWindow *parent = Q_NULLPTR);
 	/**
 	 * @brief リスト更新
 	 * @param confsets コンフィグレーションパラメータ一覧

@@ -29,7 +29,7 @@ public:
 	 * @brief コンストラクタ
 	 * @param parent 親ウィジェット
 	 */
-	Highlighter(QTextDocument *parent = 0);
+	Highlighter(QTextDocument *parent = Q_NULLPTR);
 
 protected:
 	/**

@@ -296,14 +296,6 @@ GraphicsView::GraphicsView(QGraphicsScene * scene, QWidget * parent):
  */
 RenderRTC::RenderRTC(QGraphicsScene* scene, RTC_XML::RTC_Profile* comp, QWidget* parent)
 	: RenderPath(scene, parent),
-	_penWidth(1),
-	_rotationAngle(0),
-	_centerPoint_x(50),
-	_centerPoint_y(50),
-	_pos_x(0),
-	_pos_y(0),
-	_width(10),
-	_height(10),
 	_port_size(10),
 	_comp_base(comp)
 {

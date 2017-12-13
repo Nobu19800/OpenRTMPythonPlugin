@@ -257,7 +257,7 @@ class JoystickPySDL2(OpenRTM_aist.DataFlowComponentBase):
 			self._d_axes_1.data.y = float(val) / float(JoystickPySDL2.max_axis_value)
 			OpenRTM_aist.setTimestamp(self._d_axes_1)
 			self._axes_1Out.write()
-		elif axes == 4:
+		if axes == 4:
 			val = sdl2.joystick.SDL_JoystickGetAxis(self.stick, 2)
 			self._d_axes_2.data.x = float(val) / float(JoystickPySDL2.max_axis_value)
 			val = sdl2.joystick.SDL_JoystickGetAxis(self.stick, 3)

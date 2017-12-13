@@ -184,7 +184,8 @@ class TankIoRTC_Py(OpenRTM_aist.DataFlowComponentBase):
 			if self._lightSwitchIn.isNew():
 				data = self._lightSwitchIn.read()
 				
-				self.light.on =  data.data[0]
+				self.light.on(data.data[0])
+				self.light.notifyStateChange()
 
 
 

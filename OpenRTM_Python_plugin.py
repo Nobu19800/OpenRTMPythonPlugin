@@ -26,7 +26,7 @@ def createEditComp(modulePath):
     pass
   
   mgr = OpenRTM_aist.Manager.instance()
-  comp = mgr.createComponent("EditRTC"+"?execution_contexts=PeriodicExecutionContext,OpenHRPExecutionContext")
+  comp = mgr.createComponent("EditRTC"+"?execution_contexts=PeriodicExecutionContext,SimulatorExecutionContext")
   if comp:
     comp.setModule(modulePath)
     return comp.getInstanceName()
@@ -81,7 +81,7 @@ def createComp(filepath):
     return ""
   
   
-  comp = mgr.createComponent(compname+"?execution_contexts=PeriodicExecutionContext,OpenHRPExecutionContext")
+  comp = mgr.createComponent(compname+"?execution_contexts=PeriodicExecutionContext,SimulatorExecutionContext")
   if comp:
     return comp.getInstanceName()
   else:
@@ -108,7 +108,7 @@ def createCompList(filepath):
     return ""
   
   
-  comp = mgr.createComponent(compname+"?execution_contexts=PeriodicExecutionContext,OpenHRPExecutionContext")
+  comp = mgr.createComponent(compname+"?execution_contexts=PeriodicExecutionContext,SimulatorExecutionContext")
   if comp:
     return comp.getInstanceName()
   else:

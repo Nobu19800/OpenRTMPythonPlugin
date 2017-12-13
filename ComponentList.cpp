@@ -228,11 +228,15 @@ void ComponentWidget::setModulePath(QString path)
 		this->setTitle(_comp.get_info().getName());
 
 		_processButton = new QPushButton(_("run(new Process)"));
-		QObject::connect(_processButton, SIGNAL(clicked()), this, SLOT(run_process()));
+		QObject::connect(_processButton, SIGNAL(clicked()), this, SLOT(run_processSlot()));
 		_mainLayout->addWidget(_processButton);
-		_managerButton = new QPushButton(_("run(rtcd)"));
-		QObject::connect(_managerButton, SIGNAL(clicked()), this, SLOT(run_rtcd()));
-		_mainLayout->addWidget(_managerButton);
+		_periodicButton = new QPushButton(_("run(rtcd,Periodic)"));
+		QObject::connect(_periodicButton, SIGNAL(clicked()), this, SLOT(run_rtcd_periodicSlot()));
+		_mainLayout->addWidget(_periodicButton);
+		/*_simButton = new QPushButton(_("run(rtcd,Choreonoid)"));
+		QObject::connect(_simButton, SIGNAL(clicked()), this, SLOT(run_rtcd_simSlot()));
+		_mainLayout->addWidget(_simButton);
+		*/
 
 		_mainLayout->addStretch();
 		return;
@@ -240,12 +244,38 @@ void ComponentWidget::setModulePath(QString path)
 	
 }
 
+CPPComponentInfo::CPPComponentInfo(RTC::RTObject_impl* obj, ComponentWidget::ExecContextType ec)
+	: _obj(obj),
+	_ec(ec)
+{
+}
+
+
+CPPComponentInfo::CPPComponentInfo(const CPPComponentInfo &obj)
+{
+	_obj = obj._obj;
+	_ec = obj._ec;
+}
+
+
+PythonComponentInfo::PythonComponentInfo(std::string name, ComponentWidget::ExecContextType ec)
+	: _name(name),
+	_ec(ec)
+{
+}
+
+
+PythonComponentInfo::PythonComponentInfo(const PythonComponentInfo &obj)
+{
+	_name = obj._name;
+	_ec = obj._ec;
+}
 
 
 /**
  * @brief RTCを別プロセスで起動
  */
-void ComponentWidget::run_process()
+void ComponentWidget::run_processSlot()
 {
 	QDir::Filters filters = QDir::Files;
 	QDirIterator::IteratorFlags flags = QDirIterator::Subdirectories;
@@ -287,10 +317,27 @@ void ComponentWidget::run_process()
 
 }
 
+
+/**
+* @brief RTCをマネージャで起動
+*/
+void ComponentWidget::run_rtcd_periodicSlot()
+{
+	run_rtcd(PERIODIC_EXECUTION_CONTEXT);
+}
+
+/**
+* @brief RTCをマネージャで起動
+*/
+void ComponentWidget::run_rtcd_simSlot()
+{
+	run_rtcd(CHOREONOID_EXECUTION_CONTEXT);
+}
+
 /**
  * @brief RTCをマネージャで起動
  */
-void ComponentWidget::run_rtcd()
+void ComponentWidget::run_rtcd(ExecContextType ec_type)
 {
 	QDir::Filters filters = QDir::Files;
 	QDirIterator::IteratorFlags flags = QDirIterator::Subdirectories;
@@ -327,12 +374,14 @@ void ComponentWidget::run_rtcd()
 				RTC::ReturnCode_t ret = mgr->load(file.toStdString(), init_func.toStdString());
 				if (ret == RTC::RTC_OK)
 				{
+					mod_name = mod_name + "?execution_contexts=PeriodicExecutionContext,SimulatorExecutionContext";
 					RTC::RTObject_impl *rto = mgr->createComponent(mod_name.toLocal8Bit());
+					//cnoid::MessageView::instance()->putln(0, boost::format(_("%1%"))% mod_name.toStdString());
 					//std::cout << file.toStdString() << std::endl;
 					if (rto)
 					{
 						cnoid::MessageView::instance()->putln(0, boost::format(_("Generate %1%")) % _comp.get_info().getName().toStdString());
-						_cpp_modules.push_back(rto);
+						_cpp_modules.push_back(CPPComponentInfo(rto, ec_type));
 					}
 					else
 					{
@@ -369,7 +418,7 @@ void ComponentWidget::run_rtcd()
 #else
 					comp_name = python::extract<std::string>(cnoid::getGlobalNamespace()["createCompList"]((const char*)file.toLocal8Bit()));
 #endif
-					_python_module.push_back(comp_name);
+					_python_module.push_back(PythonComponentInfo(comp_name, ec_type));
 					cnoid::MessageView::instance()->putln(0, boost::format(_("Generate %1%")) % _comp.get_info().getName().toStdString());
 
 				}
@@ -419,11 +468,11 @@ void ComponentWidget::killprocess()
 			(*itr)->kill();
 		}
 	}
-	for (QVector<RTC::RTObject_impl *>::iterator itr = _cpp_modules.begin(); itr != _cpp_modules.end(); itr++)
+	for (QVector<CPPComponentInfo>::iterator itr = _cpp_modules.begin(); itr != _cpp_modules.end(); itr++)
 	{
-		(*itr)->exit();
+		(*itr)._obj->exit();
 	}
-	for (QVector<std::string>::iterator itr = _python_module.begin(); itr != _python_module.end(); itr++)
+	for (QVector<PythonComponentInfo>::iterator itr = _python_module.begin(); itr != _python_module.end(); itr++)
 	{
 		{
 			PyGILock lock;
@@ -432,7 +481,7 @@ void ComponentWidget::killprocess()
 			{
 
 #ifdef CNOID_USE_PYBIND11
-				getGlobalNamespace()["exitComp"]((*itr).c_str());
+				getGlobalNamespace()["exitComp"]((*itr)._name.c_str());
 
 #else
 				cnoid::getGlobalNamespace()["exitComp"](name);
@@ -488,12 +537,53 @@ int ComponentWidget::get_process_count()
 }
 
 /**
-* @brief マネージャで起動しているコンポーネント数の取得
+* @brief マネージャで起動しているコンポーネント数の取得(周期実行コンテキスト)
 * @return コンポーネント数
 */
-int ComponentWidget::get_rtcd_count()
+int ComponentWidget::get_rtcd_periodic_count()
 {
-	return _cpp_modules.size() + _python_module.size();
+	int count = 0;
+	for (QVector<CPPComponentInfo>::iterator itr = _cpp_modules.begin(); itr != _cpp_modules.end(); itr++)
+	{
+		if ((*itr)._ec == PERIODIC_EXECUTION_CONTEXT)
+		{
+			count += 1;
+		}
+	}
+
+	for (QVector<PythonComponentInfo>::iterator itr = _python_module.begin(); itr != _python_module.end(); itr++)
+	{
+		if ((*itr)._ec == PERIODIC_EXECUTION_CONTEXT)
+		{
+			count += 1;
+		}
+	}
+	return count;
+}
+
+/**
+* @brief マネージャで起動しているコンポーネント数の取得(シミュレーション用実行コンテキスト)
+* @return コンポーネント数
+*/
+int ComponentWidget::get_rtcd_sim_count()
+{
+	int count = 0;
+	for (QVector<CPPComponentInfo>::iterator itr = _cpp_modules.begin(); itr != _cpp_modules.end(); itr++)
+	{
+		if ((*itr)._ec == CHOREONOID_EXECUTION_CONTEXT)
+		{
+			count += 1;
+		}
+	}
+
+	for (QVector<PythonComponentInfo>::iterator itr = _python_module.begin(); itr != _python_module.end(); itr++)
+	{
+		if ((*itr)._ec == CHOREONOID_EXECUTION_CONTEXT)
+		{
+			count += 1;
+		}
+	}
+	return count;
 }
 
 
@@ -504,6 +594,195 @@ int ComponentWidget::get_rtcd_count()
 RTC_XML::RTC_Profile ComponentWidget::get_comp_prof()
 {
 	return _comp;
+}
+
+
+/**
+* @brief シミュレーション開始時実行関数
+* @return
+*/
+void ComponentWidget::start()
+{
+
+	for (QVector<CPPComponentInfo>::iterator itr = _cpp_modules.begin(); itr != _cpp_modules.end(); itr++)
+	{
+
+		RTC::ExecutionContext_var ec = (*itr)._obj->getExecutionContext((*itr)._ec);
+		/*MessageView::instance()->putln(0,
+			format(_("%1%")) % (bool)CORBA::is_nil(ec));*/
+		/*MessageView::instance()->putln(0,
+			format(_("%1%")) % (int)(*itr)._ec);*/
+		if (!CORBA::is_nil(ec)) {
+			ec->activate_component((*itr)._obj->getObjRef());
+		}
+	}
+	for (QVector<PythonComponentInfo>::iterator itr = _python_module.begin(); itr != _python_module.end(); itr++)
+	{
+		{
+			PyGILock lock;
+
+			try
+			{
+
+#ifdef CNOID_USE_PYBIND11
+				getGlobalNamespace()["startSimulation"]((*itr)._name.c_str(), (int)(*itr)._ec);
+#else
+				python::extract<std::string>(cnoid::getGlobalNamespace()["startSimulation"](comp_name, execContextType.which()));
+				//python::extract<std::string>(cnoid::pythonMainNamespace()["startSimulation"](comp_name,execContextType.which()));
+#endif
+
+			}
+			catch (const py::error_already_set&e)
+			{
+
+#ifdef CNOID_USE_PYBIND11
+				MessageView::instance()->putln(0,
+					format(_("%1%")) % e.what());
+#else
+				PyErr_Print();
+#endif
+			}
+			catch (...)
+			{
+
+
+			}
+
+
+
+
+		}
+	}
+}
+
+/**
+* @brief シミュレーション更新前実行関数
+*/
+void ComponentWidget::input()
+{
+
+}
+
+/**
+* @brief シミュレーション更新中実行関数
+*/
+void ComponentWidget::control()
+{
+	for (QVector<CPPComponentInfo>::iterator itr = _cpp_modules.begin(); itr != _cpp_modules.end(); itr++)
+	{
+		
+
+
+		RTC::ExecutionContext_ptr ec = (*itr)._obj->getExecutionContext((*itr)._ec);
+		if (!CORBA::is_nil(ec)) {
+			OpenRTM::ExtTrigExecutionContextService_var ec_ext = OpenRTM::ExtTrigExecutionContextService::_narrow(ec);
+			if (!CORBA::is_nil(ec_ext)) {
+
+				ec_ext->tick();
+			}
+		}
+	}
+	for (QVector<PythonComponentInfo>::iterator itr = _python_module.begin(); itr != _python_module.end(); itr++)
+	{
+		{
+			PyGILock lock;
+
+			try
+			{
+
+
+
+#ifdef CNOID_USE_PYBIND11
+				getGlobalNamespace()["tickEC"]((*itr)._name.c_str(), (int)(*itr)._ec);
+#else
+				python::extract<std::string>(cnoid::getGlobalNamespace()["tickEC"](comp_name, execContextType.which()));
+				//python::extract<std::string>(cnoid::pythonMainNamespace()["tickEC"](comp_name,execContextType.which()));
+#endif
+
+
+			}
+			catch (const py::error_already_set&e)
+			{
+
+#ifdef CNOID_USE_PYBIND11
+				MessageView::instance()->putln(0,
+					format(_("%1%")) % e.what());
+#else
+				PyErr_Print();
+#endif
+			}
+			catch (...)
+			{
+
+
+			}
+
+
+
+
+		}
+	}
+}
+
+/**
+* @brief シミュレーション更新後実行関数
+*/
+void ComponentWidget::output()
+{
+
+}
+
+/**
+* @brief シミュレーション終了時実行関数
+*/
+void ComponentWidget::stop()
+{
+
+	for (QVector<CPPComponentInfo>::iterator itr = _cpp_modules.begin(); itr != _cpp_modules.end(); itr++)
+	{
+
+		RTC::ExecutionContext_var ec = (*itr)._obj->getExecutionContext((*itr)._ec);
+		if (!CORBA::is_nil(ec)) {
+			ec->deactivate_component((*itr)._obj->getObjRef());
+		}
+	}
+	for (QVector<PythonComponentInfo>::iterator itr = _python_module.begin(); itr != _python_module.end(); itr++)
+	{
+		{
+			PyGILock lock;
+
+			try
+			{
+
+#ifdef CNOID_USE_PYBIND11
+				getGlobalNamespace()["stopSimulation"]((*itr)._name.c_str(), (int)(*itr)._ec);
+#else
+				python::extract<std::string>(cnoid::getGlobalNamespace()["startSimulation"](comp_name, execContextType.which()));
+				//python::extract<std::string>(cnoid::pythonMainNamespace()["startSimulation"](comp_name,execContextType.which()));
+#endif
+
+			}
+			catch (const py::error_already_set&e)
+			{
+
+#ifdef CNOID_USE_PYBIND11
+				MessageView::instance()->putln(0,
+					format(_("%1%")) % e.what());
+#else
+				PyErr_Print();
+#endif
+			}
+			catch (...)
+			{
+
+
+			}
+
+
+
+
+		}
+	}
 }
 
 
@@ -626,7 +905,8 @@ void ComponentList::store(cnoid::Archive& archive)
 			Mapping* compMap = compListing->newMapping();
 			compMap->write("name", comp_itr.key().toStdString());
 			compMap->write("process", comp_itr.value()->get_process_count());
-			compMap->write("rtcd", comp_itr.value()->get_rtcd_count());
+			compMap->write("rtcd_periodic", comp_itr.value()->get_rtcd_periodic_count());
+			compMap->write("rtcd_sim", comp_itr.value()->get_rtcd_sim_count());
 
 			
 
@@ -674,10 +954,12 @@ void ComponentList::restore_process(const cnoid::Archive& archive)
 					const Mapping& compMap = *compListing[j].toMapping();
 					std::string comp_name;
 					int process_count = 0;
-					int rtcd_count = 0;
+					int rtcd_periodic_count = 0;
+					int rtcd_sim_count = 0;
 					compMap.read("name", comp_name);
 					compMap.read("process", process_count);
-					compMap.read("rtcd", rtcd_count);
+					compMap.read("rtcd_periodic", rtcd_periodic_count);
+					compMap.read("rtcd_sim", rtcd_sim_count);
 
 					QString tname = QString::fromStdString(name);
 					
@@ -690,18 +972,106 @@ void ComponentList::restore_process(const cnoid::Archive& archive)
 						{
 							for (int k = 0; k < process_count; k++)
 							{
-								comps[cname]->run_process();
+								comps[cname]->run_processSlot();
 							}
 							
-							for (int k = 0; k < rtcd_count; k++)
+							for (int k = 0; k < rtcd_periodic_count; k++)
 							{
-								comps[cname]->run_rtcd();
+								comps[cname]->run_rtcd_periodicSlot();
+							}
+
+							for (int k = 0; k < rtcd_sim_count; k++)
+							{
+								comps[cname]->run_rtcd_simSlot();
 							}
 						}
 					}
 				}
 			}
 
+		}
+	}
+}
+
+
+
+/**
+* @brief シミュレーション開始時実行関数
+* @return
+*/
+void ComponentList::start()
+{
+	for (QMap<QString, ComponentTabWidget *>::iterator tab_itr = tabList.begin(); tab_itr != tabList.end(); tab_itr++)
+	{
+		ComponentTabWidget *ctw = tab_itr.value();
+		QMap<QString, ComponentWidget *> comps = ctw->getComponents();
+		for (QMap<QString, ComponentWidget *>::iterator comp_itr = comps.begin(); comp_itr != comps.end(); comp_itr++)
+		{
+			comp_itr.value()->start();
+		}
+	}
+}
+
+/**
+* @brief シミュレーション更新前実行関数
+*/
+void ComponentList::input()
+{
+	for (QMap<QString, ComponentTabWidget *>::iterator tab_itr = tabList.begin(); tab_itr != tabList.end(); tab_itr++)
+	{
+		ComponentTabWidget *ctw = tab_itr.value();
+		QMap<QString, ComponentWidget *> comps = ctw->getComponents();
+		for (QMap<QString, ComponentWidget *>::iterator comp_itr = comps.begin(); comp_itr != comps.end(); comp_itr++)
+		{
+			comp_itr.value()->input();
+		}
+	}
+}
+
+/**
+* @brief シミュレーション更新中実行関数
+*/
+void ComponentList::control()
+{
+	for (QMap<QString, ComponentTabWidget *>::iterator tab_itr = tabList.begin(); tab_itr != tabList.end(); tab_itr++)
+	{
+		ComponentTabWidget *ctw = tab_itr.value();
+		QMap<QString, ComponentWidget *> comps = ctw->getComponents();
+		for (QMap<QString, ComponentWidget *>::iterator comp_itr = comps.begin(); comp_itr != comps.end(); comp_itr++)
+		{
+			comp_itr.value()->control();
+		}
+	}
+}
+
+/**
+* @brief シミュレーション更新後実行関数
+*/
+void ComponentList::output()
+{
+	for (QMap<QString, ComponentTabWidget *>::iterator tab_itr = tabList.begin(); tab_itr != tabList.end(); tab_itr++)
+	{
+		ComponentTabWidget *ctw = tab_itr.value();
+		QMap<QString, ComponentWidget *> comps = ctw->getComponents();
+		for (QMap<QString, ComponentWidget *>::iterator comp_itr = comps.begin(); comp_itr != comps.end(); comp_itr++)
+		{
+			comp_itr.value()->output();
+		}
+	}
+}
+
+/**
+* @brief シミュレーション終了時実行関数
+*/
+void ComponentList::stop()
+{
+	for (QMap<QString, ComponentTabWidget *>::iterator tab_itr = tabList.begin(); tab_itr != tabList.end(); tab_itr++)
+	{
+		ComponentTabWidget *ctw = tab_itr.value();
+		QMap<QString, ComponentWidget *> comps = ctw->getComponents();
+		for (QMap<QString, ComponentWidget *>::iterator comp_itr = comps.begin(); comp_itr != comps.end(); comp_itr++)
+		{
+			comp_itr.value()->stop();
 		}
 	}
 }
@@ -799,4 +1169,47 @@ void ComponentListView::store(cnoid::Archive& archive)
 void ComponentListView::restore(const cnoid::Archive& archive)
 {
 	_mwin->restore(archive);
+}
+
+
+
+/**
+* @brief シミュレーション開始時実行関数
+* @return
+*/
+void ComponentListView::start()
+{
+	_mwin->start();
+}
+
+/**
+* @brief シミュレーション更新前実行関数
+*/
+void ComponentListView::input()
+{
+	_mwin->input();
+}
+
+/**
+* @brief シミュレーション更新中実行関数
+*/
+void ComponentListView::control()
+{
+	_mwin->control();
+}
+
+/**
+* @brief シミュレーション更新後実行関数
+*/
+void ComponentListView::output()
+{
+	_mwin->output();
+}
+
+/**
+* @brief シミュレーション終了時実行関数
+*/
+void ComponentListView::stop()
+{
+	_mwin->stop();
 }

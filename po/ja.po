@@ -180,8 +180,11 @@ msgstr "関数"
 msgid "run(new Process)"
 msgstr "実行(別プロセス)"
 
-msgid "run(rtcd)"
-msgstr "実行(rtcd)"
+msgid "run(rtcd,Periodic)"
+msgstr "実行(rtcd、周期実行)"
+
+msgid "run(rtcd,Choreonoid)"
+msgstr "実行(rtcd、トリガー駆動)"
 
 
 msgid "Generate %1%"

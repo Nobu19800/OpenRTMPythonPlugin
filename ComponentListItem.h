@@ -10,6 +10,8 @@
 #include <cnoid/Item>
 #include <cnoid/ItemManager>
 
+#include <cnoid/ControllerItem>
+
 
 #include <QWidget>
 #include <QTableWidget>
@@ -60,7 +62,7 @@ namespace rtmiddleware {
 	 * @class ComponentListItem
 	 * @brief コンポーネントリストアイテム
 	 */
-	class CNOID_EXPORT ComponentListItem : public cnoid::Item
+	class CNOID_EXPORT ComponentListItem : public cnoid::ControllerItem
 	{
 	public:
 		/**
@@ -82,7 +84,32 @@ namespace rtmiddleware {
 		 */
 		static void initialize(cnoid::ExtensionManager* ext);
 
-
+		/**
+		* @brief シミュレーション開始時実行関数
+		* @return
+		*/
+		virtual bool start();
+		/**
+		* @brief 刻み幅取得
+		* @return 刻み幅
+		*/
+		virtual double timeStep() const;
+		/**
+		* @brief シミュレーション更新前実行関数
+		*/
+		virtual void input();
+		/**
+		* @brief シミュレーション更新中実行関数
+		*/
+		virtual bool control();
+		/**
+		* @brief シミュレーション更新後実行関数
+		*/
+		virtual void output();
+		/**
+		* @brief シミュレーション終了時実行関数
+		*/
+		virtual void stop();
 
 	protected:
 		/**

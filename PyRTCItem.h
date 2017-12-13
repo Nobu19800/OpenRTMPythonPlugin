@@ -47,6 +47,7 @@ namespace rtmiddleware {
 
 		/**
 		 * @brief シミュレーション開始時実行関数
+		 * @return
 		 */
 		virtual bool start();
 		/**

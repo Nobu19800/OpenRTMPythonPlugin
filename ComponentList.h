@@ -39,6 +39,12 @@ class QGroupBox;
 class QProcess;
 QT_END_NAMESPACE
 
+
+class CPPComponentInfo;
+class PythonComponentInfo;
+
+
+
 /**
  * @class ComponentWidget
  * @brief RTC表示ウィジェット
@@ -78,19 +84,64 @@ public:
 	*/
 	int get_process_count();
 	/**
-	* @brief マネージャで起動しているコンポーネント数の取得
+	* @brief マネージャで起動しているコンポーネント数の取得(周期実行コンテキスト)
 	* @return コンポーネント数
 	*/
-	int get_rtcd_count();
+	int get_rtcd_periodic_count();
+	/**
+	* @brief マネージャで起動しているコンポーネント数の取得(シミュレーション用実行コンテキスト)
+	* @return コンポーネント数
+	*/
+	int get_rtcd_sim_count();
+	/**
+	* @enum
+	* @brief 実行コンテキストの種別
+	*/
+	enum ExecContextType {
+		PERIODIC_EXECUTION_CONTEXT,
+		CHOREONOID_EXECUTION_CONTEXT,
+		N_EXEC_CONTEXT_TYPES
+	};
+
+	/**
+	* @brief RTCをマネージャで起動
+	*/
+	void run_rtcd(ExecContextType ec_type = CHOREONOID_EXECUTION_CONTEXT);
+
+	/**
+	* @brief シミュレーション開始時実行関数
+	* @return
+	*/
+	void start();
+	/**
+	* @brief シミュレーション更新前実行関数
+	*/
+	void input();
+	/**
+	* @brief シミュレーション更新中実行関数
+	*/
+	void control();
+	/**
+	* @brief シミュレーション更新後実行関数
+	*/
+	void output();
+	/**
+	* @brief シミュレーション終了時実行関数
+	*/
+	void stop();
 public Q_SLOTS:
 	/**
 	 * @brief RTCを別プロセスで起動
 	 */
-	void run_process();
+	void run_processSlot();
 	/**
-	 * @brief RTCをマネージャで起動
+	 * @brief RTCをマネージャで起動(周期実行コンテキスト)
 	 */
-	void run_rtcd();
+	void run_rtcd_periodicSlot();
+	/**
+	* @brief RTCをマネージャで起動(シミュレーション用コンテキスト)
+	*/
+	void run_rtcd_simSlot();
 	
 	
 
@@ -100,10 +151,29 @@ private:
 	RTCViewWidget *_vw;
 	QVBoxLayout *_mainLayout;
 	QPushButton *_processButton;
-	QPushButton *_managerButton;
+	QPushButton *_periodicButton;
+	QPushButton *_simButton;
 	QVector<QProcess*> _process;
-	QVector<RTC::RTObject_impl*> _cpp_modules;
-	QVector<std::string> _python_module;
+	QVector<CPPComponentInfo> _cpp_modules;
+	QVector<PythonComponentInfo> _python_module;
+};
+
+
+class CPPComponentInfo
+{
+public:
+	CPPComponentInfo(RTC::RTObject_impl* obj=NULL, ComponentWidget::ExecContextType ec= ComponentWidget::ExecContextType::PERIODIC_EXECUTION_CONTEXT);
+	CPPComponentInfo(const CPPComponentInfo &obj);
+	RTC::RTObject_impl* _obj;
+	ComponentWidget::ExecContextType _ec;
+};
+class PythonComponentInfo
+{
+public:
+	PythonComponentInfo(std::string name="", ComponentWidget::ExecContextType ec = ComponentWidget::ExecContextType::PERIODIC_EXECUTION_CONTEXT);
+	PythonComponentInfo(const PythonComponentInfo &obj);
+	std::string _name;
+	ComponentWidget::ExecContextType _ec;
 };
 
 /**
@@ -142,6 +212,7 @@ public:
 	* @return RTCウィジェット一覧
 	*/
 	QMap<QString, ComponentWidget *>  getComponents();
+
 private:
 	QMap<QString, ComponentWidget *> _complist;
 	QVBoxLayout *_mainLayout;
@@ -190,6 +261,27 @@ public:
 	* @param archive
 	*/
 	void restore_process(const cnoid::Archive& archive);
+	/**
+	* @brief シミュレーション開始時実行関数
+	* @return
+	*/
+	void start();
+	/**
+	* @brief シミュレーション更新前実行関数
+	*/
+	void input();
+	/**
+	* @brief シミュレーション更新中実行関数
+	*/
+	void control();
+	/**
+	* @brief シミュレーション更新後実行関数
+	*/
+	void output();
+	/**
+	* @brief シミュレーション終了時実行関数
+	*/
+	void stop();
 private:
 	QMap<QString, ComponentTabWidget*> tabList;
 
@@ -254,6 +346,27 @@ public:
 	* @param archive
 	*/
 	void restore(const cnoid::Archive& archive);
+	/**
+	* @brief シミュレーション開始時実行関数
+	* @return
+	*/
+	void start();
+	/**
+	* @brief シミュレーション更新前実行関数
+	*/
+	void input();
+	/**
+	* @brief シミュレーション更新中実行関数
+	*/
+	void control();
+	/**
+	* @brief シミュレーション更新後実行関数
+	*/
+	void output();
+	/**
+	* @brief シミュレーション終了時実行関数
+	*/
+	void stop();
 private:
 	ScrollArea *_area;
 	ComponentList *_mwin;

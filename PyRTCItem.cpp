@@ -121,7 +121,7 @@ PyRTCItem::PyRTCItem()
 	relativePathBaseType.select(RTC_DIRECTORY);
 
 	execContextType.setSymbol(PERIODIC_EXECUTION_CONTEXT,  N_("PeriodicExecutionContext"));
-	execContextType.setSymbol(CHOREONOID_EXECUTION_CONTEXT,  N_("ChoreonoidExecutionContext"));
+	execContextType.setSymbol(CHOREONOID_EXECUTION_CONTEXT,  N_("SimulatorExecutionContext"));
 	execContextType.select(CHOREONOID_EXECUTION_CONTEXT);
 
 };
@@ -371,6 +371,7 @@ void PyRTCItem::onPositionChanged()
 
 /**
  * @brief シミュレーション開始時実行関数
+ * @return
  */
 bool PyRTCItemBase::start()
 {

@@ -205,3 +205,77 @@ void ComponentListItem::onDisconnectedFromRoot()
 		ComponentListView::instance()->killprocess();
 	}
 }
+
+
+
+/**
+* @brief シミュレーション開始時実行関数
+* @return
+*/
+bool ComponentListItem::start()
+{
+	ComponentListView *cv = ComponentListView::instance();
+	if (cv)
+	{
+		ComponentListView::instance()->start();
+	}
+	return true;
+}
+
+/**
+* @brief 刻み幅取得
+* @return 刻み幅
+*/
+double ComponentListItem::timeStep() const
+{
+	return 0;
+}
+
+/**
+* @brief シミュレーション更新前実行関数
+*/
+void ComponentListItem::input()
+{
+	ComponentListView *cv = ComponentListView::instance();
+	if (cv)
+	{
+		ComponentListView::instance()->input();
+	}
+}
+
+/**
+* @brief シミュレーション更新中実行関数
+*/
+bool ComponentListItem::control()
+{
+	ComponentListView *cv = ComponentListView::instance();
+	if (cv)
+	{
+		ComponentListView::instance()->control();
+	}
+	return true;
+}
+
+/**
+* @brief シミュレーション更新後実行関数
+*/
+void ComponentListItem::output()
+{
+	ComponentListView *cv = ComponentListView::instance();
+	if (cv)
+	{
+		ComponentListView::instance()->output();
+	}
+}
+
+/**
+* @brief シミュレーション終了時実行関数
+*/
+void ComponentListItem::stop()
+{
+	ComponentListView *cv = ComponentListView::instance();
+	if (cv)
+	{
+		ComponentListView::instance()->stop();
+	}
+}

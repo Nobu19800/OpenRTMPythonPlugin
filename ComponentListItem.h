@@ -109,6 +109,10 @@ namespace rtmiddleware {
 		 * @brief 
 		 */
 		virtual void onPositionChanged();
+		/**
+		* @brief
+		*/
+		virtual void onDisconnectedFromRoot();
 
 		//ScrollArea *_area;
 		//ComponentList *_mwin;

@@ -68,7 +68,11 @@ public:
 	 * @param s フォントサイズ
 	 */
 	void setFontSize(int s);
-	
+	/**
+	* @brief テキスト設定
+	* @return テキスト
+	*/
+	void setText(QString code);
 
 
 public Q_SLOTS:

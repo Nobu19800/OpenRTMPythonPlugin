@@ -70,6 +70,11 @@ namespace rtmiddleware {
 		 * @brief シミュレーション終了時実行関数
 		 */
 		virtual void stop();
+		/**
+		* @brief 実行コンテキスト設定
+		* @param which 実行コンテキストID
+		*/
+		void setExecContextType(int which);
 
 		enum RelativePathBaseType {
 			RTC_DIRECTORY,
@@ -122,11 +127,7 @@ namespace rtmiddleware {
 		 * @param ext 
 		 */
 		static void initialize(cnoid::ExtensionManager* ext);
-		/**
-		 * @brief 実行コンテキスト設定
-		 * @param which 実行コンテキストID 
-		 */
-		void setExecContextType(int which);
+
 		/**
 		 * @brief RTC生成
 		 * @param name 名前

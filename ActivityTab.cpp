@@ -110,6 +110,15 @@ QString ActivityTab::getText()
 	return _editor->toPlainText();
 }
 
+/**
+* @brief テキスト設定
+* @return テキスト
+*/
+void ActivityTab::setText(QString code)
+{
+	_editor->setText(code);
+}
+
 
 /**
  * @brief フォントサイズ設定

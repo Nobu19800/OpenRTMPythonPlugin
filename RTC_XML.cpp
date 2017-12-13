@@ -4,16 +4,34 @@
  *
  */
 
+
 #include "RTC_XML.h"
 
 
 using namespace RTC_XML;
+
+class Guard
+{
+public:
+	Guard(coil::Mutex *mutex)
+	{
+		m_mutex = mutex;
+		m_mutex->lock();
+	};
+	~Guard()
+	{
+		m_mutex->unlock();
+	};
+private:
+	coil::Mutex *m_mutex;
+};
 
 /**
  * @brief コンストラクタ
  */
 BasicInfo::BasicInfo()
 {
+	m_mutex = new coil::Mutex;
 }
 
 /**
@@ -24,6 +42,8 @@ BasicInfo::BasicInfo(const BasicInfo &obj)
 {
 	_properties = obj._properties;
 	_docs = obj._docs;
+	m_mutex = obj.m_mutex;
+	
 }
 
 /**
@@ -39,6 +59,7 @@ BasicInfo::~BasicInfo()
  */
 void BasicInfo::getXMLData(QXmlStreamReader &reader)
 {
+	Guard guard(m_mutex);
 	{
 		//std::cout << reader.name().toString().toStdString() << std::endl;
 		QXmlStreamAttributes attributes = reader.attributes();
@@ -72,6 +93,7 @@ void BasicInfo::getXMLData(QXmlStreamReader &reader)
  */
 QString BasicInfo::getCategory()
 {
+	Guard guard(m_mutex);
 	return _properties["category"];
 }
 
@@ -81,6 +103,7 @@ QString BasicInfo::getCategory()
  */
 QString BasicInfo::getName()
 {
+	Guard guard(m_mutex);
 	return _properties["name"];
 }
 
@@ -89,7 +112,7 @@ QString BasicInfo::getName()
  */
 RTC_Action::RTC_Action()
 {
-
+	m_mutex = new coil::Mutex;
 }
 
 /**
@@ -100,6 +123,7 @@ RTC_Action::RTC_Action(const RTC_Action &obj)
 {
 	_docs = obj._docs;
 	_properties = obj._properties;
+	m_mutex = obj.m_mutex;
 }
 
 /**
@@ -116,6 +140,7 @@ RTC_Action::~RTC_Action()
  */
 void RTC_Action::getXMLData(QXmlStreamReader &reader)
 {
+	Guard guard(m_mutex);
 	{
 		//std::cout << reader.name().toString().toStdString() << std::endl;
 		QXmlStreamAttributes attributes = reader.attributes();
@@ -148,7 +173,7 @@ void RTC_Action::getXMLData(QXmlStreamReader &reader)
  */
 ConfigurationSet::ConfigurationSet()
 {
-
+	m_mutex = new coil::Mutex;
 }
 
 /**
@@ -160,6 +185,8 @@ ConfigurationSet::ConfigurationSet(const ConfigurationSet &obj)
 	_properties = obj._properties;
 	_docs = obj._docs;
 	_ext = obj._ext;
+
+	m_mutex = obj.m_mutex;
 }
 
 /**
@@ -176,6 +203,7 @@ ConfigurationSet::~ConfigurationSet()
  */
 void ConfigurationSet::getXMLData(QXmlStreamReader &reader)
 {
+	Guard guard(m_mutex);
 	{
 		//std::cout << reader.name().toString().toStdString() << std::endl;
 		QXmlStreamAttributes attributes = reader.attributes();
@@ -229,6 +257,7 @@ QString ConfigurationSet::get_data_name()
  */
 QString ConfigurationSet::get_name()
 {
+	Guard guard(m_mutex);
 	return _properties["name"];
 }
 
@@ -238,6 +267,7 @@ QString ConfigurationSet::get_name()
  */
 void ConfigurationSet::set_name(QString name)
 {
+	Guard guard(m_mutex);
 	_properties["name"] = name;
 }
 
@@ -247,6 +277,7 @@ void ConfigurationSet::set_name(QString name)
  */
 QString ConfigurationSet::get_defaultValue()
 {
+	Guard guard(m_mutex);
 	return _properties["defaultValue"];
 }
 
@@ -256,6 +287,7 @@ QString ConfigurationSet::get_defaultValue()
  */
 void ConfigurationSet::set_defaultValue(QString val)
 {
+	Guard guard(m_mutex);
 	_properties["defaultValue"] = val;
 }
 
@@ -265,6 +297,7 @@ void ConfigurationSet::set_defaultValue(QString val)
  */
 QString ConfigurationSet::get_type()
 {
+	Guard guard(m_mutex);
 	return _properties["type"];
 }
 
@@ -274,6 +307,7 @@ QString ConfigurationSet::get_type()
  */
 void ConfigurationSet::set_type(QString type)
 {
+	Guard guard(m_mutex);
 	_properties["type"] = type;
 }
 
@@ -283,6 +317,7 @@ void ConfigurationSet::set_type(QString type)
  */
 QString ConfigurationSet::get_widget()
 {
+	Guard guard(m_mutex);
 	//return _ext["value"];
 	return "";
 }
@@ -293,6 +328,7 @@ QString ConfigurationSet::get_widget()
  */
 void ConfigurationSet::set_widget(QString widget)
 {
+	Guard guard(m_mutex);
 	//_ext["value"] = widget;
 }
 
@@ -302,6 +338,7 @@ void ConfigurationSet::set_widget(QString widget)
  */
 QString ConfigurationSet::get_constraint()
 {
+	Guard guard(m_mutex);
 	//return _properties["defaultValue"];
 	return "";
 }
@@ -312,6 +349,7 @@ QString ConfigurationSet::get_constraint()
  */
 void ConfigurationSet::set_constraint(QString constraits)
 {
+	Guard guard(m_mutex);
 	//_properties["defaultValue"] = constraits;
 }
 
@@ -321,6 +359,7 @@ void ConfigurationSet::set_constraint(QString constraits)
  */
 QString ConfigurationSet::get_step()
 {
+	Guard guard(m_mutex);
 	//return _properties["defaultValue"];
 	return "";
 }
@@ -331,6 +370,7 @@ QString ConfigurationSet::get_step()
  */
 void ConfigurationSet::set_step(QString step)
 {
+	Guard guard(m_mutex);
 	//_properties["defaultValue"] = step;
 }
 
@@ -342,6 +382,8 @@ DataPorts::DataPorts()
 	_properties["name"] = "port";
 	_properties["portType"] = "DataInPort";
 	_properties["type"] = "RTC::TimedDouble";
+
+	m_mutex = new coil::Mutex;
 }
 
 /**
@@ -352,6 +394,9 @@ DataPorts::DataPorts(const DataPorts &obj)
 {
 	_properties = obj._properties;
 	_docs = obj._docs;
+
+	m_mutex = obj.m_mutex;
+	
 }
 
 /**
@@ -368,6 +413,7 @@ DataPorts::~DataPorts()
  */
 QString DataPorts::get_name()
 {
+	Guard guard(m_mutex);
 	return _properties["name"];
 }
 
@@ -378,6 +424,7 @@ QString DataPorts::get_name()
  */
 QString DataPorts::get_portType()
 {
+	Guard guard(m_mutex);
 	return _properties["portType"];
 }
 
@@ -387,6 +434,7 @@ QString DataPorts::get_portType()
  */
 QString DataPorts::get_type()
 {
+	Guard guard(m_mutex);
 	return _properties["type"];
 }
 
@@ -400,6 +448,7 @@ QString DataPorts::get_type()
  */
 void DataPorts::set_name(QString name)
 {
+	Guard guard(m_mutex);
 	_properties["name"] = name;
 }
 
@@ -409,6 +458,7 @@ void DataPorts::set_name(QString name)
  */
 void DataPorts::set_portType(QString type)
 {
+	Guard guard(m_mutex);
 	_properties["portType"] = type;
 }
 
@@ -418,6 +468,7 @@ void DataPorts::set_portType(QString type)
  */
 void DataPorts::set_type(QString type)
 {
+	Guard guard(m_mutex);
 	_properties["type"] = type;
 }
 
@@ -427,6 +478,7 @@ void DataPorts::set_type(QString type)
  */
 void DataPorts::getXMLData(QXmlStreamReader &reader)
 {
+	Guard guard(m_mutex);
 	{
 		//std::cout << reader.name().toString().toStdString() << std::endl;
 		QXmlStreamAttributes attributes = reader.attributes();
@@ -490,6 +542,8 @@ QString DataPorts::get_port_name()
 ServiceInterface::ServiceInterface()
 {
 	_properties["name"] = "port";
+
+	m_mutex = new coil::Mutex;
 }
 
 /**
@@ -500,6 +554,8 @@ ServiceInterface::ServiceInterface(const ServiceInterface &obj)
 {
 	_properties = obj._properties;
 	_docs = obj._docs;
+
+	m_mutex = obj.m_mutex;
 }
 
 /**
@@ -516,6 +572,7 @@ ServiceInterface::~ServiceInterface()
  */
 QString ServiceInterface::get_name()
 {
+	Guard guard(m_mutex);
 	return _properties["name"];
 }
 
@@ -525,6 +582,7 @@ QString ServiceInterface::get_name()
  */
 void ServiceInterface::set_name(QString name)
 {
+	Guard guard(m_mutex);
 	_properties["name"] = name;
 }
 
@@ -543,6 +601,7 @@ QString ServiceInterface::get_data_name()
  */
 QString ServiceInterface::get_direction()
 {
+	Guard guard(m_mutex);
 	return _properties["direction"];
 }
 
@@ -552,6 +611,7 @@ QString ServiceInterface::get_direction()
  */
 void ServiceInterface::set_direction(QString dir)
 {
+	Guard guard(m_mutex);
 	_properties["direction"] = dir;
 }
 
@@ -561,6 +621,7 @@ void ServiceInterface::set_direction(QString dir)
  */
 QString ServiceInterface::get_idlFile()
 {
+	Guard guard(m_mutex);
 	return _properties["idlFile"];
 }
 
@@ -570,6 +631,7 @@ QString ServiceInterface::get_idlFile()
  */
 void ServiceInterface::set_idlFile(QString file)
 {
+	Guard guard(m_mutex);
 	_properties["idlFile"] = file;
 }
 
@@ -579,6 +641,7 @@ void ServiceInterface::set_idlFile(QString file)
  */
 QString ServiceInterface::get_type()
 {
+	Guard guard(m_mutex);
 	return _properties["type"];
 }
 
@@ -588,6 +651,7 @@ QString ServiceInterface::get_type()
  */
 void ServiceInterface::set_type(QString type)
 {
+	Guard guard(m_mutex);
 	_properties["type"] = type;
 }
 
@@ -597,6 +661,7 @@ void ServiceInterface::set_type(QString type)
  */
 QString ServiceInterface::get_path()
 {
+	Guard guard(m_mutex);
 	return _properties["path"];
 }
 
@@ -606,6 +671,7 @@ QString ServiceInterface::get_path()
  */
 void ServiceInterface::set_path(QString path)
 {
+	Guard guard(m_mutex);
 	_properties["path"] = path;
 }
 
@@ -616,6 +682,7 @@ void ServiceInterface::set_path(QString path)
  */
 void ServiceInterface::getXMLData(QXmlStreamReader &reader)
 {
+	Guard guard(m_mutex);
 	{
 		//std::cout << reader.name().toString().toStdString() << std::endl;
 		QXmlStreamAttributes attributes = reader.attributes();
@@ -649,7 +716,7 @@ void ServiceInterface::getXMLData(QXmlStreamReader &reader)
  */
 ServicePorts::ServicePorts()
 {
-
+	m_mutex = new coil::Mutex;
 }
 
 /**
@@ -661,6 +728,8 @@ ServicePorts::ServicePorts(const ServicePorts &obj)
 	_properties = obj._properties;
 	_interfaces = obj._interfaces;
 	_docs = obj._docs;
+
+	m_mutex = obj.m_mutex;
 }
 
 /**
@@ -677,6 +746,7 @@ ServicePorts::~ServicePorts()
  */
 void ServicePorts::addInterface(ServiceInterface svrif)
 {
+	Guard guard(m_mutex);
 	_interfaces.push_back(svrif);
 }
 
@@ -686,6 +756,7 @@ void ServicePorts::addInterface(ServiceInterface svrif)
  */
 void ServicePorts::getXMLData(QXmlStreamReader &reader)
 {
+	Guard guard(m_mutex);
 	{
 		//std::cout << reader.name().toString().toStdString() << std::endl;
 		QXmlStreamAttributes attributes = reader.attributes();
@@ -726,6 +797,7 @@ void ServicePorts::getXMLData(QXmlStreamReader &reader)
  */
 QString ServicePorts::get_name()
 {
+	Guard guard(m_mutex);
 	return _properties["name"];
 }
 
@@ -735,6 +807,7 @@ QString ServicePorts::get_name()
  */
 void ServicePorts::set_name(QString name)
 {
+	Guard guard(m_mutex);
 	_properties["name"] = name;
 }
 
@@ -744,6 +817,7 @@ void ServicePorts::set_name(QString name)
  */
 QVector<ServiceInterface> ServicePorts::get_interfaces()
 {
+	Guard guard(m_mutex);
 	return _interfaces;
 }
 
@@ -753,7 +827,7 @@ QVector<ServiceInterface> ServicePorts::get_interfaces()
  */
 Language::Language()
 {
-
+	m_mutex = new coil::Mutex;
 }
 
 /**
@@ -764,6 +838,8 @@ Language::Language(const Language &obj)
 {
 	_docs = obj._docs;
 	_properties = obj._properties;
+
+	m_mutex = obj.m_mutex;
 }
 
 
@@ -781,6 +857,7 @@ Language::~Language()
  */
 void Language::getXMLData(QXmlStreamReader &reader)
 {
+	Guard guard(m_mutex);
 	{
 		//std::cout << reader.name().toString().toStdString() << std::endl;
 		QXmlStreamAttributes attributes = reader.attributes();
@@ -815,6 +892,7 @@ void Language::getXMLData(QXmlStreamReader &reader)
  */
 QString Language::getKind()
 {
+	Guard guard(m_mutex);
 	return  _properties["kind"];
 }
 
@@ -823,7 +901,7 @@ QString Language::getKind()
  */
 RTC_Profile::RTC_Profile()
 {
-
+	m_mutex = new coil::Mutex;
 }
 
 /**
@@ -839,6 +917,8 @@ RTC_Profile::RTC_Profile(const RTC_Profile &obj)
 	_dataports = obj._dataports;
 	_svrports = obj._svrports;
 	_language = obj._language;
+
+	m_mutex = obj.m_mutex;
 }
 
 
@@ -946,6 +1026,7 @@ void RTC_Profile::loadXML(QString name)
  */
 int RTC_Profile::getPortNum()
 {
+	Guard guard(m_mutex);
 	return _dataports.size() + _svrports.size();
 }
 
@@ -964,6 +1045,7 @@ RTC_ProfileRTP::RTC_ProfileRTP()
  */
 RTC_ProfileRTP::RTC_State RTC_ProfileRTP::getState(int ec_num)
 {
+	Guard guard(m_mutex);
 	if (_state.keys().indexOf(ec_num) >= 0)
 	{
 		return _state[ec_num];
@@ -978,6 +1060,7 @@ RTC_ProfileRTP::RTC_State RTC_ProfileRTP::getState(int ec_num)
  */
 void RTC_ProfileRTP::setState(RTC_ProfileRTP::RTC_State state, int ec_num)
 {
+	Guard guard(m_mutex);
 	_state[ec_num] = state;
 }
 
@@ -987,6 +1070,7 @@ void RTC_ProfileRTP::setState(RTC_ProfileRTP::RTC_State state, int ec_num)
  */
 QMap <QString, RTC_Action> RTC_Profile::get_actions()
 {
+	Guard guard(m_mutex);
 	return _actions;
 }
 
@@ -997,12 +1081,14 @@ QMap <QString, RTC_Action> RTC_Profile::get_actions()
  */
 QVector<ConfigurationSet> RTC_Profile::get_confsets()
 {
+	Guard guard(m_mutex);
 	return _confsets;
 }
 
 
 QVector<DataPorts> RTC_Profile::get_dataports()
 {
+	Guard guard(m_mutex);
 	return _dataports;
 }
 
@@ -1012,12 +1098,14 @@ QVector<DataPorts> RTC_Profile::get_dataports()
  */
 void RTC_Profile::addDataPort(DataPorts port)
 {
+	Guard guard(m_mutex);
 	_dataports.push_back(port);
 }
 
 
 void RTC_Profile::addServicePort(ServicePorts port)
 {
+	Guard guard(m_mutex);
 	_svrports.push_back(port);
 }
 
@@ -1027,6 +1115,7 @@ void RTC_Profile::addServicePort(ServicePorts port)
  */
 QVector<ServicePorts>  RTC_Profile::get_svcports()
 {
+	Guard guard(m_mutex);
 	return _svrports;
 }
 
@@ -1036,6 +1125,7 @@ QVector<ServicePorts>  RTC_Profile::get_svcports()
  */
 void RTC_Profile::addConfigurationSet(ConfigurationSet conf)
 {
+	Guard guard(m_mutex);
 	_confsets.push_back(conf);
 }
 
@@ -1045,6 +1135,7 @@ void RTC_Profile::addConfigurationSet(ConfigurationSet conf)
  */
 void RTC_Profile::removeDataPort(QString name)
 {
+	Guard guard(m_mutex);
 	for (QVector<DataPorts>::iterator itr = _dataports.begin(); itr != _dataports.end(); itr++)
 	{
 		if ((*itr).get_name() == name)
@@ -1061,6 +1152,7 @@ void RTC_Profile::removeDataPort(QString name)
  */
 void RTC_Profile::removeServicePort(QString name)
 {
+	Guard guard(m_mutex);
 	for (QVector<ServicePorts>::iterator itr = _svrports.begin(); itr != _svrports.end(); itr++)
 	{
 		if ((*itr).get_name() == name)
@@ -1077,6 +1169,7 @@ void RTC_Profile::removeServicePort(QString name)
  */
 void RTC_Profile::removeConfigurationSet(QString name)
 {
+	Guard guard(m_mutex);
 	for (QVector<ConfigurationSet>::iterator itr = _confsets.begin(); itr != _confsets.end(); itr++)
 	{
 		if ((*itr).get_name() == name)
@@ -1093,6 +1186,7 @@ void RTC_Profile::removeConfigurationSet(QString name)
  */
 BasicInfo RTC_Profile::get_info()
 {
+	Guard guard(m_mutex);
 	return _info;
 }
 
@@ -1102,5 +1196,6 @@ BasicInfo RTC_Profile::get_info()
  */
 Language RTC_Profile::get_language()
 {
+	Guard guard(m_mutex);
 	return _language;
 }

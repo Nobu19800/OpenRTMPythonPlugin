@@ -16,6 +16,9 @@
 #include <cnoid/View>
 #include <cnoid/CorbaUtil>
 
+#include <rtm/Manager.h>
+#include <rtm/ManagerServant.h>
+
 #include "RTC_XML.h"
 #include "RTCViewWidget.h"
 
@@ -64,7 +67,22 @@ public:
 	* @brief 終了処理
 	*/
 	void killprocess();
-private Q_SLOTS:
+	/**
+	* @brief RTCプロファイルオブジェクトの取得
+	* @return RTCプロファイルオブジェクト
+	*/
+	RTC_XML::RTC_Profile get_comp_prof();
+	/**
+	* @brief 起動しているプロセス数の取得
+	* @return 起動しているプロセス数
+	*/
+	int get_process_count();
+	/**
+	* @brief マネージャで起動しているコンポーネント数の取得
+	* @return コンポーネント数
+	*/
+	int get_rtcd_count();
+public Q_SLOTS:
 	/**
 	 * @brief RTCを別プロセスで起動
 	 */
@@ -73,6 +91,8 @@ private Q_SLOTS:
 	 * @brief RTCをマネージャで起動
 	 */
 	void run_rtcd();
+	
+	
 
 private:
 	QString _path;
@@ -81,21 +101,23 @@ private:
 	QVBoxLayout *_mainLayout;
 	QPushButton *_processButton;
 	QPushButton *_managerButton;
-	QProcess *_process;
+	QVector<QProcess*> _process;
+	QVector<RTC::RTObject_impl*> _cpp_modules;
+	QVector<std::string> _python_module;
 };
 
 /**
- * @class ComponentTabWidgwt
+ * @class ComponentTabWidget
  * @brief カテゴリ別RTC表示タブ
  */
-class ComponentTabWidgwt : public QWidget
+class ComponentTabWidget : public QWidget
 {
 	Q_OBJECT
 public:
 	/**
 	 * @brief コンストラクタ
 	 */
-	ComponentTabWidgwt();
+	ComponentTabWidget();
 	/**
 	 * @brief RTC追加
 	 * @param cw RTC表示ウィジェット
@@ -115,8 +137,13 @@ public:
 	* @brief 終了処理
 	*/
 	void killprocess();
+	/**
+	* @brief RTCウィジェット一覧取得
+	* @return RTCウィジェット一覧
+	*/
+	QMap<QString, ComponentWidget *>  getComponents();
 private:
-	QVector<ComponentWidget *> _complist;
+	QMap<QString, ComponentWidget *> _complist;
 	QVBoxLayout *_mainLayout;
 	QVector<QHBoxLayout*> _subLayouts;
 };
@@ -148,8 +175,23 @@ public:
 	* @brief 終了処理
 	*/
 	void killprocess();
+	/**
+	* @brief 保存する
+	* @param archive
+	*/
+	void store(cnoid::Archive& archive);
+	/**
+	* @brief 復元する
+	* @param archive
+	*/
+	void restore(const cnoid::Archive& archive);
+	/**
+	* @brief 復元する
+	* @param archive
+	*/
+	void restore_process(const cnoid::Archive& archive);
 private:
-	QMap<QString, ComponentTabWidgwt*> tabList;
+	QMap<QString, ComponentTabWidget*> tabList;
 
 
 };
@@ -202,6 +244,16 @@ public:
 	* @brief 終了処理
 	*/
 	void killprocess();
+	/**
+	* @brief 保存する
+	* @param archive 
+	*/
+	void store(cnoid::Archive& archive);
+	/**
+	* @brief 復元する
+	* @param archive
+	*/
+	void restore(const cnoid::Archive& archive);
 private:
 	ScrollArea *_area;
 	ComponentList *_mwin;

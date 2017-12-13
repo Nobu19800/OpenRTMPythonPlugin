@@ -18,6 +18,8 @@
 //#include <QtXml>
 #include <map>
 
+#include <coil/Mutex.h>
+
 
 
 namespace RTC_XML
@@ -59,6 +61,8 @@ namespace RTC_XML
 		 * @return モジュール名
 		 */
 		QString getName();
+
+		coil::Mutex *m_mutex;
 	};
 
 	/**
@@ -91,6 +95,8 @@ namespace RTC_XML
 
 		QMap <QString, QString> _docs;
 		QMap <QString, QString> _properties;
+
+		coil::Mutex *m_mutex;
 	};
 
 	/**
@@ -186,6 +192,8 @@ namespace RTC_XML
 		QMap <QString, QString> _properties;
 		QMap <QString, QString> _docs;
 		QMap <QString, QString> _ext;
+
+		coil::Mutex *m_mutex;
 	};
 
 	/**
@@ -255,6 +263,8 @@ namespace RTC_XML
 		 * @return ポート変数名
 		 */
 		QString get_port_name();
+
+		coil::Mutex *m_mutex;
 	};
 
 	/**
@@ -339,6 +349,8 @@ namespace RTC_XML
 		QString get_data_name();
 		QMap <QString, QString> _properties;
 		QMap <QString, QString> _docs;
+
+		coil::Mutex *m_mutex;
 	};
 
 	/**
@@ -391,6 +403,8 @@ namespace RTC_XML
 		QVector<ServiceInterface> _interfaces;
 		QMap <QString, QString> _docs;
 
+		coil::Mutex *m_mutex;
+
 	};
 
 	/**
@@ -425,6 +439,8 @@ namespace RTC_XML
 		 * @return 言語名
 		 */
 		QString getKind();
+
+		coil::Mutex *m_mutex;
 	};
 
 	/**
@@ -524,6 +540,8 @@ namespace RTC_XML
 		 */
 		Language get_language();
 		Language _language;
+
+		coil::Mutex *m_mutex;
 
 
 	};

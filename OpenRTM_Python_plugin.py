@@ -62,7 +62,7 @@ def createComp(filepath):
   
   mgr = OpenRTM_aist.Manager.instance()
   
-  
+
   filename = os.path.basename(filepath)
   compname, ext = os.path.splitext(filename)
   
@@ -76,7 +76,8 @@ def createComp(filepath):
   if compname in sys.modules.keys():
     sys.modules.pop(compname)
 
-  if mgr.load(filepath, None) is RTC.RTC_ERROR or mgr.load(filepath, None) is RTC.PRECONDITION_NOT_MET or mgr.load(filepath, None) is RTC.BAD_PARAMETER:
+  ret = mgr.load(filepath, None)
+  if ret is RTC.RTC_ERROR or ret is RTC.PRECONDITION_NOT_MET or ret is RTC.BAD_PARAMETER:
     return ""
   
   
@@ -86,6 +87,32 @@ def createComp(filepath):
   else:
     return ""
 
+
+
+def createCompList(filepath):
+  
+  try:
+    filepath = filepath.encode('utf-8')
+  except:
+    pass
+  
+  mgr = OpenRTM_aist.Manager.instance()
+
+  filename = os.path.basename(filepath)
+  compname, ext = os.path.splitext(filename)
+  
+  
+
+  ret = mgr.load(filepath, None)
+  if ret is RTC.RTC_ERROR or ret is RTC.PRECONDITION_NOT_MET or ret is RTC.BAD_PARAMETER:
+    return ""
+  
+  
+  comp = mgr.createComponent(compname+"?execution_contexts=PeriodicExecutionContext,OpenHRPExecutionContext")
+  if comp:
+    return comp.getInstanceName()
+  else:
+    return ""
   
 
 def exitComp(rtcname):

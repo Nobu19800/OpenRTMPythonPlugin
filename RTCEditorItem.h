@@ -16,6 +16,10 @@
 
 #include <src/OpenRTMPlugin/RTSItem.h>
 
+#include <coil/Mutex.h>
+#include <coil/Time.h>
+
+
 
 #include "PyRTCItem.h"
 #include "RTC_MainWindow.h"
@@ -40,6 +44,7 @@ namespace rtmiddleware {
 	 */
 	class CNOID_EXPORT RTCEditorItem : public PyRTCItemBase
 	{
+		
 	public:
 		/**
 		 * @brief コンストラクタ
@@ -96,11 +101,22 @@ namespace rtmiddleware {
 		 * @param port データポートプロファイル
 		 */
 		void add_dataport(RTC_XML::DataPorts port);
-
+		/**
+		* @brief ウインドウ表示
+		*/
+		void showWindows();
+		/**
+		* @brief ビュー追加時実行関数
+		* @param item RTCダイアグラム上で選択中のRTC
+		*/
+		void onVeiwAdded(cnoid::View* view);
 
 	private:
 		cnoid::Connection selectionChangedConnection;
+		cnoid::Connection viewAddConnection;
 		RTC_MainWindow *mwin;
+		coil::Mutex m_mutex;
+	
 	protected:
 		/**
 		 * @brief プロパティ設定
@@ -122,6 +138,7 @@ namespace rtmiddleware {
 		 * @param archive 
 		 */
 		virtual bool restore(const cnoid::Archive& archive) override;
+		
 
 		/**
 		 * @brief 初期化時実行関数

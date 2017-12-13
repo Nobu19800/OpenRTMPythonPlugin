@@ -203,7 +203,7 @@ void PyRTCItem::doPutProperties(PutPropertyFunction& putProperty)
  * @brief 実行コンテキスト設定
  * @param which 実行コンテキストID 
  */
-void PyRTCItem::setExecContextType(int which)
+void PyRTCItemBase::setExecContextType(int which)
 {
 	if(which != execContextType.which()){
         		execContextType.select(which);

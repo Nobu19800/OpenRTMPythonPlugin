@@ -101,6 +101,23 @@ public:
 	 * @return Pythonファイルのパス
 	 */
 	QString getFileName();
+	/**
+	* @brief RTCプロファイルオブジェクト取得
+	* @return RTCプロファイルオブジェクト
+	*/
+	RTC_XML::RTC_ProfileRTP *getRTCProfile();
+	/**
+	* @brief 実装コード取得
+	* @param id コールバックのID
+	* @return 実装コード文字列
+	*/
+	QString get_code(ActivityCode id);
+	/**
+	* @brief 実装コード設定
+	* @param id コールバックのID
+	* @param code 実装コード文字列
+	*/
+	void set_code(ActivityCode id, QString code);
 	cnoid::Signal<void(const char*)>  sigSaveButton;
 	
 public Q_SLOTS:

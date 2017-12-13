@@ -30,6 +30,8 @@
 #include <QDebug>
 #include <QTextCodec>
 
+#include <cnoid/MessageView>
+
 
 #include "Highlighter.h"
 
@@ -183,7 +185,7 @@ QString RTC_MainWindow::getFileName()
  */
 void RTC_MainWindow::save_button_slot()
 {
-
+	//cnoid::MessageView::instance()->putln(0, "save");
 	//std::cout << tmp_dir.path().toStdString() << std::endl;
 	
 	QTextCodec* codec = QTextCodec::codecForName("UTF-8");
@@ -305,4 +307,34 @@ void RTC_MainWindow::deleteConfig(QString name)
 void RTC_MainWindow::createMenus()
 {
 
+}
+
+/**
+* @brief RTCプロファイルオブジェクト取得
+* @return RTCプロファイルオブジェクト
+*/
+RTC_XML::RTC_ProfileRTP *RTC_MainWindow::getRTCProfile()
+{
+	return _comp;
+}
+
+
+/**
+* @brief 実装コード取得
+* @return 実装コード文字列
+*/
+QString RTC_MainWindow::get_code(ActivityCode id)
+{
+	return tab_list[id]->getText();
+}
+
+
+/**
+* @brief 実装コード設定
+* @param id コールバックのID
+* @param code 実装コード文字列
+*/
+void RTC_MainWindow::set_code(ActivityCode id, QString code)
+{
+	tab_list[id]->setText(code);
 }

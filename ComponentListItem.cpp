@@ -82,6 +82,18 @@ ComponentListItem::ComponentListItem()
 };
 
 /**
+* @brief デストラクタ
+*/
+ComponentListItem::~ComponentListItem()
+{
+	ComponentListView *cv = ComponentListView::instance();
+	if (cv)
+	{
+		ComponentListView::instance()->killprocess();
+	}
+};
+
+/**
  * @brief コピーコンストラクタ
  * @param org コピー元
  */
@@ -110,12 +122,6 @@ ComponentListItem::ComponentListItem(const ComponentListItem& org)
 	
 };
 
-/**
- * @brief デストラクタ
- */
-ComponentListItem::~ComponentListItem()
-{
-}
 
 
 /**
@@ -158,6 +164,11 @@ cnoid::Item* ComponentListItem::doDuplicate() const
  */
 bool ComponentListItem::store(cnoid::Archive& archive)
 {
+	ComponentListView *cv = ComponentListView::instance();
+	if (cv)
+	{
+		ComponentListView::instance()->store(archive);
+	}
 	return true;
 }
 
@@ -167,6 +178,11 @@ bool ComponentListItem::store(cnoid::Archive& archive)
  */
 bool ComponentListItem::restore(const cnoid::Archive& archive)
 {
+	ComponentListView *cv = ComponentListView::instance();
+	if (cv)
+	{
+		ComponentListView::instance()->restore(archive);
+	}
 	return true;
 }
 
@@ -176,4 +192,16 @@ bool ComponentListItem::restore(const cnoid::Archive& archive)
 void ComponentListItem::onPositionChanged()
 {
 
+}
+
+/**
+* @brief
+*/
+void ComponentListItem::onDisconnectedFromRoot()
+{
+	ComponentListView *cv = ComponentListView::instance();
+	if (cv)
+	{
+		ComponentListView::instance()->killprocess();
+	}
 }

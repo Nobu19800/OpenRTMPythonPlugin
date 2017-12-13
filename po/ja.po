@@ -182,3 +182,18 @@ msgstr "実行(別プロセス)"
 
 msgid "run(rtcd)"
 msgstr "実行(rtcd)"
+
+
+msgid "Generate %1%"
+msgstr "%1%を起動しました"
+
+msgid "Failed Generate %1%"
+msgstr "%1%の起動に失敗しました"
+
+
+msgid "not running %1% Manager"
+msgstr "%1%のマネージャは起動していません"
+
+
+msgid "not supported %1%"
+msgstr "%1%はサポートしていません"

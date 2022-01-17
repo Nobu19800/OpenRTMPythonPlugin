@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file  BaseTab.h
- * @brief ƒ^ƒu‚ÌŠî–{ƒNƒ‰ƒX
+ * @brief ã‚¿ãƒ–ã®åŸºæœ¬ã‚¯ãƒ©ã‚¹
  *
  */
 
@@ -26,117 +26,119 @@ class QLabel;
 class QVBoxLayout;
 QT_END_NAMESPACE
 
-/**
- * @enum WidgetType
- * @brief ƒEƒBƒWƒFƒbƒg‚Ìí•Êˆê——
- */
-enum WidgetType
-{
-	TextBox = 1,
-	Combox = 2,
-	TextCombox = 3,
-	SpinBox = 4,
-	DoubleSpinBox = 5
-};
-
-/**
- * @class BaseWidget
- * @brief ƒEƒBƒWƒFƒbƒgŠi”[ƒNƒ‰ƒX
- */
-class BaseWidget
-{
-public:
-	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param widget ƒEƒBƒWƒFƒbƒg
-	 * @param layout ƒŒƒCƒAƒEƒg
-	 * @param t ƒEƒBƒWƒFƒbƒgí•Ê
-	 */
-	BaseWidget(QWidget *widget=NULL, QLayout *layout = NULL, WidgetType t= TextBox);
-	QWidget *_widget;
-	QLayout *_layout;
-	WidgetType _type;
+namespace rtmiddleware {
 
 	/**
-	 * @brief ƒ‰ƒCƒ“ƒeƒLƒXƒgƒ{ƒbƒNƒX‚ÉƒeƒLƒXƒgİ’è
-	 * @param text ƒeƒLƒXƒg
+	 * @enum WidgetType
+	 * @brief ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆã®ç¨®åˆ¥ä¸€è¦§
 	 */
-	void setText(QString text);
-	/**
-	 * @brief ƒ‰ƒCƒ“ƒeƒLƒXƒgƒ{ƒbƒNƒX‚ÌƒeƒLƒXƒgæ“¾
-	 * @return ƒeƒLƒXƒg
-	 */
-	QString getText();
-	/**
-	 * @brief ƒRƒ“ƒ{ƒ{ƒbƒNƒX‚ÌƒeƒLƒXƒgæ“¾
-	 * @return ƒeƒLƒXƒg
-	 */
-	QString getItemText();
-};
-
-/**
- * @class BaseTab
- * @brief ƒ^ƒu‚Ìƒx[ƒXƒNƒ‰ƒX
- */
-class BaseTab : public QWidget
-{
-    Q_OBJECT
-
-public:
-	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param parent eƒEƒBƒWƒFƒbƒg
-	 */
-	BaseTab(QWidget *parent = Q_NULLPTR);
+	enum WidgetType
+	{
+		TextBox = 1,
+		Combox = 2,
+		TextCombox = 3,
+		SpinBox = 4,
+		DoubleSpinBox = 5
+	};
 
 	/**
-	 * @brief ƒEƒBƒWƒFƒbƒg’Ç‰Á
-	 * @param wid ’Ç‰ÁƒEƒBƒWƒFƒbƒg
-	 * @param name –¼‘O
-	 * @param label ƒ‰ƒxƒ‹–¼
-	 * @param t ƒEƒBƒWƒFƒbƒg‚Ìí•Ê
-	 * @return ƒEƒBƒWƒFƒbƒgŠi”[ƒNƒ‰ƒX
+	 * @class BaseWidget
+	 * @brief ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆæ ¼ç´ã‚¯ãƒ©ã‚¹
 	 */
-	BaseWidget apendWidget(QWidget *wid, QString name, QString label, WidgetType t=TextBox);
+	class BaseWidget
+	{
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param widget ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 * @param layout ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆ
+		 * @param t ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆç¨®åˆ¥
+		 */
+		BaseWidget(QWidget* widget = NULL, QLayout* layout = NULL, WidgetType t = TextBox);
+		QWidget* _widget;
+		QLayout* _layout;
+		WidgetType _type;
+
+		/**
+		 * @brief ãƒ©ã‚¤ãƒ³ãƒ†ã‚­ã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã«ãƒ†ã‚­ã‚¹ãƒˆè¨­å®š
+		 * @param text ãƒ†ã‚­ã‚¹ãƒˆ
+		 */
+		void setText(QString text);
+		/**
+		 * @brief ãƒ©ã‚¤ãƒ³ãƒ†ã‚­ã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã®ãƒ†ã‚­ã‚¹ãƒˆå–å¾—
+		 * @return ãƒ†ã‚­ã‚¹ãƒˆ
+		 */
+		QString getText();
+		/**
+		 * @brief ã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹ã®ãƒ†ã‚­ã‚¹ãƒˆå–å¾—
+		 * @return ãƒ†ã‚­ã‚¹ãƒˆ
+		 */
+		QString getItemText();
+	};
+
 	/**
-	 * @brief ƒRƒ“ƒ{ƒ{ƒbƒNƒX’Ç‰Á
-	 * @param name –¼‘O
-	 * @param label ƒ‰ƒxƒ‹–¼
-	 * @param value ‰Šú‚Ì’l
-	 * @param ls ƒAƒCƒeƒ€ƒŠƒXƒg
-	 * @param default_s ƒfƒtƒHƒ‹ƒg’l
-	 * @return ƒEƒBƒWƒFƒbƒgŠi”[ƒNƒ‰ƒX
+	 * @class BaseTab
+	 * @brief ã‚¿ãƒ–ã®ãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹
 	 */
-	BaseWidget addCombox(QString name, QString label, QVector<QString> value, QVector<QString> ls, QString default_s);
-	/**
-	 * @brief ƒ‰ƒCƒ“ƒeƒLƒXƒgƒ{ƒbƒNƒX’Ç‰Á
-	 * @param name –¼‘O
-	 * @param label ƒ‰ƒxƒ‹–¼
-	 * @param value ‰Šú‚Ì’l
-	 * @param default_s ƒfƒtƒHƒ‹ƒg’l
-	 * @return ƒEƒBƒWƒFƒbƒgŠi”[ƒNƒ‰ƒX
-	 */
-	BaseWidget addTextBox(QString name, QString label, QVector<QString> value, QString default_s);
-	
-public Q_SLOTS:
-//    void fileNew();
+	class BaseTab : public QWidget
+	{
+		Q_OBJECT
 
-protected:
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		BaseTab(QWidget* parent = Q_NULLPTR);
+
+		/**
+		 * @brief ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆè¿½åŠ 
+		 * @param wid è¿½åŠ ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 * @param name åå‰
+		 * @param label ãƒ©ãƒ™ãƒ«å
+		 * @param t ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆã®ç¨®åˆ¥
+		 * @return ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆæ ¼ç´ã‚¯ãƒ©ã‚¹
+		 */
+		BaseWidget apendWidget(QWidget* wid, QString name, QString label, WidgetType t = TextBox);
+		/**
+		 * @brief ã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹è¿½åŠ 
+		 * @param name åå‰
+		 * @param label ãƒ©ãƒ™ãƒ«å
+		 * @param value åˆæœŸã®å€¤
+		 * @param ls ã‚¢ã‚¤ãƒ†ãƒ ãƒªã‚¹ãƒˆ
+		 * @param default_s ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤
+		 * @return ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆæ ¼ç´ã‚¯ãƒ©ã‚¹
+		 */
+		BaseWidget addCombox(QString name, QString label, QVector<QString> value, QVector<QString> ls, QString default_s);
+		/**
+		 * @brief ãƒ©ã‚¤ãƒ³ãƒ†ã‚­ã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹è¿½åŠ 
+		 * @param name åå‰
+		 * @param label ãƒ©ãƒ™ãƒ«å
+		 * @param value åˆæœŸã®å€¤
+		 * @param default_s ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤
+		 * @return ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆæ ¼ç´ã‚¯ãƒ©ã‚¹
+		 */
+		BaseWidget addTextBox(QString name, QString label, QVector<QString> value, QString default_s);
+
+	public Q_SLOTS:
+		//    void fileNew();
+
+	protected:
 
 
 
-//    void fileOpen();
+		//    void fileOpen();
 
 
-protected:
+	protected:
 
-	QVBoxLayout *mainLayout;
-	QMap<QString, BaseWidget> WidList;
-	QVector<QVBoxLayout*> subLayouts;
-	int widNum;
-	
-	
+		QVBoxLayout* mainLayout;
+		QMap<QString, BaseWidget> WidList;
+		QVector<QVBoxLayout*> subLayouts;
+		int widNum;
 
-};
 
-#endif // TEXTEDIT_H
+
+	};
+}
+#endif // BASETAB_H

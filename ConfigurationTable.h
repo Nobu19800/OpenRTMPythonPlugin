@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file  ConfigurationTable.h
- * @brief ƒRƒ“ƒtƒBƒMƒ…ƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^ˆê——•\¦ƒNƒ‰ƒX
+ * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ä¸€è¦§è¡¨ç¤ºã‚¯ãƒ©ã‚¹
  *
  */
 
@@ -33,169 +33,170 @@ class QLabel;
 class QVBoxLayout;
 QT_END_NAMESPACE
 
-class ConfigParamDialog;
-class RTC_MainWindow;
 
 
-/**
- * @class ConfigParamWidgetBase
- * @brief ƒRƒ“ƒtƒBƒMƒ…ƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^İ’èƒEƒBƒ“ƒhƒEƒx[ƒXƒNƒ‰ƒX
- */
-class ConfigParamWidgetBase : public BaseTab
-{
-	Q_OBJECT
-
-public:
+namespace rtmiddleware {
+	class ConfigParamDialog;
+	class RTC_MainWindow;
 	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param parent eƒEƒBƒWƒFƒbƒg
+	 * @class ConfigParamWidgetBase
+	 * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿è¨­å®šã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹
 	 */
-	ConfigParamWidgetBase(QWidget *parent = Q_NULLPTR);
+	class ConfigParamWidgetBase : public BaseTab
+	{
+		Q_OBJECT
+
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		ConfigParamWidgetBase(QWidget* parent = Q_NULLPTR);
 
 
 
-private:
-	BaseWidget _paramNameTextbox;
-	BaseWidget _paramTypeCombox;
-	BaseWidget _paramDefaultTextbox;
-	BaseWidget _paramConstraintsTextbox;
-	BaseWidget _paramWidgetCombox;
-	BaseWidget _paramStepTextbox;
-	QPushButton *_createButton;
+	private:
+		BaseWidget _paramNameTextbox;
+		BaseWidget _paramTypeCombox;
+		BaseWidget _paramDefaultTextbox;
+		BaseWidget _paramConstraintsTextbox;
+		BaseWidget _paramWidgetCombox;
+		BaseWidget _paramStepTextbox;
+		QPushButton* _createButton;
 
-};
+	};
 
 
-/**
- * @class ConfigParamWidget
- * @brief ƒRƒ“ƒtƒBƒMƒ…ƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^•ÒWƒEƒBƒWƒFƒbƒg
- */
-class ConfigParamWidget : public ConfigParamWidgetBase
-{
-	Q_OBJECT
-public:
 	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param dialog ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^•ÒWƒ_ƒCƒAƒƒO
-	 * @param parent eƒEƒBƒWƒFƒbƒg
+	 * @class ConfigParamWidget
+	 * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ç·¨é›†ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
 	 */
-	ConfigParamWidget(ConfigParamDialog *dialog, QWidget *parent = Q_NULLPTR);
-private:
-	ConfigParamDialog *_dialog;
+	class ConfigParamWidget : public ConfigParamWidgetBase
+	{
+		Q_OBJECT
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param dialog ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ç·¨é›†ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		ConfigParamWidget(ConfigParamDialog* dialog, QWidget* parent = Q_NULLPTR);
+	private:
+		ConfigParamDialog* _dialog;
 
-};
+	};
 
-/**
- * @class ConfigParamDialog
- * @brief ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^•ÒWƒ_ƒCƒAƒƒO
- */
-class ConfigParamDialog : public QDialog
-{
-	Q_OBJECT
-public:
 	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param parent eƒEƒBƒWƒFƒbƒg
+	 * @class ConfigParamDialog
+	 * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ç·¨é›†ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
 	 */
-	ConfigParamDialog(QWidget *parent = Q_NULLPTR);
-private Q_SLOTS:
+	class ConfigParamDialog : public QDialog
+	{
+		Q_OBJECT
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		ConfigParamDialog(QWidget* parent = Q_NULLPTR);
+	private Q_SLOTS:
+		/**
+		 * @brief å‰Šé™¤ãƒœã‚¿ãƒ³æŠ¼ä¸‹æ™‚ã®ã‚¹ãƒ­ãƒƒãƒˆ
+		 */
+		void deleteButtonSlot();
+	private:
+		QVBoxLayout* _mainLayout;
+		ConfigParamWidget* _cfwidget;
+
+	};
+
+
 	/**
-	 * @brief íœƒ{ƒ^ƒ“‰Ÿ‰º‚ÌƒXƒƒbƒg
+	 * @class ConfigSettingButton
+	 * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ç·¨é›†ãƒ€ã‚¤ã‚¢ãƒ­ã‚°èµ·å‹•ãƒœã‚¿ãƒ³
 	 */
-	void deleteButtonSlot();
-private:
-	QVBoxLayout *_mainLayout;
-	ConfigParamWidget *_cfwidget;
+	class ConfigSettingButton : public QPushButton
+	{
+		Q_OBJECT
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param name è¡¨ç¤ºå
+		 * @param profile ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		ConfigSettingButton(QString name, RTC_XML::ConfigurationSet profile, RTC_MainWindow* parent = Q_NULLPTR);
+	private Q_SLOTS:
+		/**
+		 * @brief ãƒœã‚¿ãƒ³æŠ¼ä¸‹æ™‚ã®ã‚¹ãƒ­ãƒƒãƒˆ
+		 */
+		void pushSlot();
+	private:
+		RTC_MainWindow* _mainwindow;
+		RTC_XML::ConfigurationSet _profile;
 
-};
+	};
 
 
-/**
- * @class ConfigSettingButton
- * @brief ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^•ÒWƒ_ƒCƒAƒƒO‹N“®ƒ{ƒ^ƒ“
- */
-class ConfigSettingButton : public QPushButton
-{
-	Q_OBJECT
-public:
 	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param name •\¦–¼
-	 * @param profile ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^ƒvƒƒtƒ@ƒCƒ‹ƒIƒuƒWƒFƒNƒg
-	 * @param parent eƒEƒBƒWƒFƒbƒg
+	 * @class ConfigurationTable
+	 * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ä¸€è¦§è¡¨ç¤ºã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
 	 */
-	ConfigSettingButton(QString name, RTC_XML::ConfigurationSet profile, RTC_MainWindow *parent = Q_NULLPTR);
-private Q_SLOTS:
+	class ConfigurationTable : public QTableWidget
+	{
+		Q_OBJECT
+
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		ConfigurationTable(RTC_MainWindow* parent = Q_NULLPTR);
+		/**
+		 * @brief ãƒªã‚¹ãƒˆæ›´æ–°
+		 * @param confsets ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ä¸€è¦§
+		 */
+		virtual void list_update(QVector<RTC_XML::ConfigurationSet> confsets);
+	public Q_SLOTS:
+		//    void fileNew();
+
+	protected:
+
+
+
+
+
+		//    void fileOpen();
+
+
+	private:
+		RTC_MainWindow* _mainLayout;
+
+
+	};
+
 	/**
-	 * @brief ƒ{ƒ^ƒ“‰Ÿ‰º‚ÌƒXƒƒbƒg
+	 * @class ConfigurationTableRTP
+	 * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ä¸€è¦§è¡¨ç¤ºã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ(å‹•çš„ç·¨é›†å¯¾å¿œ)
 	 */
-	void pushSlot();
-private:
-	RTC_MainWindow *_mainwindow;
-	RTC_XML::ConfigurationSet _profile;
+	class ConfigurationTableRTP : public ConfigurationTable
+	{
+		Q_OBJECT
 
-};
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		ConfigurationTableRTP(RTC_MainWindow* mainwindow, RTC_MainWindow* parent = Q_NULLPTR);
+		/**
+		 * @brief ãƒªã‚¹ãƒˆæ›´æ–°
+		 * @param confsets ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ä¸€è¦§
+		 */
+		virtual void list_update(QVector<RTC_XML::ConfigurationSet> confsets);
+	private:
+		RTC_MainWindow* _mainwindow;
+	};
+}
 
-
-/**
- * @class ConfigurationTable
- * @brief ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^ˆê——•\¦ƒEƒBƒWƒFƒbƒg
- */
-class ConfigurationTable : public QTableWidget
-{
-    Q_OBJECT
-
-public:
-	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param parent eƒEƒBƒWƒFƒbƒg
-	 */
-	ConfigurationTable(RTC_MainWindow *parent = Q_NULLPTR);
-	/**
-	 * @brief ƒŠƒXƒgXV
-	 * @param confsets ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^ˆê——
-	 */
-	virtual void list_update(QVector<RTC_XML::ConfigurationSet> confsets);
-public Q_SLOTS:
-//    void fileNew();
-
-protected:
-
-
-
-
-
-//    void fileOpen();
-
-
-private:
-	RTC_MainWindow *_mainLayout;
-	
-
-};
-
-/**
- * @class ConfigurationTableRTP
- * @brief ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^ˆê——•\¦ƒEƒBƒWƒFƒbƒg(“®“I•ÒW‘Î‰)
- */
-class ConfigurationTableRTP : public ConfigurationTable
-{
-	Q_OBJECT
-
-public:
-	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param parent eƒEƒBƒWƒFƒbƒg
-	 */
-	ConfigurationTableRTP(RTC_MainWindow *mainwindow, RTC_MainWindow *parent = Q_NULLPTR);
-	/**
-	 * @brief ƒŠƒXƒgXV
-	 * @param confsets ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^ˆê——
-	 */
-	virtual void list_update(QVector<RTC_XML::ConfigurationSet> confsets);
-private:
-	RTC_MainWindow *_mainwindow;
-};
-
-
-#endif // TEXTEDIT_H
+#endif // CONFIGURATIONTABLE_H

@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file  ControlCompWidget.cpp
- * @brief ƒRƒ“ƒ|[ƒlƒ“ƒgŠÄ‹ƒEƒBƒWƒFƒbƒg
+ * @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆç›£è¦–ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
  *
  */
 
@@ -35,68 +35,69 @@
 #include "ControlCompWidget.h"
 #include "gettext.h"
 
-
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @param parent eƒEƒBƒWƒFƒbƒg
- */
-ControlCompWidget::ControlCompWidget(QWidget *parent)
-	: BaseTab(parent)
-{
-
-
-	_ECCombox = addCombox("ECCombox", _("Execution Context"), QVector<QString>(), QVector<QString>({ "0" }), "0");
-
-	_activeButton = new QPushButton(_("Activate"));
-	QObject::connect(_activeButton, SIGNAL(clicked()),this, SLOT(activeButtonSlot()));
-
-	subLayouts.back()->addWidget(_activeButton);
-	subLayouts.back()->addStretch();
+namespace rtmiddleware {
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+	 */
+	ControlCompWidget::ControlCompWidget(QWidget* parent)
+		: BaseTab(parent)
+	{
 
 
-	_deactiveButton = new QPushButton(_("Deactivate"));
-	QObject::connect(_deactiveButton, SIGNAL(clicked()),this, SLOT(deactiveButtonSlot()));
+		_ECCombox = addCombox("ECCombox", _("Execution Context"), QVector<QString>(), QVector<QString>({ "0" }), "0");
 
-	subLayouts.back()->addWidget(_deactiveButton);
-	subLayouts.back()->addStretch();
+		_activeButton = new QPushButton(_("Activate"));
+		QObject::connect(_activeButton, SIGNAL(clicked()), this, SLOT(activeButtonSlot()));
+
+		subLayouts.back()->addWidget(_activeButton);
+		subLayouts.back()->addStretch();
 
 
-	_resetButton = new QPushButton(_("Reset"));
-	QObject::connect(_resetButton, SIGNAL(clicked()),this, SLOT(resetButtonSlot()));
+		_deactiveButton = new QPushButton(_("Deactivate"));
+		QObject::connect(_deactiveButton, SIGNAL(clicked()), this, SLOT(deactiveButtonSlot()));
 
-	subLayouts.back()->addWidget(_resetButton);
-	subLayouts.back()->addStretch();
-}
+		subLayouts.back()->addWidget(_deactiveButton);
+		subLayouts.back()->addStretch();
 
-/**
- * @brief İ’è‚µ‚Ä‚¢‚éÀsƒRƒ“ƒeƒLƒXƒg‚ÌIDæ“¾
- * @retuen ÀsƒRƒ“ƒeƒLƒXƒg‚ÌID
- */
-int ControlCompWidget::getECNum()
-{
-	return _ECCombox.getItemText().toInt();
-}
 
-/**
- * @brief ƒAƒNƒeƒBƒuƒ{ƒ^ƒ“‚ÌƒXƒƒbƒg
- */
-void ControlCompWidget::activeButtonSlot()
-{
-	sigActiveButton();
-}
+		_resetButton = new QPushButton(_("Reset"));
+		QObject::connect(_resetButton, SIGNAL(clicked()), this, SLOT(resetButtonSlot()));
 
-/**
- * @brief ”ñƒAƒNƒeƒBƒuƒ{ƒ^ƒ“‚ÌƒXƒƒbƒg
- */
-void ControlCompWidget::deactiveButtonSlot()
-{
-	sigDeactiveButton();
-}
+		subLayouts.back()->addWidget(_resetButton);
+		subLayouts.back()->addStretch();
+	}
 
-/**
- * @brief ƒŠƒZƒbƒgƒ{ƒ^ƒ“‚ÌƒXƒƒbƒg
- */
-void ControlCompWidget::resetButtonSlot()
-{
-	sigResetButton();
+	/**
+	 * @brief è¨­å®šã—ã¦ã„ã‚‹å®Ÿè¡Œã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã®IDå–å¾—
+	 * @retuen å®Ÿè¡Œã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã®ID
+	 */
+	int ControlCompWidget::getECNum()
+	{
+		return _ECCombox.getItemText().toInt();
+	}
+
+	/**
+	 * @brief ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãƒœã‚¿ãƒ³ã®ã‚¹ãƒ­ãƒƒãƒˆ
+	 */
+	void ControlCompWidget::activeButtonSlot()
+	{
+		sigActiveButton();
+	}
+
+	/**
+	 * @brief éã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãƒœã‚¿ãƒ³ã®ã‚¹ãƒ­ãƒƒãƒˆ
+	 */
+	void ControlCompWidget::deactiveButtonSlot()
+	{
+		sigDeactiveButton();
+	}
+
+	/**
+	 * @brief ãƒªã‚»ãƒƒãƒˆãƒœã‚¿ãƒ³ã®ã‚¹ãƒ­ãƒƒãƒˆ
+	 */
+	void ControlCompWidget::resetButtonSlot()
+	{
+		sigResetButton();
+	}
 }

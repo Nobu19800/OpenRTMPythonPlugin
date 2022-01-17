@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file  DataPortTable.h
- * @brief ƒf[ƒ^ƒ|[ƒgˆê——•\¦ƒNƒ‰ƒX
+ * @brief ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆä¸€è¦§è¡¨ç¤ºã‚¯ãƒ©ã‚¹
  *
  */
 
@@ -33,41 +33,42 @@ QT_END_NAMESPACE
 
 
 
-
-/**
- * @class DataPortTable
- * @brief ƒf[ƒ^ƒ|[ƒgˆê——•\¦ƒEƒBƒWƒFƒbƒg
- */
-class DataPortTable : public QTableWidget
-{
-    Q_OBJECT
-
-public:
+namespace rtmiddleware {
 	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	 * @class DataPortTable
+	 * @brief ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆä¸€è¦§è¡¨ç¤ºã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
 	 */
-	DataPortTable();
-	/**
-	 * @brief ƒŠƒXƒgXV
-	 * @param ports ƒf[ƒ^ƒ|[ƒgˆê——
-	 */
-	void list_update(QVector<RTC_XML::DataPorts> ports);
-public Q_SLOTS:
-//    void fileNew();
+	class DataPortTable : public QTableWidget
+	{
+		Q_OBJECT
 
-protected:
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 */
+		DataPortTable();
+		/**
+		 * @brief ãƒªã‚¹ãƒˆæ›´æ–°
+		 * @param ports ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆä¸€è¦§
+		 */
+		void list_update(QVector<RTC_XML::DataPorts> ports);
+	public Q_SLOTS:
+		//    void fileNew();
+
+	protected:
 
 
 
 
 
-//    void fileOpen();
+		//    void fileOpen();
 
 
-private:
+	private:
 
-	
 
-};
 
-#endif // TEXTEDIT_H
+	};
+}
+
+#endif // DATAPORTTABLE_H

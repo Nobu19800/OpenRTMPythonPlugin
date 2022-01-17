@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file  RTC_XML.h
- * @brief RTCƒvƒƒtƒ@ƒCƒ‹ƒIƒuƒWƒFƒNƒgƒNƒ‰ƒX
+ * @brief RTCãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¯ãƒ©ã‚¹
  *
  */
 
@@ -18,7 +18,7 @@
 //#include <QtXml>
 #include <map>
 
-#include <coil/Mutex.h>
+#include <mutex>
 
 
 
@@ -26,68 +26,68 @@ namespace RTC_XML
 {
 	/**
 	 * @class BasicInfo
-	 * @brief Šî–{ƒvƒƒtƒ@ƒCƒ‹
+	 * @brief åŸºæœ¬ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
 	 */
 	class BasicInfo
 	{
 	public:
 		/**
-		 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		 */
 		BasicInfo();
 		/**
-		 * @brief ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-		 * @param obj ƒRƒs[Œ³
+		 * @brief ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param obj ã‚³ãƒ”ãƒ¼å…ƒ
 		 */
 		BasicInfo(const BasicInfo &obj);
 		/**
-		 * @brief ƒfƒXƒgƒ‰ƒNƒ^
+		 * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		 */
 		~BasicInfo();
 		QMap <QString, QString> _properties;
 		QMap <QString, QString> _docs;
 		/**
-		 * @brief XMLƒtƒ@ƒCƒ‹‚©‚çƒvƒƒtƒ@ƒCƒ‹æ“¾
-		 * @param reader XMLƒŠ[ƒ_[
+		 * @brief XMLãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«å–å¾—
+		 * @param reader XMLãƒªãƒ¼ãƒ€ãƒ¼
 		 */
 		void getXMLData(QXmlStreamReader &reader);
 		/**
-		 * @brief ƒJƒeƒSƒŠ–¼æ“¾
-		 * @return ƒJƒeƒSƒŠ–¼
+		 * @brief ã‚«ãƒ†ã‚´ãƒªåå–å¾—
+		 * @return ã‚«ãƒ†ã‚´ãƒªå
 		 */
 		QString getCategory();
 		/**
-		 * @brief ƒ‚ƒWƒ…[ƒ‹–¼æ“¾
-		 * @return ƒ‚ƒWƒ…[ƒ‹–¼
+		 * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«åå–å¾—
+		 * @return ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«å
 		 */
 		QString getName();
 
-		coil::Mutex *m_mutex;
+		std::mutex *m_mutex;
 	};
 
 	/**
 	 * @class RTC_Action
-	 * @brief ƒAƒNƒeƒBƒrƒeƒBƒvƒƒtƒ@ƒCƒ‹
+	 * @brief ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
 	 */
 	class RTC_Action
 	{
 	public:
 		/**
-		 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		 */
 		RTC_Action();
 		/**
-		 * @brief ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-		 * @param obj ƒRƒs[Œ³
+		 * @brief ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param obj ã‚³ãƒ”ãƒ¼å…ƒ
 		 */
 		RTC_Action(const RTC_Action &obj);
 		/**
-		 * @brief ƒfƒXƒgƒ‰ƒNƒ^
+		 * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		 */
 		~RTC_Action();
 		/**
-		 * @brief XMLƒtƒ@ƒCƒ‹‚©‚çƒvƒƒtƒ@ƒCƒ‹æ“¾
-		 * @param reader XMLƒŠ[ƒ_[
+		 * @brief XMLãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«å–å¾—
+		 * @param reader XMLãƒªãƒ¼ãƒ€ãƒ¼
 		 */
 		void getXMLData(QXmlStreamReader &reader);
 		
@@ -96,306 +96,306 @@ namespace RTC_XML
 		QMap <QString, QString> _docs;
 		QMap <QString, QString> _properties;
 
-		coil::Mutex *m_mutex;
+		std::mutex *m_mutex;
 	};
 
 	/**
 	 * @class ConfigurationSet
-	 * @brief ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒvƒƒtƒ@ƒCƒ‹
+	 * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
 	 */
 	class ConfigurationSet
 	{
 	public:
 		/**
-		 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		 */
 		ConfigurationSet();
 		/**
-		 * @brief ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-		 * @param obj ƒRƒs[Œ³
+		 * @brief ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param obj ã‚³ãƒ”ãƒ¼å…ƒ
 		 */
 		ConfigurationSet(const ConfigurationSet &obj);
 		/**
-		 * @brief ƒfƒXƒgƒ‰ƒNƒ^
+		 * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		 */
 		~ConfigurationSet();
 		/**
-		 * @brief XMLƒtƒ@ƒCƒ‹‚©‚çƒvƒƒtƒ@ƒCƒ‹æ“¾
-		 * @param reader XMLƒŠ[ƒ_[
+		 * @brief XMLãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«å–å¾—
+		 * @param reader XMLãƒªãƒ¼ãƒ€ãƒ¼
 		 */
 		void getXMLData(QXmlStreamReader &reader);
 		/**
-		 * @brief ƒpƒ‰ƒ[ƒ^–¼æ“¾
-		 * @return ƒpƒ‰ƒ[ƒ^–¼
+		 * @brief ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿åå–å¾—
+		 * @return ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å
 		 */
 		QString get_name();
 		/**
-		 * @brief ƒpƒ‰ƒ[ƒ^–¼æ“¾
-		 * @param name ƒpƒ‰ƒ[ƒ^–¼
+		 * @brief ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿åå–å¾—
+		 * @param name ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å
 		 */
 		void set_name(QString name);
 		/**
-		 * @brief ƒfƒtƒHƒ‹ƒg’lİ’è
-		 * @return ƒfƒtƒHƒ‹ƒg’l
+		 * @brief ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤è¨­å®š
+		 * @return ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤
 		 */
 		QString get_defaultValue();
 		/**
-		 * @brief ƒfƒtƒHƒ‹ƒg’lİ’è
-		 * @param val ƒfƒtƒHƒ‹ƒg’l
+		 * @brief ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤è¨­å®š
+		 * @param val ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤
 		 */
 		void set_defaultValue(QString val);
 		/**
-		 * @brief ƒf[ƒ^Œ^æ“¾
-		 * @return ƒf[ƒ^Œ^
+		 * @brief ãƒ‡ãƒ¼ã‚¿å‹å–å¾—
+		 * @return ãƒ‡ãƒ¼ã‚¿å‹
 		 */
 		QString get_type();
 		/**
-		 * @brief ƒf[ƒ^Œ^İ’è
-		 * @param type ƒf[ƒ^Œ^–¼
+		 * @brief ãƒ‡ãƒ¼ã‚¿å‹è¨­å®š
+		 * @param type ãƒ‡ãƒ¼ã‚¿å‹å
 		 */
 		void set_type(QString type);
 		/**
-		 * @brief ƒEƒBƒWƒFƒbƒgŒ^æ“¾
-		 * @return ƒEƒBƒWƒFƒbƒgŒ^
+		 * @brief ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆå‹å–å¾—
+		 * @return ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆå‹
 		 */
 		QString get_widget();
 		/**
-		 * @brief ƒEƒBƒWƒFƒbƒgŒ^İ’è
-		 * @param widget ƒEƒBƒWƒFƒbƒgŒ^
+		 * @brief ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆå‹è¨­å®š
+		 * @param widget ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆå‹
 		 */
 		void set_widget(QString widget);
 		/**
-		 * @brief §–ñ®æ“¾
-		 * @return §–ñ®
+		 * @brief åˆ¶ç´„å¼å–å¾—
+		 * @return åˆ¶ç´„å¼
 		 */
 		QString get_constraint();
 		/**
-		 * @brief §–ñ®İ’è
-		 * @param constraits §–ñ®
+		 * @brief åˆ¶ç´„å¼è¨­å®š
+		 * @param constraits åˆ¶ç´„å¼
 		 */
 		void set_constraint(QString constraits);
 		/**
-		 * @brief ƒXƒeƒbƒv’læ“¾
-		 * @return ƒXƒeƒbƒv’l
+		 * @brief ã‚¹ãƒ†ãƒƒãƒ—å€¤å–å¾—
+		 * @return ã‚¹ãƒ†ãƒƒãƒ—å€¤
 		 */
 		QString get_step();
 		/**
-		 * @brief ƒXƒeƒbƒv’lİ’è
-		 * @param step ƒXƒeƒbƒv’l
+		 * @brief ã‚¹ãƒ†ãƒƒãƒ—å€¤è¨­å®š
+		 * @param step ã‚¹ãƒ†ãƒƒãƒ—å€¤
 		 */
 		void set_step(QString step);
 		/**
-		 * @brief •Ï”–¼æ“¾
-		 * @return •Ï”–¼
+		 * @brief å¤‰æ•°åå–å¾—
+		 * @return å¤‰æ•°å
 		 */
 		QString get_data_name();
 		QMap <QString, QString> _properties;
 		QMap <QString, QString> _docs;
 		QMap <QString, QString> _ext;
 
-		coil::Mutex *m_mutex;
+		std::mutex *m_mutex;
 	};
 
 	/**
 	 * @class DataPorts
-	 * @brief ƒf[ƒ^ƒ|[ƒgƒvƒƒtƒ@ƒCƒ‹
+	 * @brief ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
 	 */
 	class DataPorts
 	{
 	public:
 		/**
-		 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		 */
 		DataPorts();
 		/**
-		 * @brief ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-		 * @param obj ƒRƒs[Œ³
+		 * @brief ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param obj ã‚³ãƒ”ãƒ¼å…ƒ
 		 */
 		DataPorts(const DataPorts &obj);
 		/**
-		 * @brief ƒfƒXƒgƒ‰ƒNƒ^
+		 * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		 */
 		~DataPorts();
 		/**
-		 * @brief XMLƒtƒ@ƒCƒ‹‚©‚çƒvƒƒtƒ@ƒCƒ‹æ“¾
-		 * @param reader XMLƒŠ[ƒ_[
+		 * @brief XMLãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«å–å¾—
+		 * @param reader XMLãƒªãƒ¼ãƒ€ãƒ¼
 		 */
 		void getXMLData(QXmlStreamReader &reader);
 		QMap <QString, QString> _properties;
 		QMap <QString, QString> _docs;
 		/**
-		 * @brief ƒ|[ƒg–¼æ“¾
-		 * @return ƒ|[ƒg–¼
+		 * @brief ãƒãƒ¼ãƒˆåå–å¾—
+		 * @return ãƒãƒ¼ãƒˆå
 		 */
 		QString get_name();
 		/**
-		 * @brief ƒ|[ƒgŒ^æ“¾
-		 * @return ƒ|[ƒgŒ^
+		 * @brief ãƒãƒ¼ãƒˆå‹å–å¾—
+		 * @return ãƒãƒ¼ãƒˆå‹
 		 */
 		QString get_portType();
 		/**
-		 * @brief ƒf[ƒ^Œ^æ“¾
-		 * @return ƒf[ƒ^Œ^
+		 * @brief ãƒ‡ãƒ¼ã‚¿å‹å–å¾—
+		 * @return ãƒ‡ãƒ¼ã‚¿å‹
 		 */
 		QString get_type();
 		/**
-		 * @brief ƒ|[ƒg–¼İ’è
-		 * @param name ƒ|[ƒg–¼
+		 * @brief ãƒãƒ¼ãƒˆåè¨­å®š
+		 * @param name ãƒãƒ¼ãƒˆå
 		 */
 		void set_name(QString name);
 		/**
-		 * @brief ƒ|[ƒgŒ^İ’è
-		 * @param type ƒ|[ƒgŒ^
+		 * @brief ãƒãƒ¼ãƒˆå‹è¨­å®š
+		 * @param type ãƒãƒ¼ãƒˆå‹
 		 */
 		void set_portType(QString type);
 		/**
-		 * @brief ƒf[ƒ^Œ^İ’è
-		 * @param type ƒf[ƒ^Œ^
+		 * @brief ãƒ‡ãƒ¼ã‚¿å‹è¨­å®š
+		 * @param type ãƒ‡ãƒ¼ã‚¿å‹
 		 */
 		void set_type(QString type);
 		/**
-		 * @brief ƒf[ƒ^•Ï”–¼æ“¾
-		 * @return ƒf[ƒ^•Ï”–¼
+		 * @brief ãƒ‡ãƒ¼ã‚¿å¤‰æ•°åå–å¾—
+		 * @return ãƒ‡ãƒ¼ã‚¿å¤‰æ•°å
 		 */
 		QString get_data_name();
 		/**
-		 * @brief ƒ|[ƒg•Ï”–¼æ“¾
-		 * @return ƒ|[ƒg•Ï”–¼
+		 * @brief ãƒãƒ¼ãƒˆå¤‰æ•°åå–å¾—
+		 * @return ãƒãƒ¼ãƒˆå¤‰æ•°å
 		 */
 		QString get_port_name();
 
-		coil::Mutex *m_mutex;
+		std::mutex *m_mutex;
 	};
 
 	/**
 	 * @class ServiceInterface
-	 * @brief ƒT[ƒrƒXƒCƒ“ƒ^[ƒtƒF[ƒXƒvƒƒtƒ@ƒCƒ‹
+	 * @brief ã‚µãƒ¼ãƒ“ã‚¹ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
 	 */
 	class ServiceInterface
 	{
 	public:
 		/**
-		 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		 */
 		ServiceInterface();
 		/**
-		 * @brief ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-		 * @param obj ƒRƒs[Œ³
+		 * @brief ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param obj ã‚³ãƒ”ãƒ¼å…ƒ
 		 */
 		ServiceInterface(const ServiceInterface &obj);
 		/**
-		 * @brief ƒfƒXƒgƒ‰ƒNƒ^
+		 * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		 */
 		~ServiceInterface();
 		/**
-		 * @brief XMLƒtƒ@ƒCƒ‹‚©‚çƒvƒƒtƒ@ƒCƒ‹æ“¾
-		 * @param reader XMLƒŠ[ƒ_[
+		 * @brief XMLãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«å–å¾—
+		 * @param reader XMLãƒªãƒ¼ãƒ€ãƒ¼
 		 */
 		void getXMLData(QXmlStreamReader &reader);
 		/**
-		 * @brief ƒCƒ“ƒ^[ƒtƒF[ƒX–¼æ“¾
-		 * @return ƒCƒ“ƒ^[ƒtƒF[ƒX–¼
+		 * @brief ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹åå–å¾—
+		 * @return ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹å
 		 */
 		QString get_name();
 		/**
-		 * @brief ƒCƒ“ƒ^[ƒtƒF[ƒX–¼İ’è
-		 * @param name ƒCƒ“ƒ^[ƒtƒF[ƒX–¼
+		 * @brief ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹åè¨­å®š
+		 * @param name ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹å
 		 */
 		void set_name(QString name);
 		/**
-		 * @brief •ûŒüæ“¾
-		 * @return •ûŒü
+		 * @brief æ–¹å‘å–å¾—
+		 * @return æ–¹å‘
 		 */
 		QString get_direction();
 		/**
-		 * @brief •ûŒüİ’è
-		 * @param dir •ûŒü–¼
+		 * @brief æ–¹å‘è¨­å®š
+		 * @param dir æ–¹å‘å
 		 */
 		void set_direction(QString dir);
 		/**
-		 * @brief IDLƒtƒ@ƒCƒ‹ƒpƒXæ“¾
-		 * @return IDLƒtƒ@ƒCƒ‹ƒpƒX
+		 * @brief IDLãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹å–å¾—
+		 * @return IDLãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹
 		 */
 		QString get_idlFile();
 		/**
-		 * @brief IDLƒtƒ@ƒCƒ‹ƒpƒXİ’è
-		 * @param file IDLƒtƒ@ƒCƒ‹ƒpƒX
+		 * @brief IDLãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹è¨­å®š
+		 * @param file IDLãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹
 		 */
 		void set_idlFile(QString file);
 		/**
-		 * @brief ƒCƒ“ƒ^[ƒtƒF[ƒXŒ^æ“¾
-		 * @return ƒCƒ“ƒ^[ƒtƒF[ƒXŒ^
+		 * @brief ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹å‹å–å¾—
+		 * @return ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹å‹
 		 */
 		QString get_type();
 		/**
-		 * @brief ƒCƒ“ƒ^[ƒtƒF[ƒXŒ^İ’è
-		 * @param type ƒCƒ“ƒ^[ƒtƒF[ƒXŒ^
+		 * @brief ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹å‹è¨­å®š
+		 * @param type ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹å‹
 		 */
 		void set_type(QString type);
 		/**
-		 * @brief IDLƒCƒ“ƒNƒ‹[ƒhƒpƒXæ“¾
-		 * @return IDLƒCƒ“ƒNƒ‹[ƒhƒpƒX
+		 * @brief IDLã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ãƒ‘ã‚¹å–å¾—
+		 * @return IDLã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ãƒ‘ã‚¹
 		 */
 		QString get_path();
 		/**
-		 * @brief IDLƒCƒ“ƒNƒ‹[ƒhƒpƒXİ’è
-		 * @param path IDLƒCƒ“ƒNƒ‹[ƒhƒpƒX
+		 * @brief IDLã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ãƒ‘ã‚¹è¨­å®š
+		 * @param path IDLã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ãƒ‘ã‚¹
 		 */
 		void set_path(QString path);
 		/**
-		 * @brief ƒCƒ“ƒ^[ƒtƒF[ƒX•Ï”–¼æ“¾
-		 * @return ƒCƒ“ƒ^[ƒtƒF[ƒX•Ï”–¼
+		 * @brief ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹å¤‰æ•°åå–å¾—
+		 * @return ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹å¤‰æ•°å
 		 */
 		QString get_data_name();
 		QMap <QString, QString> _properties;
 		QMap <QString, QString> _docs;
 
-		coil::Mutex *m_mutex;
+		std::mutex *m_mutex;
 	};
 
 	/**
 	 * @class ServicePorts
-	 * @brief ƒT[ƒrƒXƒ|[ƒgƒvƒƒtƒ@ƒCƒ‹
+	 * @brief ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
 	 */
 	class ServicePorts
 	{
 	public:
 		/**
-		 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		 */
 		ServicePorts();
 		/**
-		 * @brief ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-		 * @param obj ƒRƒs[Œ³
+		 * @brief ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param obj ã‚³ãƒ”ãƒ¼å…ƒ
 		 */
 		ServicePorts(const ServicePorts &obj);
 		/**
-		 * @brief ƒfƒXƒgƒ‰ƒNƒ^
+		 * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		 */
 		~ServicePorts();
 		/**
-		 * @brief XMLƒtƒ@ƒCƒ‹‚©‚çƒvƒƒtƒ@ƒCƒ‹æ“¾
-		 * @param reader XMLƒŠ[ƒ_[
+		 * @brief XMLãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«å–å¾—
+		 * @param reader XMLãƒªãƒ¼ãƒ€ãƒ¼
 		 */
 		void getXMLData(QXmlStreamReader &reader);
 		/**
-		 * @brief ƒCƒ“ƒ^[ƒtƒF[ƒX’Ç‰Á
-		 * @param svrif ƒT[ƒrƒXƒCƒ“ƒ^[ƒtƒF[ƒXƒvƒƒtƒ@ƒCƒ‹
+		 * @brief ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹è¿½åŠ 
+		 * @param svrif ã‚µãƒ¼ãƒ“ã‚¹ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
 		 */
 		void addInterface(ServiceInterface svrif);
 		/**
-		 * @brief ƒ|[ƒg–¼æ“¾
-		 * @return ƒ|[ƒg–¼
+		 * @brief ãƒãƒ¼ãƒˆåå–å¾—
+		 * @return ãƒãƒ¼ãƒˆå
 		 */
 		QString get_name();
 		/**
-		 * @brief ƒ|[ƒg–¼İ’è
-		 * @param name ƒ|[ƒg–¼
+		 * @brief ãƒãƒ¼ãƒˆåè¨­å®š
+		 * @param name ãƒãƒ¼ãƒˆå
 		 */
 		void set_name(QString name);
 		/**
-		 * @brief ƒCƒ“ƒ^[ƒtƒF[ƒXæ“¾
-		 * @return ƒT[ƒrƒXƒCƒ“ƒ^[ƒtƒF[ƒXˆê——
+		 * @brief ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹å–å¾—
+		 * @return ã‚µãƒ¼ãƒ“ã‚¹ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ä¸€è¦§
 		 */
 		QVector<ServiceInterface> get_interfaces();
 
@@ -403,130 +403,130 @@ namespace RTC_XML
 		QVector<ServiceInterface> _interfaces;
 		QMap <QString, QString> _docs;
 
-		coil::Mutex *m_mutex;
+		std::mutex *m_mutex;
 
 	};
 
 	/**
 	 * @class Language
-	 * @brief Œ¾Œêƒvƒƒtƒ@ƒCƒ‹
+	 * @brief è¨€èªãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
 	 */
 	class Language
 	{
 	public:
 		/**
-		 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		 */
 		Language();
 		/**
-		 * @brief ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-		 * @param obj ƒRƒs[Œ³
+		 * @brief ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param obj ã‚³ãƒ”ãƒ¼å…ƒ
 		 */
 		Language(const Language &obj);
 		/**
-		 * @brief ƒfƒXƒgƒ‰ƒNƒ^
+		 * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		 */
 		~Language();
 		/**
-		 * @brief XMLƒtƒ@ƒCƒ‹‚©‚çƒvƒƒtƒ@ƒCƒ‹æ“¾
-		 * @param reader XMLƒŠ[ƒ_[
+		 * @brief XMLãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«å–å¾—
+		 * @param reader XMLãƒªãƒ¼ãƒ€ãƒ¼
 		 */
 		void getXMLData(QXmlStreamReader &reader);
 		QMap <QString, QString> _properties;
 		QMap <QString, QString> _docs;
 		/**
-		 * @brief Œ¾Œê–¼æ“¾
-		 * @return Œ¾Œê–¼
+		 * @brief è¨€èªåå–å¾—
+		 * @return è¨€èªå
 		 */
 		QString getKind();
 
-		coil::Mutex *m_mutex;
+		std::mutex *m_mutex;
 	};
 
 	/**
 	 * @class RTC_Profile
-	 * @brief RTCƒvƒƒtƒ@ƒCƒ‹
+	 * @brief RTCãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
 	 */
 	class RTC_Profile
 	{
 	public:
 		/**
-		 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		 */
 		RTC_Profile();
 		/**
-		 * @brief ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-		 * @param obj ƒRƒs[Œ³
+		 * @brief ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param obj ã‚³ãƒ”ãƒ¼å…ƒ
 		 */
 		RTC_Profile(const RTC_Profile &obj);
 		/**
-		 * @brief ƒfƒXƒgƒ‰ƒNƒ^
+		 * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		 */
 		~RTC_Profile();
 		/**
-		 * @brief XMLƒtƒ@ƒCƒ‹‚©‚çƒvƒƒtƒ@ƒCƒ‹æ“¾
-		 * @param name XMLƒtƒ@ƒCƒ‹‚ÌƒpƒX
+		 * @brief XMLãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«å–å¾—
+		 * @param name XMLãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹
 		 */
 		void loadXML(QString name);
 		/**
-		 * @brief ƒ|[ƒg‚Ì‘”æ“¾
-		 * @return ƒ|[ƒg‚Ì‘”
+		 * @brief ãƒãƒ¼ãƒˆã®ç·æ•°å–å¾—
+		 * @return ãƒãƒ¼ãƒˆã®ç·æ•°
 		 */
 		int getPortNum();
 		/**
-		 * @brief ƒf[ƒ^ƒ|[ƒg’Ç‰Á
-		 * @param port ƒf[ƒ^ƒ|[ƒgƒvƒƒtƒ@ƒCƒ‹
+		 * @brief ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆè¿½åŠ 
+		 * @param port ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
 		 */
 		void addDataPort(DataPorts port);
 		/**
-		 * @brief ƒT[ƒrƒXƒ|[ƒg’Ç‰Á
-		 * @param port ƒT[ƒrƒXƒ|[ƒgƒvƒƒtƒ@ƒCƒ‹
+		 * @brief ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆè¿½åŠ 
+		 * @param port ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
 		 */
 		void addServicePort(ServicePorts port);
 		/**
-		 * @brief ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^’Ç‰Á
-		 * @param conf ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^
+		 * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿è¿½åŠ 
+		 * @param conf ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
 		 */
 		void addConfigurationSet(ConfigurationSet conf);
 		/**
-		 * @brief ƒf[ƒ^ƒ|[ƒgíœ
-		 * @param name ƒ|[ƒg–¼
+		 * @brief ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆå‰Šé™¤
+		 * @param name ãƒãƒ¼ãƒˆå
 		 */
 		void removeDataPort(QString name);
 		/**
-		 * @brief ƒT[ƒrƒXƒ|[ƒgíœ
-		 * @param name ƒ|[ƒg–¼
+		 * @brief ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆå‰Šé™¤
+		 * @param name ãƒãƒ¼ãƒˆå
 		 */
 		void removeServicePort(QString name);
 		/**
-		 * @brief ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^íœ
-		 * @param name ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^–¼
+		 * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å‰Šé™¤
+		 * @param name ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å
 		 */
 		void removeConfigurationSet(QString name);
 		/**
-		 * @brief ƒAƒNƒeƒBƒrƒeƒBæ“¾
-		 * @return ƒAƒNƒeƒBƒrƒeƒBˆê——
+		 * @brief ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£å–å¾—
+		 * @return ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£ä¸€è¦§
 		 */
 		QMap <QString, RTC_Action> get_actions();
 		/**
-		 * @brief ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^æ“¾
-		 * @return ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^ˆê——
+		 * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å–å¾—
+		 * @return ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ä¸€è¦§
 		 */
 		QVector<ConfigurationSet> get_confsets();
 		/**
-		 * @brief ƒf[ƒ^ƒ|[ƒgæ“¾
-		 * @return ƒf[ƒ^ƒ|[ƒgˆê——
+		 * @brief ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆå–å¾—
+		 * @return ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆä¸€è¦§
 		 */
 		QVector<DataPorts> get_dataports();
 		/**
-		 * @brief ƒT[ƒrƒXƒ|[ƒgæ“¾
-		 * @return ƒT[ƒrƒXƒ|[ƒgˆê——
+		 * @brief ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆå–å¾—
+		 * @return ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆä¸€è¦§
 		 */
 		QVector<ServicePorts> get_svcports();
 		QMap <QString, QString> _properties;
 		/**
-		 * @brief Šî–{ƒvƒƒtƒ@ƒCƒ‹æ“¾
-		 * @return Šî–{ƒvƒƒtƒ@ƒCƒ‹ˆê——
+		 * @brief åŸºæœ¬ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«å–å¾—
+		 * @return åŸºæœ¬ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§
 		 */
 		BasicInfo get_info();
 		BasicInfo _info;
@@ -535,33 +535,33 @@ namespace RTC_XML
 		QVector<DataPorts> _dataports;
 		QVector<ServicePorts> _svrports;
 		/**
-		 * @brief Œ¾Œêƒvƒƒtƒ@ƒCƒ‹æ“¾
-		 * @return Œ¾Œêƒvƒƒtƒ@ƒCƒ‹ˆê——
+		 * @brief è¨€èªãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«å–å¾—
+		 * @return è¨€èªãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§
 		 */
 		Language get_language();
 		Language _language;
 
-		coil::Mutex *m_mutex;
+		std::mutex *m_mutex;
 
 
 	};
 
 	/**
-	 * @class RTC_Profile(“®“I•ÒW)
-	 * @brief RTCƒvƒƒtƒ@ƒCƒ‹
+	 * @class RTC_Profile(å‹•çš„ç·¨é›†)
+	 * @brief RTCãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
 	 */
 	class RTC_ProfileRTP : public RTC_Profile
 	{
 	public:
 		/**
-		 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		 */
 		RTC_ProfileRTP();
 		/**
 		 * @enum RTC_State
-		 * @brief RTCó‘Ôˆê——
+		 * @brief RTCçŠ¶æ…‹ä¸€è¦§
 		 */
-		enum RTC_State
+		enum class RTC_State
 		{
 			RTP_Created = 0,
 			RTP_InActive = 1,
@@ -569,15 +569,15 @@ namespace RTC_XML
 			RTP_Error = 3,
 		};
 		/**
-		 * @brief RTCó‘Ôæ“¾
-		 * @param ec_num ÀsƒRƒ“ƒeƒLƒXƒgID
-		 * @return RTCó‘Ôæ“¾
+		 * @brief RTCçŠ¶æ…‹å–å¾—
+		 * @param ec_num å®Ÿè¡Œã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆID
+		 * @return RTCçŠ¶æ…‹å–å¾—
 		 */
 		RTC_State getState(int ec_num);
 		/**
-		 * @brief RTCó‘Ôİ’è
-		 * @param state RTCó‘Ô
-		 * @param ec_num ÀsƒRƒ“ƒeƒLƒXƒgID
+		 * @brief RTCçŠ¶æ…‹è¨­å®š
+		 * @param state RTCçŠ¶æ…‹
+		 * @param ec_num å®Ÿè¡Œã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆID
 		 */
 		void setState(RTC_ProfileRTP::RTC_State state, int ec_num);
 	private:
@@ -589,4 +589,4 @@ namespace RTC_XML
 
 
 
-#endif // TEXTEDIT_H
+#endif // RTC_XML_H

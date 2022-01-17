@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file  PythonEditor.cpp
- * @brief Python—pƒGƒfƒBƒ^
+ * @brief Pythonç”¨ã‚¨ãƒ‡ã‚£ã‚¿
  *
  */
 
@@ -32,132 +32,136 @@
 
 #include "PythonEditor.h"
 
-const int PythonEditor::tab_keywords_size = 2;
-const char *PythonEditor::tab_keywords[tab_keywords_size] = { "break", "return" };
 
 
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @param parent eƒEƒBƒWƒFƒbƒg
- */
-PythonEditor::PythonEditor(QWidget *parent)
-    : QTextEdit(parent),
-	fontSize(12),
-	wrapColumn(80)
-{
+namespace rtmiddleware {
 
-	setTabStopWidth(20);
-	createFont(fontSize, wrapColumn);
-}
+	const int PythonEditor::tab_keywords_size = 2;
+	const char* PythonEditor::tab_keywords[tab_keywords_size] = { "break", "return" };
 
-
-/**
- * @brief ƒtƒHƒ“ƒgÝ’è
- * @param fontSize ƒtƒHƒ“ƒgƒTƒCƒY
- * @param wrapColumn s‚Ì•¶Žš”
- */
-void PythonEditor::createFont(const int fontSize, const int wrapColumn)
-{
-	QFont font("monospace", fontSize);
-	font.setStyleHint(QFont::TypeWriter);
-	int fontPxSize = QFontMetrics(font).width('0');
-	setFont(font);
-	setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
-	setLineWrapMode(QTextEdit::FixedPixelWidth);
-	setLineWrapColumnOrWidth(fontSize * wrapColumn);
-}
-
-/**
- * @brief 
- * @param source 
- */
-void PythonEditor::insertFromMimeData(const QMimeData * source)
-{
-
-	if (source->hasText())
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+	 */
+	PythonEditor::PythonEditor(QWidget* parent)
+		: QTextEdit(parent),
+		fontSize(12),
+		wrapColumn(80)
 	{
-		textCursor().insertText(source->text());
+
+		setTabStopWidth(20);
+		createFont(fontSize, wrapColumn);
 	}
-}
 
-/**
- * @brief ƒtƒHƒ“ƒgƒTƒCƒYÝ’è
- * @param s ƒtƒHƒ“ƒgƒTƒCƒY
- */
-void PythonEditor::setFontSize(const int s)
-{
-	createFont(s, wrapColumn);
-}
 
-/**
- * @brief ƒL[‰Ÿ‰ºŽž‚ÌƒCƒxƒ“ƒg
- * @param e ƒCƒxƒ“ƒg“à—e  
- */
-void PythonEditor::keyPressEvent(QKeyEvent *e)
-{
-	QTextEdit::keyPressEvent(e);
-	QTextCursor cu = textCursor();
-	int c = document()->lineCount();
-	if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return)
+	/**
+	 * @brief ãƒ•ã‚©ãƒ³ãƒˆè¨­å®š
+	 * @param fontSize ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚º
+	 * @param wrapColumn è¡Œã®æ–‡å­—æ•°
+	 */
+	void PythonEditor::createFont(const int fontSize, const int wrapColumn)
 	{
-		QString s = document()->findBlockByLineNumber(cu.blockNumber() - 1).text();
-		if (!s.isEmpty())
+		QFont font("monospace", fontSize);
+		font.setStyleHint(QFont::TypeWriter);
+		int fontPxSize = QFontMetrics(font).width('0');
+		setFont(font);
+		setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+		setLineWrapMode(QTextEdit::FixedPixelWidth);
+		setLineWrapColumnOrWidth(fontSize * wrapColumn);
+	}
+
+	/**
+	 * @brief
+	 * @param source
+	 */
+	void PythonEditor::insertFromMimeData(const QMimeData* source)
+	{
+
+		if (source->hasText())
 		{
-			QString add_str = "";
-			int c_t = 0;
-			int c_s = 0;
-			for (int i = 0; i < s.size(); i++)
+			textCursor().insertText(source->text());
+		}
+	}
+
+	/**
+	 * @brief ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚ºè¨­å®š
+	 * @param s ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚º
+	 */
+	void PythonEditor::setFontSize(const int s)
+	{
+		createFont(s, wrapColumn);
+	}
+
+	/**
+	 * @brief ã‚­ãƒ¼æŠ¼ä¸‹æ™‚ã®ã‚¤ãƒ™ãƒ³ãƒˆ
+	 * @param e ã‚¤ãƒ™ãƒ³ãƒˆå†…å®¹
+	 */
+	void PythonEditor::keyPressEvent(QKeyEvent* e)
+	{
+		QTextEdit::keyPressEvent(e);
+		QTextCursor cu = textCursor();
+		int c = document()->lineCount();
+		if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return)
+		{
+			QString s = document()->findBlockByLineNumber(cu.blockNumber() - 1).text();
+			if (!s.isEmpty())
 			{
-				if (s[i] == "\t")
+				QString add_str = "";
+				int c_t = 0;
+				int c_s = 0;
+				for (int i = 0; i < s.size(); i++)
 				{
-					c_t += 1;
-				}
-				else if (s[i] == " ")
-				{
-					c_s += 1;
-				}
-				else
-				{
-					break;
-				}
-
-			}
-			
-			
-			if (s.at(s.length() - 1) == ":")
-			{
-				add_str += "\t";
-			}
-
-			QString p = s.replace("\t", " ");
-			QStringList pl = p.split(" ");
-			
-			if (!pl.isEmpty())
-			{
-				p = pl.back();
-				for (int i = 0; i < tab_keywords_size; i++)
-				{
-
-
-					if (p == tab_keywords[i])
+					if (s[i] == "\t")
 					{
-						if (c_t > 0)c_t -= 1;
-						else if (c_s > 0)c_s -= 1;
+						c_t += 1;
+					}
+					else if (s[i] == " ")
+					{
+						c_s += 1;
+					}
+					else
+					{
+						break;
+					}
+
+				}
+
+
+				if (s.at(s.length() - 1) == ":")
+				{
+					add_str += "\t";
+				}
+
+				QString p = s.replace("\t", " ");
+				QStringList pl = p.split(" ");
+
+				if (!pl.isEmpty())
+				{
+					p = pl.back();
+					for (int i = 0; i < tab_keywords_size; i++)
+					{
+
+
+						if (p == tab_keywords[i])
+						{
+							if (c_t > 0)c_t -= 1;
+							else if (c_s > 0)c_s -= 1;
+						}
 					}
 				}
-			}
-			for (int i = 0; i < c_t; i++)
-			{
-				add_str += "\t";
+				for (int i = 0; i < c_t; i++)
+				{
+					add_str += "\t";
+				}
+
+				for (int i = 0; i < c_s; i++)
+				{
+					add_str += " ";
+				}
+				std::cout << c_s << "\t" << c_t << std::endl;
+				cu.insertText(add_str);
 			}
 
-			for (int i = 0; i < c_s; i++)
-			{
-				add_str += " ";
-			}
-			std::cout << c_s << "\t" << c_t << std::endl;
-			cu.insertText(add_str);
 		}
-
 	}
 }

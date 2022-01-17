@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file  addServicePortTab.cpp
- * @brief ƒT[ƒrƒXƒ|[ƒgİ’èƒ^ƒu
+ * @brief ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆè¨­å®šã‚¿ãƒ–
  *
  */
 
@@ -38,178 +38,179 @@
 #include "gettext.h"
 
 
-
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @param comp ƒRƒ“ƒ|[ƒlƒ“ƒgƒvƒƒtƒ@ƒCƒ‹ƒIƒuƒWƒFƒNƒg
- * @param viewWidget RTC•\¦ƒEƒBƒWƒFƒbƒg
- * @param listWidget ƒT[ƒrƒXƒ|[ƒgˆê——•\¦ƒEƒBƒWƒFƒbƒg
- * @param parent eƒEƒBƒWƒFƒbƒg
- */
-addServicePortTab::addServicePortTab(RTC_XML::RTC_ProfileRTP *comp, RTCViewWidget *viewWidget, ServicePortTable *listWidget, QWidget *parent)
-	: BaseTab(parent)
-{
-
-	_comp = comp;
-
-	_viewWidget = viewWidget;
-	_listWidget = listWidget;
-
-	
-	
-	
-	
-	
-	_portNameTextbox  = addTextBox("portNameTextbox", _("Port Name"), QVector<QString>(), "port");
-	_interfaceNameTextbox = addTextBox("interfaceName", _("Interface Name"), QVector<QString>(), "");
-	_dinterfaceDirCombox = addCombox("interfaceDir ", _("Direction"), QVector<QString>(), QVector<QString>({"Required","Provided"}), "Required");
-
-	_IDLTextbox = addTextBox("interfaceName", _("IDL File"), QVector<QString>(), "IDL");
-
-	_IDLFileButton = new QPushButton(_("Open"));
-	QObject::connect(_IDLFileButton, SIGNAL(clicked()), this, SLOT(IDLFileButtonSlot()));
-	_IDLTextbox._layout->addWidget(_IDLFileButton);
-
-	_interfaceTypeCombox = addCombox("interfaceType ", _("Interface type"), QVector<QString>(), QVector<QString>(), "");
-	_IDLPathTextbox = addTextBox("IDLPath", _("IDL Path"), QVector<QString>(), "");
-
-	_IDLPathButton = new QPushButton(_("Open"));
-	QObject::connect(_IDLPathButton, SIGNAL(clicked()), this, SLOT(IDLPathButtonSlot()));
-	_IDLPathTextbox._layout->addWidget(_IDLPathButton);
-
-
-
-
-	_createButton = new QPushButton(_("Create"));
-	QObject::connect(_createButton, SIGNAL(clicked()),this, SLOT(createButtonSlot()));
-
-	subLayouts.back()->addWidget(_createButton);
-	mainLayout->addStretch();
-	
-
-}
-
-/**
- * @brief IDLƒtƒ@ƒCƒ‹İ’èƒ{ƒ^ƒ“‰Ÿ‰º‚ÌƒXƒƒbƒg
- */
-void addServicePortTab::IDLFileButtonSlot()
-{
-	QString fileName = QFileDialog::getOpenFileName(this,
-		_("Open"), "",
-		tr("IDL File (*.idl);;All Files (*)"));
-
-	if (fileName.isEmpty())
+namespace rtmiddleware {
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param comp ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	 * @param viewWidget RTCè¡¨ç¤ºã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+	 * @param listWidget ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆä¸€è¦§è¡¨ç¤ºã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+	 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+	 */
+	addServicePortTab::addServicePortTab(RTC_XML::RTC_ProfileRTP* comp, RTCViewWidget* viewWidget, ServicePortTable* listWidget, QWidget* parent)
+		: BaseTab(parent)
 	{
-		return;
+
+		_comp = comp;
+
+		_viewWidget = viewWidget;
+		_listWidget = listWidget;
+
+
+
+
+
+
+		_portNameTextbox = addTextBox("portNameTextbox", _("Port Name"), QVector<QString>(), "port");
+		_interfaceNameTextbox = addTextBox("interfaceName", _("Interface Name"), QVector<QString>(), "");
+		_dinterfaceDirCombox = addCombox("interfaceDir ", _("Direction"), QVector<QString>(), QVector<QString>({ "Required","Provided" }), "Required");
+
+		_IDLTextbox = addTextBox("interfaceName", _("IDL File"), QVector<QString>(), "IDL");
+
+		_IDLFileButton = new QPushButton(_("Open"));
+		QObject::connect(_IDLFileButton, SIGNAL(clicked()), this, SLOT(IDLFileButtonSlot()));
+		_IDLTextbox._layout->addWidget(_IDLFileButton);
+
+		_interfaceTypeCombox = addCombox("interfaceType ", _("Interface type"), QVector<QString>(), QVector<QString>(), "");
+		_IDLPathTextbox = addTextBox("IDLPath", _("IDL Path"), QVector<QString>(), "");
+
+		_IDLPathButton = new QPushButton(_("Open"));
+		QObject::connect(_IDLPathButton, SIGNAL(clicked()), this, SLOT(IDLPathButtonSlot()));
+		_IDLPathTextbox._layout->addWidget(_IDLPathButton);
+
+
+
+
+		_createButton = new QPushButton(_("Create"));
+		QObject::connect(_createButton, SIGNAL(clicked()), this, SLOT(createButtonSlot()));
+
+		subLayouts.back()->addWidget(_createButton);
+		mainLayout->addStretch();
+
+
 	}
-	_IDLTextbox.setText(fileName);
 
-}
-
-/**
- * @brief IDLƒCƒ“ƒNƒ‹[ƒhƒpƒXİ’èƒ{ƒ^ƒ“‰Ÿ‰º‚ÌƒXƒƒbƒg
- */
-void addServicePortTab::IDLPathButtonSlot()
-{
-	QString dirName = QFileDialog::getExistingDirectory(this, _("Open"));
-
-	if (dirName.isEmpty())
+	/**
+	 * @brief IDLãƒ•ã‚¡ã‚¤ãƒ«è¨­å®šãƒœã‚¿ãƒ³æŠ¼ä¸‹æ™‚ã®ã‚¹ãƒ­ãƒƒãƒˆ
+	 */
+	void addServicePortTab::IDLFileButtonSlot()
 	{
-		return;
-	}
-	_IDLPathTextbox.setText(dirName);
+		QString fileName = QFileDialog::getOpenFileName(this,
+			_("Open"), "",
+			tr("IDL File (*.idl);;All Files (*)"));
 
-}
-
-
-/**
- * @brief ƒT[ƒrƒXƒ|[ƒgŒŸõ
- * @param name ƒ|[ƒg–¼
- * @param ret ƒT[ƒrƒXƒ^ƒ|[ƒgƒvƒƒtƒ@ƒCƒ‹ƒIƒuƒWƒFƒNƒg
- * @param return trueFw’èƒ|[ƒg–¼‚ÌƒT[ƒrƒXƒ|[ƒg‚ª‘¶İ‚µ‚½ false:‘¶İ‚µ‚È‚©‚Á‚½
- */
-bool addServicePortTab::searchPort(QString name, RTC_XML::ServicePorts &ret)
-{
-	QVector<RTC_XML::ServicePorts> ports = _comp->get_svcports();
-	for (QVector<RTC_XML::ServicePorts>::iterator itr = ports.begin(); itr != ports.end(); itr++)
-	{
-		if ((*itr).get_name() == name)
+		if (fileName.isEmpty())
 		{
-			ret = (*itr);
-			return true;
+			return;
 		}
+		_IDLTextbox.setText(fileName);
+
 	}
-	return false;
-}
 
-/**
- * @brief ƒT[ƒrƒXƒ|[ƒg’Ç‰Á
- * @param profile ƒT[ƒrƒXƒ|[ƒgƒvƒƒtƒ@ƒCƒ‹ƒIƒuƒWƒFƒNƒg
- */
-void addServicePortTab::addPort(RTC_XML::ServicePorts profile)
-{
-	if (_comp != NULL)
+	/**
+	 * @brief IDLã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ãƒ‘ã‚¹è¨­å®šãƒœã‚¿ãƒ³æŠ¼ä¸‹æ™‚ã®ã‚¹ãƒ­ãƒƒãƒˆ
+	 */
+	void addServicePortTab::IDLPathButtonSlot()
 	{
+		QString dirName = QFileDialog::getExistingDirectory(this, _("Open"));
 
-		if (!searchPort(profile.get_name(), profile))
+		if (dirName.isEmpty())
+		{
+			return;
+		}
+		_IDLPathTextbox.setText(dirName);
+
+	}
+
+
+	/**
+	 * @brief ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆæ¤œç´¢
+	 * @param name ãƒãƒ¼ãƒˆå
+	 * @param ret ã‚µãƒ¼ãƒ“ã‚¹ã‚¿ãƒãƒ¼ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	 * @param return trueï¼šæŒ‡å®šãƒãƒ¼ãƒˆåã®ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆãŒå­˜åœ¨ã—ãŸ false:å­˜åœ¨ã—ãªã‹ã£ãŸ
+	 */
+	bool addServicePortTab::searchPort(QString name, RTC_XML::ServicePorts& ret)
+	{
+		QVector<RTC_XML::ServicePorts> ports = _comp->get_svcports();
+		for (QVector<RTC_XML::ServicePorts>::iterator itr = ports.begin(); itr != ports.end(); itr++)
+		{
+			if ((*itr).get_name() == name)
+			{
+				ret = (*itr);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * @brief ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆè¿½åŠ 
+	 * @param profile ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	 */
+	void addServicePortTab::addPort(RTC_XML::ServicePorts profile)
+	{
+		if (_comp != NULL)
 		{
 
-			_comp->addServicePort(profile);
-			_viewWidget->getRenderRTC()->addServicePort(profile);
-			_listWidget->list_update(_comp->get_svcports());
+			if (!searchPort(profile.get_name(), profile))
+			{
 
+				_comp->addServicePort(profile);
+				_viewWidget->getRenderRTC()->addServicePort(profile);
+				_listWidget->list_update(_comp->get_svcports());
+
+
+			}
 
 		}
-
 	}
-}
 
-/**
- * @brief ¶¬ƒ{ƒ^ƒ“‰Ÿ‰º‚ÌƒXƒƒbƒg
- */
-void addServicePortTab::createButtonSlot()
-{
-	RTC_XML::ServicePorts profile;
-	QString name = _portNameTextbox.getText();
-	name = name.replace(" ", "");
-	name = name.replace("\t", "");
-	if (name.isEmpty())
+	/**
+	 * @brief ç”Ÿæˆãƒœã‚¿ãƒ³æŠ¼ä¸‹æ™‚ã®ã‚¹ãƒ­ãƒƒãƒˆ
+	 */
+	void addServicePortTab::createButtonSlot()
 	{
-		QMessageBox::question(this, _("Creation Faild"), _("Please Input Name"), QMessageBox::Ok);
-		return;
+		RTC_XML::ServicePorts profile;
+		QString name = _portNameTextbox.getText();
+		name = name.replace(" ", "");
+		name = name.replace("\t", "");
+		if (name.isEmpty())
+		{
+			QMessageBox::question(this, _("Creation Faild"), _("Please Input Name"), QMessageBox::Ok);
+			return;
+		}
+		profile.set_name(name);
+
+
+		RTC_XML::ServiceInterface svrif;
+
+		QString if_name = _interfaceNameTextbox.getText();
+		if_name = if_name.replace(" ", "");
+		if_name = if_name.replace("\t", "");
+		if (if_name.isEmpty())
+		{
+			QMessageBox::question(this, _("Creation Faild"), _("Please Input Interface Name"), QMessageBox::Ok);
+			return;
+		}
+		svrif.set_name(if_name);
+
+		svrif.set_direction(_interfaceDirCombox.getItemText());
+
+		QString idl_name = _IDLTextbox.getText();
+		idl_name = idl_name.replace(" ", "");
+		idl_name = idl_name.replace("\t", "");
+		if (idl_name.isEmpty())
+		{
+			QMessageBox::question(this, _("Creation Faild"), _("Please Input IDL File Name"), QMessageBox::Ok);
+			return;
+		}
+		svrif.set_idlFile(idl_name);
+
+		svrif.set_type(_interfaceTypeCombox.getText());
+
+		svrif.set_path(_IDLPathTextbox.getText());
+
+		profile.addInterface(svrif);
+
+		addPort(profile);
 	}
-	profile.set_name(name);
-
-
-	RTC_XML::ServiceInterface svrif;
-
-	QString if_name = _interfaceNameTextbox.getText();
-	if_name = if_name.replace(" ", "");
-	if_name = if_name.replace("\t", "");
-	if (if_name.isEmpty())
-	{
-		QMessageBox::question(this, _("Creation Faild"), _("Please Input Interface Name"), QMessageBox::Ok);
-		return;
-	}
-	svrif.set_name(if_name);
-
-	svrif.set_direction(_interfaceDirCombox.getItemText());
-
-	QString idl_name = _IDLTextbox.getText();
-	idl_name = idl_name.replace(" ", "");
-	idl_name = idl_name.replace("\t", "");
-	if (idl_name.isEmpty())
-	{
-		QMessageBox::question(this, _("Creation Faild"), _("Please Input IDL File Name"), QMessageBox::Ok);
-		return;
-	}
-	svrif.set_idlFile(idl_name);
-
-	svrif.set_type(_interfaceTypeCombox.getText());
-
-	svrif.set_path(_IDLPathTextbox.getText());
-
-	profile.addInterface(svrif);
-
-	addPort(profile);
 }

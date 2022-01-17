@@ -1,17 +1,13 @@
-/*!
+ï»¿/*!
  * @file  ComponentListItem.cpp
- * @brief ƒRƒ“ƒ|[ƒlƒ“ƒgƒŠƒXƒgƒAƒCƒeƒ€
+ * @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãƒªã‚¹ãƒˆã‚¢ã‚¤ãƒ†ãƒ 
  *
  */
 
 #include <cnoid/MenuManager>
 #include <cnoid/MessageView>
-#include <boost/bind.hpp>
 
 //#include <src/OpenRTMPlugin/RTSItem.h>
-
-
-#include <boost/ref.hpp>
 
 
 #include <cnoid/Item>
@@ -62,8 +58,6 @@
 #include "gettext.h"
 
 using namespace cnoid;
-using namespace boost;
-using namespace rtmiddleware;
 
 
 
@@ -72,210 +66,211 @@ using namespace rtmiddleware;
 
 
 
-
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- */
-ComponentListItem::ComponentListItem()
-{
-
-};
-
-/**
-* @brief ƒfƒXƒgƒ‰ƒNƒ^
-*/
-ComponentListItem::~ComponentListItem()
-{
-	ComponentListView *cv = ComponentListView::instance();
-	if (cv)
+namespace rtmiddleware {
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 */
+	ComponentListItem::ComponentListItem()
 	{
-		ComponentListView::instance()->killprocess();
-	}
-};
 
-/**
- * @brief ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @param org ƒRƒs[Œ³
- */
-ComponentListItem::ComponentListItem(const ComponentListItem& org)
-//	: _area(NULL),
-//	  _mwin(NULL)
-{
-	setName(org.name());
+	};
 
-	/*
-	if (_mwin == NULL)
-	{
-		_area = new ScrollArea();
-		_mwin = new ComponentList();
-
-		std::string dir = (filesystem::path(executableTopDirectory()) / CNOID_SHARE_SUBDIR / "rtc").generic_string();
-		_mwin->load(dir.c_str());
-		_area->setWidget(_mwin);
-		_area->show();
-		
-		
-
-	}
+	/**
+	* @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	*/
-
-	
-};
-
-
-
-/**
- * @brief ‰Šú‰»ŠÖ”
- * @param ext 
- */
-void ComponentListItem::initialize(ExtensionManager* ext)
-{
-	static bool initialized = false;
-	if(!initialized){
-		ext->itemManager().registerClass<ComponentListItem>(N_("ComponentList"));
-		ext->itemManager().addCreationPanel<ComponentListItem>(NULL);
-		initialized = true;
-	}
-}
-
-
-
-
-/**
- * @brief ƒvƒƒpƒeƒBİ’è
- * @param putProperty ƒvƒƒpƒeƒB 
- */
-void ComponentListItem::doPutProperties(cnoid::PutPropertyFunction& putProperty)
-{
-}
-
-/**
- * @brief •¡»‚·‚é
- * @return •¡»ƒIƒuƒWƒFƒNƒg
- */
-cnoid::Item* ComponentListItem::doDuplicate() const
-{
-	return new ComponentListItem(*this);
-}
-
-/**
- * @brief •Û‘¶‚·‚é
- * @param archive 
- */
-bool ComponentListItem::store(cnoid::Archive& archive)
-{
-	ComponentListView *cv = ComponentListView::instance();
-	if (cv)
+	ComponentListItem::~ComponentListItem()
 	{
-		ComponentListView::instance()->store(archive);
-	}
-	return true;
-}
+		ComponentListView* cv = ComponentListView::instance();
+		if (cv)
+		{
+			ComponentListView::instance()->killprocess();
+		}
+	};
 
-/**
- * @brief •œŒ³‚·‚é
- * @param archive 
- */
-bool ComponentListItem::restore(const cnoid::Archive& archive)
-{
-	ComponentListView *cv = ComponentListView::instance();
-	if (cv)
+	/**
+	 * @brief ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param org ã‚³ãƒ”ãƒ¼å…ƒ
+	 */
+	ComponentListItem::ComponentListItem(const ComponentListItem& org)
+		//	: _area(NULL),
+		//	  _mwin(NULL)
 	{
-		ComponentListView::instance()->restore(archive);
-	}
-	return true;
-}
+		setName(org.name());
 
-/**
- * @brief 
- */
-void ComponentListItem::onPositionChanged()
-{
+		/*
+		if (_mwin == NULL)
+		{
+			_area = new ScrollArea();
+			_mwin = new ComponentList();
 
-}
+			std::string dir = (filesystem::path(executableTopDirectory()) / CNOID_SHARE_SUBDIR / "rtc").generic_string();
+			_mwin->load(dir.c_str());
+			_area->setWidget(_mwin);
+			_area->show();
 
-/**
-* @brief
-*/
-void ComponentListItem::onDisconnectedFromRoot()
-{
-	ComponentListView *cv = ComponentListView::instance();
-	if (cv)
+
+
+		}
+		*/
+
+
+	};
+
+
+
+	/**
+	 * @brief åˆæœŸåŒ–é–¢æ•°
+	 * @param ext
+	 */
+	void ComponentListItem::initialize(ExtensionManager* ext)
 	{
-		ComponentListView::instance()->killprocess();
+		static bool initialized = false;
+		if (!initialized) {
+			ext->itemManager().registerClass<ComponentListItem>(N_("ComponentList"));
+			ext->itemManager().addCreationPanel<ComponentListItem>(NULL);
+			initialized = true;
+		}
 	}
-}
 
 
 
-/**
-* @brief ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“ŠJnÀsŠÖ”
-* @return
-*/
-bool ComponentListItem::start()
-{
-	ComponentListView *cv = ComponentListView::instance();
-	if (cv)
+
+	/**
+	 * @brief ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£è¨­å®š
+	 * @param putProperty ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
+	 */
+	void ComponentListItem::doPutProperties(cnoid::PutPropertyFunction& putProperty)
 	{
-		ComponentListView::instance()->start();
 	}
-	return true;
-}
 
-/**
-* @brief ‚İ•æ“¾
-* @return ‚İ•
-*/
-double ComponentListItem::timeStep() const
-{
-	return 0;
-}
-
-/**
-* @brief ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“XV‘OÀsŠÖ”
-*/
-void ComponentListItem::input()
-{
-	ComponentListView *cv = ComponentListView::instance();
-	if (cv)
+	/**
+	 * @brief è¤‡è£½ã™ã‚‹
+	 * @return è¤‡è£½ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	 */
+	cnoid::Item* ComponentListItem::doDuplicate() const
 	{
-		ComponentListView::instance()->input();
+		return new ComponentListItem(*this);
 	}
-}
 
-/**
-* @brief ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“XV’†ÀsŠÖ”
-*/
-bool ComponentListItem::control()
-{
-	ComponentListView *cv = ComponentListView::instance();
-	if (cv)
+	/**
+	 * @brief ä¿å­˜ã™ã‚‹
+	 * @param archive
+	 */
+	bool ComponentListItem::store(cnoid::Archive& archive)
 	{
-		ComponentListView::instance()->control();
+		ComponentListView* cv = ComponentListView::instance();
+		if (cv)
+		{
+			ComponentListView::instance()->store(archive);
+		}
+		return true;
 	}
-	return true;
-}
 
-/**
-* @brief ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“XVŒãÀsŠÖ”
-*/
-void ComponentListItem::output()
-{
-	ComponentListView *cv = ComponentListView::instance();
-	if (cv)
+	/**
+	 * @brief å¾©å…ƒã™ã‚‹
+	 * @param archive
+	 */
+	bool ComponentListItem::restore(const cnoid::Archive& archive)
 	{
-		ComponentListView::instance()->output();
+		ComponentListView* cv = ComponentListView::instance();
+		if (cv)
+		{
+			ComponentListView::instance()->restore(archive);
+		}
+		return true;
 	}
-}
 
-/**
-* @brief ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“I—¹ÀsŠÖ”
-*/
-void ComponentListItem::stop()
-{
-	ComponentListView *cv = ComponentListView::instance();
-	if (cv)
+	/**
+	 * @brief
+	 */
+	void ComponentListItem::onPositionChanged()
 	{
-		ComponentListView::instance()->stop();
+
+	}
+
+	/**
+	* @brief
+	*/
+	void ComponentListItem::onDisconnectedFromRoot()
+	{
+		ComponentListView* cv = ComponentListView::instance();
+		if (cv)
+		{
+			ComponentListView::instance()->killprocess();
+		}
+	}
+
+
+
+	/**
+	* @brief ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³é–‹å§‹æ™‚å®Ÿè¡Œé–¢æ•°
+	* @return
+	*/
+	bool ComponentListItem::start()
+	{
+		ComponentListView* cv = ComponentListView::instance();
+		if (cv)
+		{
+			ComponentListView::instance()->start();
+		}
+		return true;
+	}
+
+	/**
+	* @brief åˆ»ã¿å¹…å–å¾—
+	* @return åˆ»ã¿å¹…
+	*/
+	double ComponentListItem::timeStep() const
+	{
+		return 0;
+	}
+
+	/**
+	* @brief ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³æ›´æ–°å‰å®Ÿè¡Œé–¢æ•°
+	*/
+	void ComponentListItem::input()
+	{
+		ComponentListView* cv = ComponentListView::instance();
+		if (cv)
+		{
+			ComponentListView::instance()->input();
+		}
+	}
+
+	/**
+	* @brief ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³æ›´æ–°ä¸­å®Ÿè¡Œé–¢æ•°
+	*/
+	bool ComponentListItem::control()
+	{
+		ComponentListView* cv = ComponentListView::instance();
+		if (cv)
+		{
+			ComponentListView::instance()->control();
+		}
+		return true;
+	}
+
+	/**
+	* @brief ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³æ›´æ–°å¾Œå®Ÿè¡Œé–¢æ•°
+	*/
+	void ComponentListItem::output()
+	{
+		ComponentListView* cv = ComponentListView::instance();
+		if (cv)
+		{
+			ComponentListView::instance()->output();
+		}
+	}
+
+	/**
+	* @brief ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³çµ‚äº†æ™‚å®Ÿè¡Œé–¢æ•°
+	*/
+	void ComponentListItem::stop()
+	{
+		ComponentListView* cv = ComponentListView::instance();
+		if (cv)
+		{
+			ComponentListView::instance()->stop();
+		}
 	}
 }

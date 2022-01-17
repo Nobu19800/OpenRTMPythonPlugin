@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file  PythonEditor.h
- * @brief Python—pƒGƒfƒBƒ^
+ * @brief Pythonç”¨ã‚¨ãƒ‡ã‚£ã‚¿
  *
  */
 
@@ -19,59 +19,61 @@ class QMenu;
 class QPrinter;
 QT_END_NAMESPACE
 
-/**
- * @class PythonEditor
- * @brief Python—pƒGƒfƒBƒ^
- */
-class PythonEditor : public QTextEdit
-{
-    Q_OBJECT
-
-public:
+namespace rtmiddleware {
 	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param parent eƒEƒBƒWƒFƒbƒg
+	 * @class PythonEditor
+	 * @brief Pythonç”¨ã‚¨ãƒ‡ã‚£ã‚¿
 	 */
-	PythonEditor(QWidget *parent = Q_NULLPTR);
+	class PythonEditor : public QTextEdit
+	{
+		Q_OBJECT
 
-	/**
-	 * @brief ƒtƒHƒ“ƒgƒTƒCƒYİ’è
-	 * @param s ƒtƒHƒ“ƒgƒTƒCƒY
-	 */
-	void setFontSize(const int s);
-	static const int tab_keywords_size;
-	static const char *tab_keywords[];
-public Q_SLOTS:
-//    void fileNew();
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		PythonEditor(QWidget* parent = Q_NULLPTR);
 
-protected:
-	/**
-	 * @brief 
-	 * @param source 
-	 */
-	void insertFromMimeData(const QMimeData * source) override;
-	/**
-	 * @brief ƒL[‰Ÿ‰º‚ÌƒCƒxƒ“ƒg
-	 * @param e ƒCƒxƒ“ƒg“à—e  
-	 */
-	void keyPressEvent(QKeyEvent *) override;
+		/**
+		 * @brief ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚ºè¨­å®š
+		 * @param s ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚º
+		 */
+		void setFontSize(const int s);
+		static const int tab_keywords_size;
+		static const char* tab_keywords[];
+	public Q_SLOTS:
+		//    void fileNew();
 
-
-
-//    void fileOpen();
-
-
-private:
-	/**
-	 * @brief ƒtƒHƒ“ƒgİ’è
-	 * @param fontSize ƒtƒHƒ“ƒgƒTƒCƒY
-	 * @param wrapColumn s‚Ì•¶š”
-	 */
-	void createFont(const int fontSize, const int wrapColumn);
-	int fontSize;
-	int wrapColumn;
+	protected:
+		/**
+		 * @brief
+		 * @param source
+		 */
+		void insertFromMimeData(const QMimeData* source) override;
+		/**
+		 * @brief ã‚­ãƒ¼æŠ¼ä¸‹æ™‚ã®ã‚¤ãƒ™ãƒ³ãƒˆ
+		 * @param e ã‚¤ãƒ™ãƒ³ãƒˆå†…å®¹
+		 */
+		void keyPressEvent(QKeyEvent*) override;
 
 
-};
 
-#endif // TEXTEDIT_H
+		//    void fileOpen();
+
+
+	private:
+		/**
+		 * @brief ãƒ•ã‚©ãƒ³ãƒˆè¨­å®š
+		 * @param fontSize ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚º
+		 * @param wrapColumn è¡Œã®æ–‡å­—æ•°
+		 */
+		void createFont(const int fontSize, const int wrapColumn);
+		int fontSize;
+		int wrapColumn;
+
+
+	};
+}
+
+#endif // PYTHONEDITOR_H

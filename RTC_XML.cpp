@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file  RTC_XML.cpp
- * @brief RTCƒvƒƒtƒ@ƒCƒ‹ƒIƒuƒWƒFƒNƒgƒNƒ‰ƒX
+ * @brief RTCãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¯ãƒ©ã‚¹
  *
  */
 
@@ -8,1194 +8,1196 @@
 #include "RTC_XML.h"
 
 
-using namespace RTC_XML;
 
-class Guard
-{
-public:
-	Guard(coil::Mutex *mutex)
+namespace RTC_XML {
+
+	class Guard
 	{
-		m_mutex = mutex;
-		m_mutex->lock();
+	public:
+		Guard(std::mutex *mutex)
+		{
+			m_mutex = mutex;
+			m_mutex->lock();
+		};
+		~Guard()
+		{
+			m_mutex->unlock();
+		};
+	private:
+		std::mutex *m_mutex;
 	};
-	~Guard()
+
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 */
+	BasicInfo::BasicInfo()
 	{
-		m_mutex->unlock();
-	};
-private:
-	coil::Mutex *m_mutex;
-};
+		m_mutex = new std::mutex;
+	}
 
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- */
-BasicInfo::BasicInfo()
-{
-	m_mutex = new coil::Mutex;
-}
-
-/**
- * @brief ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @param obj ƒRƒs[Œ³
- */
-BasicInfo::BasicInfo(const BasicInfo &obj)
-{
-	_properties = obj._properties;
-	_docs = obj._docs;
-	m_mutex = obj.m_mutex;
+	/**
+	 * @brief ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param obj ã‚³ãƒ”ãƒ¼å…ƒ
+	 */
+	BasicInfo::BasicInfo(const BasicInfo &obj)
+	{
+		_properties = obj._properties;
+		_docs = obj._docs;
+		m_mutex = obj.m_mutex;
 	
-}
+	}
 
-/**
- * @brief ƒfƒXƒgƒ‰ƒNƒ^
- */
-BasicInfo::~BasicInfo()
-{
-}
-
-/**
- * @brief XMLƒtƒ@ƒCƒ‹‚©‚çƒvƒƒtƒ@ƒCƒ‹æ“¾
- * @param reader XMLƒŠ[ƒ_[
- */
-void BasicInfo::getXMLData(QXmlStreamReader &reader)
-{
-	Guard guard(m_mutex);
+	/**
+	 * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 */
+	BasicInfo::~BasicInfo()
 	{
-		//std::cout << reader.name().toString().toStdString() << std::endl;
-		QXmlStreamAttributes attributes = reader.attributes();
-		Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
-			//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
-			_properties[attribute.name().toString()] = attribute.value().toString();
-		}
 	}
 
-	while (reader.readNextStartElement()) {
-		//std::cout << reader.name().toString().toStdString() << std::endl;
-		if (reader.name() == "Doc")
-		{
-			QXmlStreamAttributes attributes = reader.attributes();
-			Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
-				//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
-				_docs[attribute.name().toString()] = attribute.value().toString();
-			}
-		}
-		else
-		{
-			reader.skipCurrentElement();
-		}
-		reader.readNext();
-	}
-}
-
-/**
- * @brief ƒJƒeƒSƒŠ–¼æ“¾
- * @return ƒJƒeƒSƒŠ–¼
- */
-QString BasicInfo::getCategory()
-{
-	Guard guard(m_mutex);
-	return _properties["category"];
-}
-
-/**
- * @brief ƒ‚ƒWƒ…[ƒ‹–¼æ“¾
- * @return ƒ‚ƒWƒ…[ƒ‹–¼
- */
-QString BasicInfo::getName()
-{
-	Guard guard(m_mutex);
-	return _properties["name"];
-}
-
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- */
-RTC_Action::RTC_Action()
-{
-	m_mutex = new coil::Mutex;
-}
-
-/**
- * @brief ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @param obj ƒRƒs[Œ³
- */
-RTC_Action::RTC_Action(const RTC_Action &obj)
-{
-	_docs = obj._docs;
-	_properties = obj._properties;
-	m_mutex = obj.m_mutex;
-}
-
-/**
- * @brief ƒfƒXƒgƒ‰ƒNƒ^
- */
-RTC_Action::~RTC_Action()
-{
-
-}
-
-/**
- * @brief XMLƒtƒ@ƒCƒ‹‚©‚çƒvƒƒtƒ@ƒCƒ‹æ“¾
- * @param reader XMLƒŠ[ƒ_[
- */
-void RTC_Action::getXMLData(QXmlStreamReader &reader)
-{
-	Guard guard(m_mutex);
+	/**
+	 * @brief XMLãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«å–å¾—
+	 * @param reader XMLãƒªãƒ¼ãƒ€ãƒ¼
+	 */
+	void BasicInfo::getXMLData(QXmlStreamReader &reader)
 	{
-		//std::cout << reader.name().toString().toStdString() << std::endl;
-		QXmlStreamAttributes attributes = reader.attributes();
-		Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
-			//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
-			_properties[attribute.name().toString()] = attribute.value().toString();
-		}
-	}
-
-	while (reader.readNextStartElement()) {
-		//std::cout << reader.name().toString().toStdString() << std::endl;
-		if (reader.name() == "Doc")
-		{
-			QXmlStreamAttributes attributes = reader.attributes();
-			Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
-				//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
-				_docs[attribute.name().toString()] = attribute.value().toString();
-			}
-		}
-		else
-		{
-			reader.skipCurrentElement();
-		}
-		reader.readNext();
-	}
-}
-
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- */
-ConfigurationSet::ConfigurationSet()
-{
-	m_mutex = new coil::Mutex;
-}
-
-/**
- * @brief ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @param obj ƒRƒs[Œ³
- */
-ConfigurationSet::ConfigurationSet(const ConfigurationSet &obj)
-{
-	_properties = obj._properties;
-	_docs = obj._docs;
-	_ext = obj._ext;
-
-	m_mutex = obj.m_mutex;
-}
-
-/**
- * @brief ƒfƒXƒgƒ‰ƒNƒ^
- */
-ConfigurationSet::~ConfigurationSet()
-{
-
-}
-
-/**
- * @brief XMLƒtƒ@ƒCƒ‹‚©‚çƒvƒƒtƒ@ƒCƒ‹æ“¾
- * @param reader XMLƒŠ[ƒ_[
- */
-void ConfigurationSet::getXMLData(QXmlStreamReader &reader)
-{
-	Guard guard(m_mutex);
-	{
-		//std::cout << reader.name().toString().toStdString() << std::endl;
-		QXmlStreamAttributes attributes = reader.attributes();
-		Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
-			//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
-			_properties[attribute.name().toString()] = attribute.value().toString();
-		}
-	}
-
-	while (reader.readNextStartElement()) {
-
-		if (reader.name() == "Doc")
-		{
-			//std::cout << reader.name().toString().toStdString() << std::endl;
-			QXmlStreamAttributes attributes = reader.attributes();
-			Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
-				_docs[attribute.name().toString()] = attribute.value().toString();
-				//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
-			}
-		}
-		else if (reader.name() == "Properties")
+		Guard guard(m_mutex);
 		{
 			//std::cout << reader.name().toString().toStdString() << std::endl;
 			QXmlStreamAttributes attributes = reader.attributes();
 			Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
 				//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
-				_ext[attribute.name().toString()] = attribute.value().toString();
-
+				_properties[attribute.name().toString()] = attribute.value().toString();
 			}
 		}
-		else
-		{
-			reader.skipCurrentElement();
-		}
-		reader.readNext();
-	}
-}
 
-/**
- * @brief •Ï”–¼æ“¾
- * @return •Ï”–¼
- */
-QString ConfigurationSet::get_data_name()
-{
-	return "_" + _properties["name"];
-}
-
-/**
- * @brief ƒpƒ‰ƒ[ƒ^–¼æ“¾
- * @return ƒpƒ‰ƒ[ƒ^–¼
- */
-QString ConfigurationSet::get_name()
-{
-	Guard guard(m_mutex);
-	return _properties["name"];
-}
-
-/**
- * @brief ƒpƒ‰ƒ[ƒ^–¼æ“¾
- * @param name ƒpƒ‰ƒ[ƒ^–¼
- */
-void ConfigurationSet::set_name(QString name)
-{
-	Guard guard(m_mutex);
-	_properties["name"] = name;
-}
-
-/**
- * @brief ƒfƒtƒHƒ‹ƒg’lİ’è
- * @return ƒfƒtƒHƒ‹ƒg’l
- */
-QString ConfigurationSet::get_defaultValue()
-{
-	Guard guard(m_mutex);
-	return _properties["defaultValue"];
-}
-
-/**
- * @brief ƒfƒtƒHƒ‹ƒg’lİ’è
- * @param val ƒfƒtƒHƒ‹ƒg’l
- */
-void ConfigurationSet::set_defaultValue(QString val)
-{
-	Guard guard(m_mutex);
-	_properties["defaultValue"] = val;
-}
-
-/**
- * @brief ƒf[ƒ^Œ^æ“¾
- * @return ƒf[ƒ^Œ^
- */
-QString ConfigurationSet::get_type()
-{
-	Guard guard(m_mutex);
-	return _properties["type"];
-}
-
-/**
- * @brief ƒf[ƒ^Œ^İ’è
- * @param type ƒf[ƒ^Œ^–¼
- */
-void ConfigurationSet::set_type(QString type)
-{
-	Guard guard(m_mutex);
-	_properties["type"] = type;
-}
-
-/**
- * @brief ƒEƒBƒWƒFƒbƒgŒ^æ“¾
- * @return ƒEƒBƒWƒFƒbƒgŒ^
- */
-QString ConfigurationSet::get_widget()
-{
-	Guard guard(m_mutex);
-	//return _ext["value"];
-	return "";
-}
-
-/**
- * @brief ƒEƒBƒWƒFƒbƒgŒ^İ’è
- * @param widget ƒEƒBƒWƒFƒbƒgŒ^
- */
-void ConfigurationSet::set_widget(QString widget)
-{
-	Guard guard(m_mutex);
-	//_ext["value"] = widget;
-}
-
-/**
- * @brief §–ñ®æ“¾
- * @return §–ñ®
- */
-QString ConfigurationSet::get_constraint()
-{
-	Guard guard(m_mutex);
-	//return _properties["defaultValue"];
-	return "";
-}
-
-/**
- * @brief §–ñ®İ’è
- * @param constraits §–ñ®
- */
-void ConfigurationSet::set_constraint(QString constraits)
-{
-	Guard guard(m_mutex);
-	//_properties["defaultValue"] = constraits;
-}
-
-/**
- * @brief ƒXƒeƒbƒv’læ“¾
- * @return ƒXƒeƒbƒv’l
- */
-QString ConfigurationSet::get_step()
-{
-	Guard guard(m_mutex);
-	//return _properties["defaultValue"];
-	return "";
-}
-
-/**
- * @brief ƒXƒeƒbƒv’lİ’è
- * @param step ƒXƒeƒbƒv’l
- */
-void ConfigurationSet::set_step(QString step)
-{
-	Guard guard(m_mutex);
-	//_properties["defaultValue"] = step;
-}
-
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- */
-DataPorts::DataPorts()
-{
-	_properties["name"] = "port";
-	_properties["portType"] = "DataInPort";
-	_properties["type"] = "RTC::TimedDouble";
-
-	m_mutex = new coil::Mutex;
-}
-
-/**
- * @brief ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @param obj ƒRƒs[Œ³
- */
-DataPorts::DataPorts(const DataPorts &obj)
-{
-	_properties = obj._properties;
-	_docs = obj._docs;
-
-	m_mutex = obj.m_mutex;
-	
-}
-
-/**
- * @brief ƒfƒXƒgƒ‰ƒNƒ^
- */
-DataPorts::~DataPorts()
-{
-
-}
-
-/**
- * @brief ƒ|[ƒg–¼æ“¾
- * @return ƒ|[ƒg–¼
- */
-QString DataPorts::get_name()
-{
-	Guard guard(m_mutex);
-	return _properties["name"];
-}
-
-
-/**
- * @brief ƒ|[ƒgŒ^æ“¾
- * @return ƒ|[ƒgŒ^
- */
-QString DataPorts::get_portType()
-{
-	Guard guard(m_mutex);
-	return _properties["portType"];
-}
-
-/**
- * @brief ƒf[ƒ^Œ^æ“¾
- * @return ƒf[ƒ^Œ^
- */
-QString DataPorts::get_type()
-{
-	Guard guard(m_mutex);
-	return _properties["type"];
-}
-
-
-
-
-
-/**
- * @brief ƒ|[ƒg–¼İ’è
- * @param name ƒ|[ƒg–¼
- */
-void DataPorts::set_name(QString name)
-{
-	Guard guard(m_mutex);
-	_properties["name"] = name;
-}
-
-/**
- * @brief ƒ|[ƒgŒ^İ’è
- * @param type ƒ|[ƒgŒ^
- */
-void DataPorts::set_portType(QString type)
-{
-	Guard guard(m_mutex);
-	_properties["portType"] = type;
-}
-
-/**
- * @brief ƒf[ƒ^Œ^İ’è
- * @param type ƒf[ƒ^Œ^
- */
-void DataPorts::set_type(QString type)
-{
-	Guard guard(m_mutex);
-	_properties["type"] = type;
-}
-
-/**
- * @brief XMLƒtƒ@ƒCƒ‹‚©‚çƒvƒƒtƒ@ƒCƒ‹æ“¾
- * @param reader XMLƒŠ[ƒ_[
- */
-void DataPorts::getXMLData(QXmlStreamReader &reader)
-{
-	Guard guard(m_mutex);
-	{
-		//std::cout << reader.name().toString().toStdString() << std::endl;
-		QXmlStreamAttributes attributes = reader.attributes();
-		Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
-			_properties[attribute.name().toString()] = attribute.value().toString();
-			//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
-		}
-	}
-
-	while (reader.readNextStartElement()) {
-
-		if (reader.name() == "Doc")
-		{
+		while (reader.readNextStartElement()) {
 			//std::cout << reader.name().toString().toStdString() << std::endl;
-			QXmlStreamAttributes attributes = reader.attributes();
-			Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
-				_docs[attribute.name().toString()] = attribute.value().toString();
-				//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
-			}
-		}
-		else
-		{
-			reader.skipCurrentElement();
-		}
-		reader.readNext();
-	}
-}
-
-
-/**
- * @brief ƒf[ƒ^•Ï”–¼æ“¾
- * @return ƒf[ƒ^•Ï”–¼
- */
-QString DataPorts::get_data_name()
-{
-	return "_d_" + get_name();
-}
-
-/**
- * @brief ƒ|[ƒg•Ï”–¼æ“¾
- * @return ƒ|[ƒg•Ï”–¼
- */
-QString DataPorts::get_port_name()
-{
-	if (get_portType() == "DataInPort")
-	{
-		return "_" + get_name() + "In";
-	}
-	else if (get_portType() == "DataOutPort")
-	{
-		return "_" + get_name() + "Out";
-	}
-	return "";
-}
-
-
-
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- */
-ServiceInterface::ServiceInterface()
-{
-	_properties["name"] = "port";
-
-	m_mutex = new coil::Mutex;
-}
-
-/**
- * @brief ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @param obj ƒRƒs[Œ³
- */
-ServiceInterface::ServiceInterface(const ServiceInterface &obj)
-{
-	_properties = obj._properties;
-	_docs = obj._docs;
-
-	m_mutex = obj.m_mutex;
-}
-
-/**
- * @brief ƒfƒXƒgƒ‰ƒNƒ^
- */
-ServiceInterface::~ServiceInterface()
-{
-
-}
-
-/**
- * @brief ƒCƒ“ƒ^[ƒtƒF[ƒX–¼æ“¾
- * @return ƒCƒ“ƒ^[ƒtƒF[ƒX–¼
- */
-QString ServiceInterface::get_name()
-{
-	Guard guard(m_mutex);
-	return _properties["name"];
-}
-
-/**
- * @brief ƒCƒ“ƒ^[ƒtƒF[ƒX–¼İ’è
- * @param name ƒCƒ“ƒ^[ƒtƒF[ƒX–¼
- */
-void ServiceInterface::set_name(QString name)
-{
-	Guard guard(m_mutex);
-	_properties["name"] = name;
-}
-
-/**
- * @brief ƒCƒ“ƒ^[ƒtƒF[ƒX•Ï”–¼æ“¾
- * @return ƒCƒ“ƒ^[ƒtƒF[ƒX•Ï”–¼
- */
-QString ServiceInterface::get_data_name()
-{
-	return "_i_" + _properties["name"];
-}
-
-/**
- * @brief •ûŒüæ“¾
- * @return •ûŒü
- */
-QString ServiceInterface::get_direction()
-{
-	Guard guard(m_mutex);
-	return _properties["direction"];
-}
-
-/**
- * @brief •ûŒüİ’è
- * @param dir •ûŒü–¼
- */
-void ServiceInterface::set_direction(QString dir)
-{
-	Guard guard(m_mutex);
-	_properties["direction"] = dir;
-}
-
-/**
- * @brief IDLƒtƒ@ƒCƒ‹ƒpƒXæ“¾
- * @return IDLƒtƒ@ƒCƒ‹ƒpƒX
- */
-QString ServiceInterface::get_idlFile()
-{
-	Guard guard(m_mutex);
-	return _properties["idlFile"];
-}
-
-/**
- * @brief IDLƒtƒ@ƒCƒ‹ƒpƒXİ’è
- * @param file IDLƒtƒ@ƒCƒ‹ƒpƒX
- */
-void ServiceInterface::set_idlFile(QString file)
-{
-	Guard guard(m_mutex);
-	_properties["idlFile"] = file;
-}
-
-/**
- * @brief ƒCƒ“ƒ^[ƒtƒF[ƒXŒ^æ“¾
- * @return ƒCƒ“ƒ^[ƒtƒF[ƒXŒ^
- */
-QString ServiceInterface::get_type()
-{
-	Guard guard(m_mutex);
-	return _properties["type"];
-}
-
-/**
- * @brief ƒCƒ“ƒ^[ƒtƒF[ƒXŒ^İ’è
- * @param type ƒCƒ“ƒ^[ƒtƒF[ƒXŒ^
- */
-void ServiceInterface::set_type(QString type)
-{
-	Guard guard(m_mutex);
-	_properties["type"] = type;
-}
-
-/**
- * @brief IDLƒCƒ“ƒNƒ‹[ƒhƒpƒXæ“¾
- * @return IDLƒCƒ“ƒNƒ‹[ƒhƒpƒX
- */
-QString ServiceInterface::get_path()
-{
-	Guard guard(m_mutex);
-	return _properties["path"];
-}
-
-/**
- * @brief IDLƒCƒ“ƒNƒ‹[ƒhƒpƒXİ’è
- * @param path IDLƒCƒ“ƒNƒ‹[ƒhƒpƒX
- */
-void ServiceInterface::set_path(QString path)
-{
-	Guard guard(m_mutex);
-	_properties["path"] = path;
-}
-
-
-/**
- * @brief XMLƒtƒ@ƒCƒ‹‚©‚çƒvƒƒtƒ@ƒCƒ‹æ“¾
- * @param reader XMLƒŠ[ƒ_[
- */
-void ServiceInterface::getXMLData(QXmlStreamReader &reader)
-{
-	Guard guard(m_mutex);
-	{
-		//std::cout << reader.name().toString().toStdString() << std::endl;
-		QXmlStreamAttributes attributes = reader.attributes();
-		Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
-			_properties[attribute.name().toString()] = attribute.value().toString();
-			//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
-		}
-	}
-
-	while (reader.readNextStartElement()) {
-		//std::cout << reader.name().toString().toStdString() << std::endl;
-		if (reader.name() == "Doc")
-		{
-			QXmlStreamAttributes attributes = reader.attributes();
-			Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
-				_docs[attribute.name().toString()] = attribute.value().toString();
-
-				//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
-			}
-		}
-		else
-		{
-			reader.skipCurrentElement();
-		}
-		reader.readNext();
-	}
-}
-
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- */
-ServicePorts::ServicePorts()
-{
-	m_mutex = new coil::Mutex;
-}
-
-/**
- * @brief ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @param obj ƒRƒs[Œ³
- */
-ServicePorts::ServicePorts(const ServicePorts &obj)
-{
-	_properties = obj._properties;
-	_interfaces = obj._interfaces;
-	_docs = obj._docs;
-
-	m_mutex = obj.m_mutex;
-}
-
-/**
- * @brief ƒfƒXƒgƒ‰ƒNƒ^
- */
-ServicePorts::~ServicePorts()
-{
-
-}
-
-/**
- * @brief ƒCƒ“ƒ^[ƒtƒF[ƒX’Ç‰Á
- * @param svrif ƒT[ƒrƒXƒCƒ“ƒ^[ƒtƒF[ƒXƒvƒƒtƒ@ƒCƒ‹
- */
-void ServicePorts::addInterface(ServiceInterface svrif)
-{
-	Guard guard(m_mutex);
-	_interfaces.push_back(svrif);
-}
-
-/**
- * @brief XMLƒtƒ@ƒCƒ‹‚©‚çƒvƒƒtƒ@ƒCƒ‹æ“¾
- * @param reader XMLƒŠ[ƒ_[
- */
-void ServicePorts::getXMLData(QXmlStreamReader &reader)
-{
-	Guard guard(m_mutex);
-	{
-		//std::cout << reader.name().toString().toStdString() << std::endl;
-		QXmlStreamAttributes attributes = reader.attributes();
-		Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
-			_properties[attribute.name().toString()] = attribute.value().toString();
-			//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
-		}
-	}
-
-	while (reader.readNextStartElement()) {
-		//std::cout << reader.name().toString().toStdString() << std::endl;
-		if (reader.name() == "Doc")
-		{
-			QXmlStreamAttributes attributes = reader.attributes();
-			Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
-				_docs[attribute.name().toString()] = attribute.value().toString();
-
-				//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
-			}
-		}
-		else if (reader.name() == "ServiceInterface")
-		{
-			ServiceInterface svc_if;
-			svc_if.getXMLData(reader);
-			_interfaces.push_back(svc_if);
-		}
-		else
-		{
-			reader.skipCurrentElement();
-		}
-		reader.readNext();
-	}
-}
-
-/**
- * @brief ƒ|[ƒg–¼æ“¾
- * @return ƒ|[ƒg–¼
- */
-QString ServicePorts::get_name()
-{
-	Guard guard(m_mutex);
-	return _properties["name"];
-}
-
-/**
- * @brief ƒ|[ƒg–¼İ’è
- * @param name ƒ|[ƒg–¼
- */
-void ServicePorts::set_name(QString name)
-{
-	Guard guard(m_mutex);
-	_properties["name"] = name;
-}
-
-/**
- * @brief ƒCƒ“ƒ^[ƒtƒF[ƒXæ“¾
- * @return ƒT[ƒrƒXƒCƒ“ƒ^[ƒtƒF[ƒXˆê——
- */
-QVector<ServiceInterface> ServicePorts::get_interfaces()
-{
-	Guard guard(m_mutex);
-	return _interfaces;
-}
-
-
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- */
-Language::Language()
-{
-	m_mutex = new coil::Mutex;
-}
-
-/**
- * @brief ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @param obj ƒRƒs[Œ³
- */
-Language::Language(const Language &obj)
-{
-	_docs = obj._docs;
-	_properties = obj._properties;
-
-	m_mutex = obj.m_mutex;
-}
-
-
-/**
- * @brief ƒfƒXƒgƒ‰ƒNƒ^
- */
-Language::~Language()
-{
-
-}
-
-/**
- * @brief XMLƒtƒ@ƒCƒ‹‚©‚çƒvƒƒtƒ@ƒCƒ‹æ“¾
- * @param reader XMLƒŠ[ƒ_[
- */
-void Language::getXMLData(QXmlStreamReader &reader)
-{
-	Guard guard(m_mutex);
-	{
-		//std::cout << reader.name().toString().toStdString() << std::endl;
-		QXmlStreamAttributes attributes = reader.attributes();
-		Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
-			_properties[attribute.name().toString()] = attribute.value().toString();
-			//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
-		}
-	}
-
-	while (reader.readNextStartElement()) {
-
-		if (reader.name() == "Doc")
-		{
-			//std::cout << reader.name().toString().toStdString() << std::endl;
-			QXmlStreamAttributes attributes = reader.attributes();
-			Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
-				_docs[attribute.name().toString()] = attribute.value().toString();
-				//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
-			}
-		}
-		else
-		{
-			reader.skipCurrentElement();
-		}
-		reader.readNext();
-	}
-}
-
-/**
- * @brief Œ¾Œê–¼æ“¾
- * @return Œ¾Œê–¼
- */
-QString Language::getKind()
-{
-	Guard guard(m_mutex);
-	return  _properties["kind"];
-}
-
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- */
-RTC_Profile::RTC_Profile()
-{
-	m_mutex = new coil::Mutex;
-}
-
-/**
- * @brief ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @param obj ƒRƒs[Œ³
- */
-RTC_Profile::RTC_Profile(const RTC_Profile &obj)
-{
-	_properties = obj._properties;
-	_info = obj._info;
-	_actions = obj._actions;
-	_confsets = obj._confsets;
-	_dataports = obj._dataports;
-	_svrports = obj._svrports;
-	_language = obj._language;
-
-	m_mutex = obj.m_mutex;
-}
-
-
-/**
- * @brief ƒfƒXƒgƒ‰ƒNƒ^
- */
-RTC_Profile::~RTC_Profile()
-{
-
-}
-
-/**
- * @brief XMLƒtƒ@ƒCƒ‹‚©‚çƒvƒƒtƒ@ƒCƒ‹æ“¾
- * @param name XMLƒtƒ@ƒCƒ‹‚ÌƒpƒX
- */
-void RTC_Profile::loadXML(QString name)
-{
-	QFile inputFile(name);
-	if (!QFile::exists(name))
-	{
-		return;
-	}
-	else if (!inputFile.open(QIODevice::ReadOnly)) {
-		return;
-	}
-	QXmlStreamReader reader(&inputFile);
-	reader.setNamespaceProcessing(false);
-
-	while (reader.readNextStartElement()) {
-		if (reader.name() == "RtcProfile")
-		{
+			if (reader.name() == "Doc")
 			{
-
 				QXmlStreamAttributes attributes = reader.attributes();
 				Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
-					_properties[attribute.name().toString()] = attribute.value().toString();
+					//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
+					_docs[attribute.name().toString()] = attribute.value().toString();
+				}
+			}
+			else
+			{
+				reader.skipCurrentElement();
+			}
+			reader.readNext();
+		}
+	}
+
+	/**
+	 * @brief ã‚«ãƒ†ã‚´ãƒªåå–å¾—
+	 * @return ã‚«ãƒ†ã‚´ãƒªå
+	 */
+	QString BasicInfo::getCategory()
+	{
+		Guard guard(m_mutex);
+		return _properties["category"];
+	}
+
+	/**
+	 * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«åå–å¾—
+	 * @return ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«å
+	 */
+	QString BasicInfo::getName()
+	{
+		Guard guard(m_mutex);
+		return _properties["name"];
+	}
+
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 */
+	RTC_Action::RTC_Action()
+	{
+		m_mutex = new std::mutex;
+	}
+
+	/**
+	 * @brief ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param obj ã‚³ãƒ”ãƒ¼å…ƒ
+	 */
+	RTC_Action::RTC_Action(const RTC_Action &obj)
+	{
+		_docs = obj._docs;
+		_properties = obj._properties;
+		m_mutex = obj.m_mutex;
+	}
+
+	/**
+	 * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 */
+	RTC_Action::~RTC_Action()
+	{
+
+	}
+
+	/**
+	 * @brief XMLãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«å–å¾—
+	 * @param reader XMLãƒªãƒ¼ãƒ€ãƒ¼
+	 */
+	void RTC_Action::getXMLData(QXmlStreamReader &reader)
+	{
+		Guard guard(m_mutex);
+		{
+			//std::cout << reader.name().toString().toStdString() << std::endl;
+			QXmlStreamAttributes attributes = reader.attributes();
+			Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
+				//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
+				_properties[attribute.name().toString()] = attribute.value().toString();
+			}
+		}
+
+		while (reader.readNextStartElement()) {
+			//std::cout << reader.name().toString().toStdString() << std::endl;
+			if (reader.name() == "Doc")
+			{
+				QXmlStreamAttributes attributes = reader.attributes();
+				Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
+					//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
+					_docs[attribute.name().toString()] = attribute.value().toString();
+				}
+			}
+			else
+			{
+				reader.skipCurrentElement();
+			}
+			reader.readNext();
+		}
+	}
+
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 */
+	ConfigurationSet::ConfigurationSet()
+	{
+		m_mutex = new std::mutex;
+	}
+
+	/**
+	 * @brief ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param obj ã‚³ãƒ”ãƒ¼å…ƒ
+	 */
+	ConfigurationSet::ConfigurationSet(const ConfigurationSet &obj)
+	{
+		_properties = obj._properties;
+		_docs = obj._docs;
+		_ext = obj._ext;
+
+		m_mutex = obj.m_mutex;
+	}
+
+	/**
+	 * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 */
+	ConfigurationSet::~ConfigurationSet()
+	{
+
+	}
+
+	/**
+	 * @brief XMLãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«å–å¾—
+	 * @param reader XMLãƒªãƒ¼ãƒ€ãƒ¼
+	 */
+	void ConfigurationSet::getXMLData(QXmlStreamReader &reader)
+	{
+		Guard guard(m_mutex);
+		{
+			//std::cout << reader.name().toString().toStdString() << std::endl;
+			QXmlStreamAttributes attributes = reader.attributes();
+			Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
+				//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
+				_properties[attribute.name().toString()] = attribute.value().toString();
+			}
+		}
+
+		while (reader.readNextStartElement()) {
+
+			if (reader.name() == "Doc")
+			{
+				//std::cout << reader.name().toString().toStdString() << std::endl;
+				QXmlStreamAttributes attributes = reader.attributes();
+				Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
+					_docs[attribute.name().toString()] = attribute.value().toString();
+					//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
+				}
+			}
+			else if (reader.name() == "Properties")
+			{
+				//std::cout << reader.name().toString().toStdString() << std::endl;
+				QXmlStreamAttributes attributes = reader.attributes();
+				Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
+					//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
+					_ext[attribute.name().toString()] = attribute.value().toString();
 
 				}
 			}
-			while (reader.readNextStartElement()) {
-				//std::cout << reader.name().toLocal8Bit().toStdString() << std::endl;
+			else
+			{
+				reader.skipCurrentElement();
+			}
+			reader.readNext();
+		}
+	}
 
-				if (reader.name() == "BasicInfo")
-				{
-					_info.getXMLData(reader);
-					//reader.readNext();
-					//reader.skipCurrentElement();
+	/**
+	 * @brief å¤‰æ•°åå–å¾—
+	 * @return å¤‰æ•°å
+	 */
+	QString ConfigurationSet::get_data_name()
+	{
+		return "_" + _properties["name"];
+	}
+
+	/**
+	 * @brief ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿åå–å¾—
+	 * @return ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å
+	 */
+	QString ConfigurationSet::get_name()
+	{
+		Guard guard(m_mutex);
+		return _properties["name"];
+	}
+
+	/**
+	 * @brief ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿åå–å¾—
+	 * @param name ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å
+	 */
+	void ConfigurationSet::set_name(QString name)
+	{
+		Guard guard(m_mutex);
+		_properties["name"] = name;
+	}
+
+	/**
+	 * @brief ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤è¨­å®š
+	 * @return ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤
+	 */
+	QString ConfigurationSet::get_defaultValue()
+	{
+		Guard guard(m_mutex);
+		return _properties["defaultValue"];
+	}
+
+	/**
+	 * @brief ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤è¨­å®š
+	 * @param val ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤
+	 */
+	void ConfigurationSet::set_defaultValue(QString val)
+	{
+		Guard guard(m_mutex);
+		_properties["defaultValue"] = val;
+	}
+
+	/**
+	 * @brief ãƒ‡ãƒ¼ã‚¿å‹å–å¾—
+	 * @return ãƒ‡ãƒ¼ã‚¿å‹
+	 */
+	QString ConfigurationSet::get_type()
+	{
+		Guard guard(m_mutex);
+		return _properties["type"];
+	}
+
+	/**
+	 * @brief ãƒ‡ãƒ¼ã‚¿å‹è¨­å®š
+	 * @param type ãƒ‡ãƒ¼ã‚¿å‹å
+	 */
+	void ConfigurationSet::set_type(QString type)
+	{
+		Guard guard(m_mutex);
+		_properties["type"] = type;
+	}
+
+	/**
+	 * @brief ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆå‹å–å¾—
+	 * @return ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆå‹
+	 */
+	QString ConfigurationSet::get_widget()
+	{
+		Guard guard(m_mutex);
+		//return _ext["value"];
+		return "";
+	}
+
+	/**
+	 * @brief ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆå‹è¨­å®š
+	 * @param widget ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆå‹
+	 */
+	void ConfigurationSet::set_widget(QString widget)
+	{
+		Guard guard(m_mutex);
+		//_ext["value"] = widget;
+	}
+
+	/**
+	 * @brief åˆ¶ç´„å¼å–å¾—
+	 * @return åˆ¶ç´„å¼
+	 */
+	QString ConfigurationSet::get_constraint()
+	{
+		Guard guard(m_mutex);
+		//return _properties["defaultValue"];
+		return "";
+	}
+
+	/**
+	 * @brief åˆ¶ç´„å¼è¨­å®š
+	 * @param constraits åˆ¶ç´„å¼
+	 */
+	void ConfigurationSet::set_constraint(QString constraits)
+	{
+		Guard guard(m_mutex);
+		//_properties["defaultValue"] = constraits;
+	}
+
+	/**
+	 * @brief ã‚¹ãƒ†ãƒƒãƒ—å€¤å–å¾—
+	 * @return ã‚¹ãƒ†ãƒƒãƒ—å€¤
+	 */
+	QString ConfigurationSet::get_step()
+	{
+		Guard guard(m_mutex);
+		//return _properties["defaultValue"];
+		return "";
+	}
+
+	/**
+	 * @brief ã‚¹ãƒ†ãƒƒãƒ—å€¤è¨­å®š
+	 * @param step ã‚¹ãƒ†ãƒƒãƒ—å€¤
+	 */
+	void ConfigurationSet::set_step(QString step)
+	{
+		Guard guard(m_mutex);
+		//_properties["defaultValue"] = step;
+	}
+
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 */
+	DataPorts::DataPorts()
+	{
+		_properties["name"] = "port";
+		_properties["portType"] = "DataInPort";
+		_properties["type"] = "RTC::TimedDouble";
+
+		m_mutex = new std::mutex;
+	}
+
+	/**
+	 * @brief ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param obj ã‚³ãƒ”ãƒ¼å…ƒ
+	 */
+	DataPorts::DataPorts(const DataPorts &obj)
+	{
+		_properties = obj._properties;
+		_docs = obj._docs;
+
+		m_mutex = obj.m_mutex;
+	
+	}
+
+	/**
+	 * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 */
+	DataPorts::~DataPorts()
+	{
+
+	}
+
+	/**
+	 * @brief ãƒãƒ¼ãƒˆåå–å¾—
+	 * @return ãƒãƒ¼ãƒˆå
+	 */
+	QString DataPorts::get_name()
+	{
+		Guard guard(m_mutex);
+		return _properties["name"];
+	}
+
+
+	/**
+	 * @brief ãƒãƒ¼ãƒˆå‹å–å¾—
+	 * @return ãƒãƒ¼ãƒˆå‹
+	 */
+	QString DataPorts::get_portType()
+	{
+		Guard guard(m_mutex);
+		return _properties["portType"];
+	}
+
+	/**
+	 * @brief ãƒ‡ãƒ¼ã‚¿å‹å–å¾—
+	 * @return ãƒ‡ãƒ¼ã‚¿å‹
+	 */
+	QString DataPorts::get_type()
+	{
+		Guard guard(m_mutex);
+		return _properties["type"];
+	}
+
+
+
+
+
+	/**
+	 * @brief ãƒãƒ¼ãƒˆåè¨­å®š
+	 * @param name ãƒãƒ¼ãƒˆå
+	 */
+	void DataPorts::set_name(QString name)
+	{
+		Guard guard(m_mutex);
+		_properties["name"] = name;
+	}
+
+	/**
+	 * @brief ãƒãƒ¼ãƒˆå‹è¨­å®š
+	 * @param type ãƒãƒ¼ãƒˆå‹
+	 */
+	void DataPorts::set_portType(QString type)
+	{
+		Guard guard(m_mutex);
+		_properties["portType"] = type;
+	}
+
+	/**
+	 * @brief ãƒ‡ãƒ¼ã‚¿å‹è¨­å®š
+	 * @param type ãƒ‡ãƒ¼ã‚¿å‹
+	 */
+	void DataPorts::set_type(QString type)
+	{
+		Guard guard(m_mutex);
+		_properties["type"] = type;
+	}
+
+	/**
+	 * @brief XMLãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«å–å¾—
+	 * @param reader XMLãƒªãƒ¼ãƒ€ãƒ¼
+	 */
+	void DataPorts::getXMLData(QXmlStreamReader &reader)
+	{
+		Guard guard(m_mutex);
+		{
+			//std::cout << reader.name().toString().toStdString() << std::endl;
+			QXmlStreamAttributes attributes = reader.attributes();
+			Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
+				_properties[attribute.name().toString()] = attribute.value().toString();
+				//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
+			}
+		}
+
+		while (reader.readNextStartElement()) {
+
+			if (reader.name() == "Doc")
+			{
+				//std::cout << reader.name().toString().toStdString() << std::endl;
+				QXmlStreamAttributes attributes = reader.attributes();
+				Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
+					_docs[attribute.name().toString()] = attribute.value().toString();
+					//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
 				}
-				else if (reader.name() == "Actions")
-				{
-					
-					while (reader.readNextStartElement()) {
-						RTC_Action act;
-						act.getXMLData(reader);
-						_actions[reader.name().toString()] = act;
+			}
+			else
+			{
+				reader.skipCurrentElement();
+			}
+			reader.readNext();
+		}
+	}
 
-						reader.readNext();
+
+	/**
+	 * @brief ãƒ‡ãƒ¼ã‚¿å¤‰æ•°åå–å¾—
+	 * @return ãƒ‡ãƒ¼ã‚¿å¤‰æ•°å
+	 */
+	QString DataPorts::get_data_name()
+	{
+		return "_d_" + get_name();
+	}
+
+	/**
+	 * @brief ãƒãƒ¼ãƒˆå¤‰æ•°åå–å¾—
+	 * @return ãƒãƒ¼ãƒˆå¤‰æ•°å
+	 */
+	QString DataPorts::get_port_name()
+	{
+		if (get_portType() == "DataInPort")
+		{
+			return "_" + get_name() + "In";
+		}
+		else if (get_portType() == "DataOutPort")
+		{
+			return "_" + get_name() + "Out";
+		}
+		return "";
+	}
+
+
+
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 */
+	ServiceInterface::ServiceInterface()
+	{
+		_properties["name"] = "port";
+
+		m_mutex = new std::mutex;
+	}
+
+	/**
+	 * @brief ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param obj ã‚³ãƒ”ãƒ¼å…ƒ
+	 */
+	ServiceInterface::ServiceInterface(const ServiceInterface &obj)
+	{
+		_properties = obj._properties;
+		_docs = obj._docs;
+
+		m_mutex = obj.m_mutex;
+	}
+
+	/**
+	 * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 */
+	ServiceInterface::~ServiceInterface()
+	{
+
+	}
+
+	/**
+	 * @brief ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹åå–å¾—
+	 * @return ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹å
+	 */
+	QString ServiceInterface::get_name()
+	{
+		Guard guard(m_mutex);
+		return _properties["name"];
+	}
+
+	/**
+	 * @brief ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹åè¨­å®š
+	 * @param name ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹å
+	 */
+	void ServiceInterface::set_name(QString name)
+	{
+		Guard guard(m_mutex);
+		_properties["name"] = name;
+	}
+
+	/**
+	 * @brief ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹å¤‰æ•°åå–å¾—
+	 * @return ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹å¤‰æ•°å
+	 */
+	QString ServiceInterface::get_data_name()
+	{
+		return "_i_" + _properties["name"];
+	}
+
+	/**
+	 * @brief æ–¹å‘å–å¾—
+	 * @return æ–¹å‘
+	 */
+	QString ServiceInterface::get_direction()
+	{
+		Guard guard(m_mutex);
+		return _properties["direction"];
+	}
+
+	/**
+	 * @brief æ–¹å‘è¨­å®š
+	 * @param dir æ–¹å‘å
+	 */
+	void ServiceInterface::set_direction(QString dir)
+	{
+		Guard guard(m_mutex);
+		_properties["direction"] = dir;
+	}
+
+	/**
+	 * @brief IDLãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹å–å¾—
+	 * @return IDLãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹
+	 */
+	QString ServiceInterface::get_idlFile()
+	{
+		Guard guard(m_mutex);
+		return _properties["idlFile"];
+	}
+
+	/**
+	 * @brief IDLãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹è¨­å®š
+	 * @param file IDLãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹
+	 */
+	void ServiceInterface::set_idlFile(QString file)
+	{
+		Guard guard(m_mutex);
+		_properties["idlFile"] = file;
+	}
+
+	/**
+	 * @brief ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹å‹å–å¾—
+	 * @return ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹å‹
+	 */
+	QString ServiceInterface::get_type()
+	{
+		Guard guard(m_mutex);
+		return _properties["type"];
+	}
+
+	/**
+	 * @brief ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹å‹è¨­å®š
+	 * @param type ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹å‹
+	 */
+	void ServiceInterface::set_type(QString type)
+	{
+		Guard guard(m_mutex);
+		_properties["type"] = type;
+	}
+
+	/**
+	 * @brief IDLã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ãƒ‘ã‚¹å–å¾—
+	 * @return IDLã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ãƒ‘ã‚¹
+	 */
+	QString ServiceInterface::get_path()
+	{
+		Guard guard(m_mutex);
+		return _properties["path"];
+	}
+
+	/**
+	 * @brief IDLã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ãƒ‘ã‚¹è¨­å®š
+	 * @param path IDLã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ãƒ‘ã‚¹
+	 */
+	void ServiceInterface::set_path(QString path)
+	{
+		Guard guard(m_mutex);
+		_properties["path"] = path;
+	}
+
+
+	/**
+	 * @brief XMLãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«å–å¾—
+	 * @param reader XMLãƒªãƒ¼ãƒ€ãƒ¼
+	 */
+	void ServiceInterface::getXMLData(QXmlStreamReader &reader)
+	{
+		Guard guard(m_mutex);
+		{
+			//std::cout << reader.name().toString().toStdString() << std::endl;
+			QXmlStreamAttributes attributes = reader.attributes();
+			Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
+				_properties[attribute.name().toString()] = attribute.value().toString();
+				//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
+			}
+		}
+
+		while (reader.readNextStartElement()) {
+			//std::cout << reader.name().toString().toStdString() << std::endl;
+			if (reader.name() == "Doc")
+			{
+				QXmlStreamAttributes attributes = reader.attributes();
+				Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
+					_docs[attribute.name().toString()] = attribute.value().toString();
+
+					//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
+				}
+			}
+			else
+			{
+				reader.skipCurrentElement();
+			}
+			reader.readNext();
+		}
+	}
+
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 */
+	ServicePorts::ServicePorts()
+	{
+		m_mutex = new std::mutex;
+	}
+
+	/**
+	 * @brief ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param obj ã‚³ãƒ”ãƒ¼å…ƒ
+	 */
+	ServicePorts::ServicePorts(const ServicePorts &obj)
+	{
+		_properties = obj._properties;
+		_interfaces = obj._interfaces;
+		_docs = obj._docs;
+
+		m_mutex = obj.m_mutex;
+	}
+
+	/**
+	 * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 */
+	ServicePorts::~ServicePorts()
+	{
+
+	}
+
+	/**
+	 * @brief ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹è¿½åŠ 
+	 * @param svrif ã‚µãƒ¼ãƒ“ã‚¹ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
+	 */
+	void ServicePorts::addInterface(ServiceInterface svrif)
+	{
+		Guard guard(m_mutex);
+		_interfaces.push_back(svrif);
+	}
+
+	/**
+	 * @brief XMLãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«å–å¾—
+	 * @param reader XMLãƒªãƒ¼ãƒ€ãƒ¼
+	 */
+	void ServicePorts::getXMLData(QXmlStreamReader &reader)
+	{
+		Guard guard(m_mutex);
+		{
+			//std::cout << reader.name().toString().toStdString() << std::endl;
+			QXmlStreamAttributes attributes = reader.attributes();
+			Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
+				_properties[attribute.name().toString()] = attribute.value().toString();
+				//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
+			}
+		}
+
+		while (reader.readNextStartElement()) {
+			//std::cout << reader.name().toString().toStdString() << std::endl;
+			if (reader.name() == "Doc")
+			{
+				QXmlStreamAttributes attributes = reader.attributes();
+				Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
+					_docs[attribute.name().toString()] = attribute.value().toString();
+
+					//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
+				}
+			}
+			else if (reader.name() == "ServiceInterface")
+			{
+				ServiceInterface svc_if;
+				svc_if.getXMLData(reader);
+				_interfaces.push_back(svc_if);
+			}
+			else
+			{
+				reader.skipCurrentElement();
+			}
+			reader.readNext();
+		}
+	}
+
+	/**
+	 * @brief ãƒãƒ¼ãƒˆåå–å¾—
+	 * @return ãƒãƒ¼ãƒˆå
+	 */
+	QString ServicePorts::get_name()
+	{
+		Guard guard(m_mutex);
+		return _properties["name"];
+	}
+
+	/**
+	 * @brief ãƒãƒ¼ãƒˆåè¨­å®š
+	 * @param name ãƒãƒ¼ãƒˆå
+	 */
+	void ServicePorts::set_name(QString name)
+	{
+		Guard guard(m_mutex);
+		_properties["name"] = name;
+	}
+
+	/**
+	 * @brief ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹å–å¾—
+	 * @return ã‚µãƒ¼ãƒ“ã‚¹ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ä¸€è¦§
+	 */
+	QVector<ServiceInterface> ServicePorts::get_interfaces()
+	{
+		Guard guard(m_mutex);
+		return _interfaces;
+	}
+
+
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 */
+	Language::Language()
+	{
+		m_mutex = new std::mutex;
+	}
+
+	/**
+	 * @brief ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param obj ã‚³ãƒ”ãƒ¼å…ƒ
+	 */
+	Language::Language(const Language &obj)
+	{
+		_docs = obj._docs;
+		_properties = obj._properties;
+
+		m_mutex = obj.m_mutex;
+	}
+
+
+	/**
+	 * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 */
+	Language::~Language()
+	{
+
+	}
+
+	/**
+	 * @brief XMLãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«å–å¾—
+	 * @param reader XMLãƒªãƒ¼ãƒ€ãƒ¼
+	 */
+	void Language::getXMLData(QXmlStreamReader &reader)
+	{
+		Guard guard(m_mutex);
+		{
+			//std::cout << reader.name().toString().toStdString() << std::endl;
+			QXmlStreamAttributes attributes = reader.attributes();
+			Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
+				_properties[attribute.name().toString()] = attribute.value().toString();
+				//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
+			}
+		}
+
+		while (reader.readNextStartElement()) {
+
+			if (reader.name() == "Doc")
+			{
+				//std::cout << reader.name().toString().toStdString() << std::endl;
+				QXmlStreamAttributes attributes = reader.attributes();
+				Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
+					_docs[attribute.name().toString()] = attribute.value().toString();
+					//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
+				}
+			}
+			else
+			{
+				reader.skipCurrentElement();
+			}
+			reader.readNext();
+		}
+	}
+
+	/**
+	 * @brief è¨€èªåå–å¾—
+	 * @return è¨€èªå
+	 */
+	QString Language::getKind()
+	{
+		Guard guard(m_mutex);
+		return  _properties["kind"];
+	}
+
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 */
+	RTC_Profile::RTC_Profile()
+	{
+		m_mutex = new std::mutex;
+	}
+
+	/**
+	 * @brief ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param obj ã‚³ãƒ”ãƒ¼å…ƒ
+	 */
+	RTC_Profile::RTC_Profile(const RTC_Profile &obj)
+	{
+		_properties = obj._properties;
+		_info = obj._info;
+		_actions = obj._actions;
+		_confsets = obj._confsets;
+		_dataports = obj._dataports;
+		_svrports = obj._svrports;
+		_language = obj._language;
+
+		m_mutex = obj.m_mutex;
+	}
+
+
+	/**
+	 * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 */
+	RTC_Profile::~RTC_Profile()
+	{
+
+	}
+
+	/**
+	 * @brief XMLãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«å–å¾—
+	 * @param name XMLãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹
+	 */
+	void RTC_Profile::loadXML(QString name)
+	{
+		QFile inputFile(name);
+		if (!QFile::exists(name))
+		{
+			return;
+		}
+		else if (!inputFile.open(QIODevice::ReadOnly)) {
+			return;
+		}
+		QXmlStreamReader reader(&inputFile);
+		reader.setNamespaceProcessing(false);
+
+		while (reader.readNextStartElement()) {
+			if (reader.name() == "RtcProfile")
+			{
+				{
+
+					QXmlStreamAttributes attributes = reader.attributes();
+					Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
+						_properties[attribute.name().toString()] = attribute.value().toString();
+
 					}
-
-
 				}
-				else if (reader.name() == "ConfigurationSet")
-				{
+				while (reader.readNextStartElement()) {
+					//std::cout << reader.name().toLocal8Bit().toStdString() << std::endl;
+
+					if (reader.name() == "BasicInfo")
+					{
+						_info.getXMLData(reader);
+						//reader.readNext();
+						//reader.skipCurrentElement();
+					}
+					else if (reader.name() == "Actions")
+					{
 					
-					while (reader.readNextStartElement()) {
+						while (reader.readNextStartElement()) {
+							RTC_Action act;
+							act.getXMLData(reader);
+							_actions[reader.name().toString()] = act;
+
+							reader.readNext();
+						}
+
+
+					}
+					else if (reader.name() == "ConfigurationSet")
+					{
+					
+						while (reader.readNextStartElement()) {
 						
-						ConfigurationSet conf;
-						conf.getXMLData(reader);
-						_confsets.push_back(conf);
+							ConfigurationSet conf;
+							conf.getXMLData(reader);
+							_confsets.push_back(conf);
 
+							reader.readNext();
+						}
+					}
+					else if (reader.name() == "DataPorts")
+					{
+						DataPorts dataport;
+						dataport.getXMLData(reader);
+						_dataports.push_back(dataport);
+					}
+					else if (reader.name() == "ServicePorts")
+					{
+						ServicePorts svcport;
+						svcport.getXMLData(reader);
+						_svrports.push_back(svcport);
+					}
+					else if (reader.name() == "Language")
+					{
+						_language.getXMLData(reader);
 						reader.readNext();
 					}
-				}
-				else if (reader.name() == "DataPorts")
-				{
-					DataPorts dataport;
-					dataport.getXMLData(reader);
-					_dataports.push_back(dataport);
-				}
-				else if (reader.name() == "ServicePorts")
-				{
-					ServicePorts svcport;
-					svcport.getXMLData(reader);
-					_svrports.push_back(svcport);
-				}
-				else if (reader.name() == "Language")
-				{
-					_language.getXMLData(reader);
-					reader.readNext();
-				}
-				else
-				{
-					//std::cout << reader.name().toString().toStdString() << std::endl;
-					reader.skipCurrentElement();
+					else
+					{
+						//std::cout << reader.name().toString().toStdString() << std::endl;
+						reader.skipCurrentElement();
+					}
 				}
 			}
+
 		}
-
 	}
-}
 
-/**
- * @brief ƒ|[ƒg‚Ì‘”æ“¾
- * @return ƒ|[ƒg‚Ì‘”
- */
-int RTC_Profile::getPortNum()
-{
-	Guard guard(m_mutex);
-	return _dataports.size() + _svrports.size();
-}
-
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- */
-RTC_ProfileRTP::RTC_ProfileRTP()
-{
-	_state[0] = RTP_Created;
-}
-
-/**
- * @brief RTCó‘Ôæ“¾
- * @param ec_num ÀsƒRƒ“ƒeƒLƒXƒgID
- * @return RTCó‘Ôæ“¾
- */
-RTC_ProfileRTP::RTC_State RTC_ProfileRTP::getState(int ec_num)
-{
-	Guard guard(m_mutex);
-	if (_state.keys().indexOf(ec_num) >= 0)
+	/**
+	 * @brief ãƒãƒ¼ãƒˆã®ç·æ•°å–å¾—
+	 * @return ãƒãƒ¼ãƒˆã®ç·æ•°
+	 */
+	int RTC_Profile::getPortNum()
 	{
-		return _state[ec_num];
+		Guard guard(m_mutex);
+		return _dataports.size() + _svrports.size();
 	}
-	return RTP_Created;
-}
 
-/**
- * @brief RTCó‘Ôİ’è
- * @param state RTCó‘Ô
- * @param ec_num ÀsƒRƒ“ƒeƒLƒXƒgID
- */
-void RTC_ProfileRTP::setState(RTC_ProfileRTP::RTC_State state, int ec_num)
-{
-	Guard guard(m_mutex);
-	_state[ec_num] = state;
-}
-
-/**
- * @brief ƒAƒNƒeƒBƒrƒeƒBæ“¾
- * @return ƒAƒNƒeƒBƒrƒeƒBˆê——
- */
-QMap <QString, RTC_Action> RTC_Profile::get_actions()
-{
-	Guard guard(m_mutex);
-	return _actions;
-}
-
-
-/**
- * @brief ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^æ“¾
- * @return ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^ˆê——
- */
-QVector<ConfigurationSet> RTC_Profile::get_confsets()
-{
-	Guard guard(m_mutex);
-	return _confsets;
-}
-
-
-QVector<DataPorts> RTC_Profile::get_dataports()
-{
-	Guard guard(m_mutex);
-	return _dataports;
-}
-
-/**
- * @brief ƒf[ƒ^ƒ|[ƒgæ“¾
- * @return ƒf[ƒ^ƒ|[ƒgˆê——
- */
-void RTC_Profile::addDataPort(DataPorts port)
-{
-	Guard guard(m_mutex);
-	_dataports.push_back(port);
-}
-
-
-void RTC_Profile::addServicePort(ServicePorts port)
-{
-	Guard guard(m_mutex);
-	_svrports.push_back(port);
-}
-
-/**
- * @brief ƒT[ƒrƒXƒ|[ƒgæ“¾
- * @return ƒT[ƒrƒXƒ|[ƒgˆê——
- */
-QVector<ServicePorts>  RTC_Profile::get_svcports()
-{
-	Guard guard(m_mutex);
-	return _svrports;
-}
-
-/**
- * @brief ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^’Ç‰Á
- * @param conf ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^
- */
-void RTC_Profile::addConfigurationSet(ConfigurationSet conf)
-{
-	Guard guard(m_mutex);
-	_confsets.push_back(conf);
-}
-
-/**
- * @brief ƒf[ƒ^ƒ|[ƒgíœ
- * @param name ƒ|[ƒg–¼
- */
-void RTC_Profile::removeDataPort(QString name)
-{
-	Guard guard(m_mutex);
-	for (QVector<DataPorts>::iterator itr = _dataports.begin(); itr != _dataports.end(); itr++)
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 */
+	RTC_ProfileRTP::RTC_ProfileRTP()
 	{
-		if ((*itr).get_name() == name)
+		_state[0] = RTC_State::RTP_Created;
+	}
+
+	/**
+	 * @brief RTCçŠ¶æ…‹å–å¾—
+	 * @param ec_num å®Ÿè¡Œã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆID
+	 * @return RTCçŠ¶æ…‹å–å¾—
+	 */
+	RTC_ProfileRTP::RTC_State RTC_ProfileRTP::getState(int ec_num)
+	{
+		Guard guard(m_mutex);
+		if (_state.keys().indexOf(ec_num) >= 0)
 		{
-			_dataports.erase(itr);
-			return;
+			return _state[ec_num];
 		}
+		return RTC_State::RTP_Created;
 	}
-}
 
-/**
- * @brief ƒT[ƒrƒXƒ|[ƒgíœ
- * @param name ƒ|[ƒg–¼
- */
-void RTC_Profile::removeServicePort(QString name)
-{
-	Guard guard(m_mutex);
-	for (QVector<ServicePorts>::iterator itr = _svrports.begin(); itr != _svrports.end(); itr++)
+	/**
+	 * @brief RTCçŠ¶æ…‹è¨­å®š
+	 * @param state RTCçŠ¶æ…‹
+	 * @param ec_num å®Ÿè¡Œã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆID
+	 */
+	void RTC_ProfileRTP::setState(RTC_ProfileRTP::RTC_State state, int ec_num)
 	{
-		if ((*itr).get_name() == name)
-		{
-			_svrports.erase(itr);
-			return;
-		}
+		Guard guard(m_mutex);
+		_state[ec_num] = state;
 	}
-}
 
-/**
- * @brief ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^íœ
- * @param name ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^–¼
- */
-void RTC_Profile::removeConfigurationSet(QString name)
-{
-	Guard guard(m_mutex);
-	for (QVector<ConfigurationSet>::iterator itr = _confsets.begin(); itr != _confsets.end(); itr++)
+	/**
+	 * @brief ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£å–å¾—
+	 * @return ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£ä¸€è¦§
+	 */
+	QMap <QString, RTC_Action> RTC_Profile::get_actions()
 	{
-		if ((*itr).get_name() == name)
+		Guard guard(m_mutex);
+		return _actions;
+	}
+
+
+	/**
+	 * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å–å¾—
+	 * @return ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ä¸€è¦§
+	 */
+	QVector<ConfigurationSet> RTC_Profile::get_confsets()
+	{
+		Guard guard(m_mutex);
+		return _confsets;
+	}
+
+
+	QVector<DataPorts> RTC_Profile::get_dataports()
+	{
+		Guard guard(m_mutex);
+		return _dataports;
+	}
+
+	/**
+	 * @brief ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆå–å¾—
+	 * @return ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆä¸€è¦§
+	 */
+	void RTC_Profile::addDataPort(DataPorts port)
+	{
+		Guard guard(m_mutex);
+		_dataports.push_back(port);
+	}
+
+
+	void RTC_Profile::addServicePort(ServicePorts port)
+	{
+		Guard guard(m_mutex);
+		_svrports.push_back(port);
+	}
+
+	/**
+	 * @brief ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆå–å¾—
+	 * @return ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆä¸€è¦§
+	 */
+	QVector<ServicePorts>  RTC_Profile::get_svcports()
+	{
+		Guard guard(m_mutex);
+		return _svrports;
+	}
+
+	/**
+	 * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿è¿½åŠ 
+	 * @param conf ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
+	 */
+	void RTC_Profile::addConfigurationSet(ConfigurationSet conf)
+	{
+		Guard guard(m_mutex);
+		_confsets.push_back(conf);
+	}
+
+	/**
+	 * @brief ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆå‰Šé™¤
+	 * @param name ãƒãƒ¼ãƒˆå
+	 */
+	void RTC_Profile::removeDataPort(QString name)
+	{
+		Guard guard(m_mutex);
+		for (QVector<DataPorts>::iterator itr = _dataports.begin(); itr != _dataports.end(); itr++)
 		{
-			_confsets.erase(itr);
-			return;
+			if ((*itr).get_name() == name)
+			{
+				_dataports.erase(itr);
+				return;
+			}
 		}
 	}
-}
 
-/**
- * @brief Šî–{ƒvƒƒtƒ@ƒCƒ‹æ“¾
- * @return Šî–{ƒvƒƒtƒ@ƒCƒ‹ˆê——
- */
-BasicInfo RTC_Profile::get_info()
-{
-	Guard guard(m_mutex);
-	return _info;
-}
+	/**
+	 * @brief ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆå‰Šé™¤
+	 * @param name ãƒãƒ¼ãƒˆå
+	 */
+	void RTC_Profile::removeServicePort(QString name)
+	{
+		Guard guard(m_mutex);
+		for (QVector<ServicePorts>::iterator itr = _svrports.begin(); itr != _svrports.end(); itr++)
+		{
+			if ((*itr).get_name() == name)
+			{
+				_svrports.erase(itr);
+				return;
+			}
+		}
+	}
 
-/**
- * @brief Œ¾Œêƒvƒƒtƒ@ƒCƒ‹æ“¾
- * @return Œ¾Œêƒvƒƒtƒ@ƒCƒ‹ˆê——
- */
-Language RTC_Profile::get_language()
-{
-	Guard guard(m_mutex);
-	return _language;
+	/**
+	 * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å‰Šé™¤
+	 * @param name ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å
+	 */
+	void RTC_Profile::removeConfigurationSet(QString name)
+	{
+		Guard guard(m_mutex);
+		for (QVector<ConfigurationSet>::iterator itr = _confsets.begin(); itr != _confsets.end(); itr++)
+		{
+			if ((*itr).get_name() == name)
+			{
+				_confsets.erase(itr);
+				return;
+			}
+		}
+	}
+
+	/**
+	 * @brief åŸºæœ¬ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«å–å¾—
+	 * @return åŸºæœ¬ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§
+	 */
+	BasicInfo RTC_Profile::get_info()
+	{
+		Guard guard(m_mutex);
+		return _info;
+	}
+
+	/**
+	 * @brief è¨€èªãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«å–å¾—
+	 * @return è¨€èªãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§
+	 */
+	Language RTC_Profile::get_language()
+	{
+		Guard guard(m_mutex);
+		return _language;
+	}
 }

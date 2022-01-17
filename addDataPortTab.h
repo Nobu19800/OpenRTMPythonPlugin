@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file  addDataPortTab.h
- * @brief ƒf[ƒ^ƒ|[ƒgİ’èƒ^ƒu
+ * @brief ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆè¨­å®šã‚¿ãƒ–
  *
  */
 
@@ -35,63 +35,63 @@ QT_END_NAMESPACE
 
 
 
-
-/**
- * @class addDataPortTab
- * @brief ƒf[ƒ^ƒ|[ƒgİ’èƒ^ƒu
- */
-class addDataPortTab : public BaseTab
-{
-    Q_OBJECT
-
-public:
+namespace rtmiddleware {
 	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param comp ƒRƒ“ƒ|[ƒlƒ“ƒgƒvƒƒtƒ@ƒCƒ‹ƒIƒuƒWƒFƒNƒg
-	 * @param viewWidget RTC•\¦ƒEƒBƒWƒFƒbƒg
-	 * @param listWidget ƒf[ƒ^ƒ|[ƒgˆê——•\¦ƒEƒBƒWƒFƒbƒg
-	 * @param parent eƒEƒBƒWƒFƒbƒg
+	 * @class addDataPortTab
+	 * @brief ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆè¨­å®šã‚¿ãƒ–
 	 */
-	addDataPortTab(RTC_XML::RTC_ProfileRTP *comp, RTCViewWidget *viewWidget, DataPortTable *listWidget, QWidget *parent = Q_NULLPTR);
-	/**
-	 * @brief ƒf[ƒ^ƒ|[ƒgŒŸõ
-	 * @param name ƒ|[ƒg–¼
-	 * @param ret ƒf[ƒ^ƒ|[ƒgƒvƒƒtƒ@ƒCƒ‹ƒIƒuƒWƒFƒNƒg
-	 * @param return trueFw’èƒ|[ƒg–¼‚Ìƒf[ƒ^ƒ|[ƒg‚ª‘¶İ‚µ‚½ false:‘¶İ‚µ‚È‚©‚Á‚½
-	 */
-	bool searchPort(QString name, RTC_XML::DataPorts &ret);
-	/**
-	 * @brief ƒf[ƒ^ƒ|[ƒg’Ç‰Á
-	 * @param profile ƒf[ƒ^ƒ|[ƒgƒvƒƒtƒ@ƒCƒ‹ƒIƒuƒWƒFƒNƒg
-	 */
-	void addPort(RTC_XML::DataPorts profile);
-	cnoid::Signal<void(RTC_XML::DataPorts)>  sigAddPort;
+	class addDataPortTab : public BaseTab
+	{
+		Q_OBJECT
 
-public Q_SLOTS:
-	/**
-	 * @brief ¶¬ƒ{ƒ^ƒ“‰Ÿ‰º‚ÌƒXƒƒbƒg
-	 */
-	void createButtonSlot();
-//    void fileNew();
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param comp ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		 * @param viewWidget RTCè¡¨ç¤ºã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 * @param listWidget ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆä¸€è¦§è¡¨ç¤ºã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		addDataPortTab(RTC_XML::RTC_ProfileRTP* comp, RTCViewWidget* viewWidget, DataPortTable* listWidget, QWidget* parent = Q_NULLPTR);
+		/**
+		 * @brief ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆæ¤œç´¢
+		 * @param name ãƒãƒ¼ãƒˆå
+		 * @param ret ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		 * @param return trueï¼šæŒ‡å®šãƒãƒ¼ãƒˆåã®ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆãŒå­˜åœ¨ã—ãŸ false:å­˜åœ¨ã—ãªã‹ã£ãŸ
+		 */
+		bool searchPort(QString name, RTC_XML::DataPorts& ret);
+		/**
+		 * @brief ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆè¿½åŠ 
+		 * @param profile ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		 */
+		void addPort(RTC_XML::DataPorts profile);
+		cnoid::Signal<void(RTC_XML::DataPorts)>  sigAddPort;
 
-protected:
+	public Q_SLOTS:
+		/**
+		 * @brief ç”Ÿæˆãƒœã‚¿ãƒ³æŠ¼ä¸‹æ™‚ã®ã‚¹ãƒ­ãƒƒãƒˆ
+		 */
+		void createButtonSlot();
+		//    void fileNew();
+
+	protected:
 
 
 
 
 
-//    void fileOpen();
+		//    void fileOpen();
 
 
-private:
-	RTCViewWidget *_viewWidget;
-	DataPortTable *_listWidget;
-	BaseWidget _portNameTextbox;
-	BaseWidget _portTypeCombox;
-	BaseWidget _dataTypeCombox;
-	QPushButton *_createButton;
-	RTC_XML::RTC_ProfileRTP *_comp;
+	private:
+		RTCViewWidget* _viewWidget;
+		DataPortTable* _listWidget;
+		BaseWidget _portNameTextbox;
+		BaseWidget _portTypeCombox;
+		BaseWidget _dataTypeCombox;
+		QPushButton* _createButton;
+		RTC_XML::RTC_ProfileRTP* _comp;
 
-};
-
-#endif // TEXTEDIT_H
+	};
+}
+#endif // ADDDATAPORTTAB_H

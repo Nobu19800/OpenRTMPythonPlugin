@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file  ComponentList.h
- * @brief RTCƒ‰ƒ“ƒ`ƒƒ[•\¦ƒNƒ‰ƒX
+ * @brief RTCãƒ©ãƒ³ãƒãƒ£ãƒ¼è¡¨ç¤ºã‚¯ãƒ©ã‚¹
  *
  */
 
@@ -40,336 +40,336 @@ class QProcess;
 QT_END_NAMESPACE
 
 
-class CPPComponentInfo;
-class PythonComponentInfo;
+
+namespace rtmiddleware {
+	class CPPComponentInfo;
+	class PythonComponentInfo;
+	/**
+	 * @class ComponentWidget
+	 * @brief RTCè¡¨ç¤ºã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+	 */
+	class ComponentWidget : public QGroupBox
+	{
+		Q_OBJECT
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param path ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒ‘ã‚¹
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		ComponentWidget(QString path, QWidget* parent = Q_NULLPTR);
+		/**
+		 * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒ‘ã‚¹è¨­å®š
+		 * @param path ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒ‘ã‚¹
+		 */
+		void setModulePath(QString path);
+		/**
+		 * @brief ã‚«ãƒ†ã‚´ãƒªå–å¾—
+		 * @return ã‚«ãƒ†ã‚´ãƒª
+		 */
+		QString getCategory();
+		/**
+		* @brief çµ‚äº†å‡¦ç†
+		*/
+		void killprocess();
+		/**
+		* @brief RTCãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å–å¾—
+		* @return RTCãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		*/
+		RTC_XML::RTC_Profile get_comp_prof();
+		/**
+		* @brief èµ·å‹•ã—ã¦ã„ã‚‹ãƒ—ãƒ­ã‚»ã‚¹æ•°ã®å–å¾—
+		* @return èµ·å‹•ã—ã¦ã„ã‚‹ãƒ—ãƒ­ã‚»ã‚¹æ•°
+		*/
+		int get_process_count();
+		/**
+		* @brief ãƒãƒãƒ¼ã‚¸ãƒ£ã§èµ·å‹•ã—ã¦ã„ã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆæ•°ã®å–å¾—(å‘¨æœŸå®Ÿè¡Œã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆ)
+		* @return ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆæ•°
+		*/
+		int get_rtcd_periodic_count();
+		/**
+		* @brief ãƒãƒãƒ¼ã‚¸ãƒ£ã§èµ·å‹•ã—ã¦ã„ã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆæ•°ã®å–å¾—(ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ç”¨å®Ÿè¡Œã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆ)
+		* @return ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆæ•°
+		*/
+		int get_rtcd_sim_count();
+		/**
+		* @enum
+		* @brief å®Ÿè¡Œã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã®ç¨®åˆ¥
+		*/
+		enum ExecContextType {
+			PERIODIC_EXECUTION_CONTEXT,
+			CHOREONOID_EXECUTION_CONTEXT,
+			N_EXEC_CONTEXT_TYPES
+		};
+
+		/**
+		* @brief RTCã‚’ãƒãƒãƒ¼ã‚¸ãƒ£ã§èµ·å‹•
+		*/
+		void run_rtcd(ExecContextType ec_type = CHOREONOID_EXECUTION_CONTEXT);
+
+		/**
+		* @brief ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³é–‹å§‹æ™‚å®Ÿè¡Œé–¢æ•°
+		* @return
+		*/
+		void start();
+		/**
+		* @brief ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³æ›´æ–°å‰å®Ÿè¡Œé–¢æ•°
+		*/
+		void input();
+		/**
+		* @brief ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³æ›´æ–°ä¸­å®Ÿè¡Œé–¢æ•°
+		*/
+		void control();
+		/**
+		* @brief ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³æ›´æ–°å¾Œå®Ÿè¡Œé–¢æ•°
+		*/
+		void output();
+		/**
+		* @brief ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³çµ‚äº†æ™‚å®Ÿè¡Œé–¢æ•°
+		*/
+		void stop();
+	public Q_SLOTS:
+		/**
+		 * @brief RTCã‚’åˆ¥ãƒ—ãƒ­ã‚»ã‚¹ã§èµ·å‹•
+		 */
+		void run_processSlot();
+		/**
+		 * @brief RTCã‚’ãƒãƒãƒ¼ã‚¸ãƒ£ã§èµ·å‹•(å‘¨æœŸå®Ÿè¡Œã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆ)
+		 */
+		void run_rtcd_periodicSlot();
+		/**
+		* @brief RTCã‚’ãƒãƒãƒ¼ã‚¸ãƒ£ã§èµ·å‹•(ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ç”¨ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆ)
+		*/
+		void run_rtcd_simSlot();
 
 
 
-/**
- * @class ComponentWidget
- * @brief RTC•\¦ƒEƒBƒWƒFƒbƒg
- */
-class ComponentWidget : public QGroupBox
-{
-	Q_OBJECT
-public:
-	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param path ƒ‚ƒWƒ…[ƒ‹ƒpƒX
-	 * @param parent eƒEƒBƒWƒFƒbƒg
-	 */
-	ComponentWidget(QString path, QWidget *parent = Q_NULLPTR);
-	/**
-	 * @brief ƒ‚ƒWƒ…[ƒ‹ƒpƒXİ’è
-	 * @param path ƒ‚ƒWƒ…[ƒ‹ƒpƒX
-	 */
-	void setModulePath(QString path);
-	/**
-	 * @brief ƒJƒeƒSƒŠæ“¾
-	 * @return ƒJƒeƒSƒŠ
-	 */
-	QString getCategory();
-	/**
-	* @brief I—¹ˆ—
-	*/
-	void killprocess();
-	/**
-	* @brief RTCƒvƒƒtƒ@ƒCƒ‹ƒIƒuƒWƒFƒNƒg‚Ìæ“¾
-	* @return RTCƒvƒƒtƒ@ƒCƒ‹ƒIƒuƒWƒFƒNƒg
-	*/
-	RTC_XML::RTC_Profile get_comp_prof();
-	/**
-	* @brief ‹N“®‚µ‚Ä‚¢‚éƒvƒƒZƒX”‚Ìæ“¾
-	* @return ‹N“®‚µ‚Ä‚¢‚éƒvƒƒZƒX”
-	*/
-	int get_process_count();
-	/**
-	* @brief ƒ}ƒl[ƒWƒƒ‚Å‹N“®‚µ‚Ä‚¢‚éƒRƒ“ƒ|[ƒlƒ“ƒg”‚Ìæ“¾(üŠúÀsƒRƒ“ƒeƒLƒXƒg)
-	* @return ƒRƒ“ƒ|[ƒlƒ“ƒg”
-	*/
-	int get_rtcd_periodic_count();
-	/**
-	* @brief ƒ}ƒl[ƒWƒƒ‚Å‹N“®‚µ‚Ä‚¢‚éƒRƒ“ƒ|[ƒlƒ“ƒg”‚Ìæ“¾(ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“—pÀsƒRƒ“ƒeƒLƒXƒg)
-	* @return ƒRƒ“ƒ|[ƒlƒ“ƒg”
-	*/
-	int get_rtcd_sim_count();
-	/**
-	* @enum
-	* @brief ÀsƒRƒ“ƒeƒLƒXƒg‚Ìí•Ê
-	*/
-	enum ExecContextType {
-		PERIODIC_EXECUTION_CONTEXT,
-		CHOREONOID_EXECUTION_CONTEXT,
-		N_EXEC_CONTEXT_TYPES
+	private:
+		QString _path;
+		RTC_XML::RTC_Profile _comp;
+		RTCViewWidget* _vw;
+		QVBoxLayout* _mainLayout;
+		QPushButton* _processButton;
+		QPushButton* _periodicButton;
+		QPushButton* _simButton;
+		QVector<QProcess*> _process;
+		QVector<CPPComponentInfo> _cpp_modules;
+		QVector<PythonComponentInfo> _python_module;
+	};
+
+
+	class CPPComponentInfo
+	{
+	public:
+		CPPComponentInfo(RTC::RTObject_impl* obj = NULL, ComponentWidget::ExecContextType ec = ComponentWidget::ExecContextType::PERIODIC_EXECUTION_CONTEXT);
+		CPPComponentInfo(const CPPComponentInfo& obj);
+		RTC::RTObject_impl* _obj;
+		ComponentWidget::ExecContextType _ec;
+	};
+	class PythonComponentInfo
+	{
+	public:
+		PythonComponentInfo(std::string name = "", ComponentWidget::ExecContextType ec = ComponentWidget::ExecContextType::PERIODIC_EXECUTION_CONTEXT);
+		PythonComponentInfo(const PythonComponentInfo& obj);
+		std::string _name;
+		ComponentWidget::ExecContextType _ec;
 	};
 
 	/**
-	* @brief RTC‚ğƒ}ƒl[ƒWƒƒ‚Å‹N“®
-	*/
-	void run_rtcd(ExecContextType ec_type = CHOREONOID_EXECUTION_CONTEXT);
-
-	/**
-	* @brief ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“ŠJnÀsŠÖ”
-	* @return
-	*/
-	void start();
-	/**
-	* @brief ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“XV‘OÀsŠÖ”
-	*/
-	void input();
-	/**
-	* @brief ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“XV’†ÀsŠÖ”
-	*/
-	void control();
-	/**
-	* @brief ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“XVŒãÀsŠÖ”
-	*/
-	void output();
-	/**
-	* @brief ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“I—¹ÀsŠÖ”
-	*/
-	void stop();
-public Q_SLOTS:
-	/**
-	 * @brief RTC‚ğ•ÊƒvƒƒZƒX‚Å‹N“®
+	 * @class ComponentTabWidget
+	 * @brief ã‚«ãƒ†ã‚´ãƒªåˆ¥RTCè¡¨ç¤ºã‚¿ãƒ–
 	 */
-	void run_processSlot();
+	class ComponentTabWidget : public QWidget
+	{
+		Q_OBJECT
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 */
+		ComponentTabWidget();
+		/**
+		 * @brief RTCè¿½åŠ 
+		 * @param cw RTCè¡¨ç¤ºã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		void addComponent(ComponentWidget* cw);
+		/**
+		 * @brief ãƒ¡ã‚¤ãƒ³ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆã®ä¼¸ç¸®å¹…è¨­å®š
+		 * @param v ä¼¸ç¸®å¹…
+		 */
+		void addStretchMain(int v = 0);
+		/**
+		 * @brief ã‚µãƒ–ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆã®ä¼¸ç¸®å¹…è¨­å®š
+		 * @param v ä¼¸ç¸®å¹…
+		 */
+		void addStretchSub(int v = 0);
+		/**
+		* @brief çµ‚äº†å‡¦ç†
+		*/
+		void killprocess();
+		/**
+		* @brief RTCã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆä¸€è¦§å–å¾—
+		* @return RTCã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆä¸€è¦§
+		*/
+		QMap<QString, ComponentWidget*>  getComponents();
+
+	private:
+		QMap<QString, ComponentWidget*> _complist;
+		QVBoxLayout* _mainLayout;
+		QVector<QHBoxLayout*> _subLayouts;
+	};
+
 	/**
-	 * @brief RTC‚ğƒ}ƒl[ƒWƒƒ‚Å‹N“®(üŠúÀsƒRƒ“ƒeƒLƒXƒg)
+	 * @class ComponentList
+	 * @brief RTCãƒ©ãƒ³ãƒãƒ£ãƒ¼è¡¨ç¤ºã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
 	 */
-	void run_rtcd_periodicSlot();
+	class ComponentList : public QTabWidget
+	{
+		Q_OBJECT
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		ComponentList(QWidget* parent = Q_NULLPTR);
+		/**
+		 * @brief RTCè¿½åŠ 
+		 * @param path ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒ‘ã‚¹
+		 */
+		void addComponent(QString path);
+		/**
+		 * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ä¸€è¦§ã‚’ãƒ­ãƒ¼ãƒ‰
+		 * @param path ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒªã‚¹ãƒˆã®ãƒ‘ã‚¹
+		 */
+		void load(QString path);
+		/**
+		* @brief çµ‚äº†å‡¦ç†
+		*/
+		void killprocess();
+		/**
+		* @brief ä¿å­˜ã™ã‚‹
+		* @param archive
+		*/
+		void store(cnoid::Archive& archive);
+		/**
+		* @brief å¾©å…ƒã™ã‚‹
+		* @param archive
+		*/
+		void restore(const cnoid::Archive& archive);
+		/**
+		* @brief å¾©å…ƒã™ã‚‹
+		* @param archive
+		*/
+		void restore_process(const cnoid::Archive& archive);
+		/**
+		* @brief ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³é–‹å§‹æ™‚å®Ÿè¡Œé–¢æ•°
+		* @return
+		*/
+		void start();
+		/**
+		* @brief ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³æ›´æ–°å‰å®Ÿè¡Œé–¢æ•°
+		*/
+		void input();
+		/**
+		* @brief ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³æ›´æ–°ä¸­å®Ÿè¡Œé–¢æ•°
+		*/
+		void control();
+		/**
+		* @brief ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³æ›´æ–°å¾Œå®Ÿè¡Œé–¢æ•°
+		*/
+		void output();
+		/**
+		* @brief ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³çµ‚äº†æ™‚å®Ÿè¡Œé–¢æ•°
+		*/
+		void stop();
+	private:
+		QMap<QString, ComponentTabWidget*> tabList;
+
+
+	};
+
 	/**
-	* @brief RTC‚ğƒ}ƒl[ƒWƒƒ‚Å‹N“®(ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“—pƒRƒ“ƒeƒLƒXƒg)
-	*/
-	void run_rtcd_simSlot();
-	
-	
-
-private:
-	QString _path;
-	RTC_XML::RTC_Profile _comp;
-	RTCViewWidget *_vw;
-	QVBoxLayout *_mainLayout;
-	QPushButton *_processButton;
-	QPushButton *_periodicButton;
-	QPushButton *_simButton;
-	QVector<QProcess*> _process;
-	QVector<CPPComponentInfo> _cpp_modules;
-	QVector<PythonComponentInfo> _python_module;
-};
-
-
-class CPPComponentInfo
-{
-public:
-	CPPComponentInfo(RTC::RTObject_impl* obj=NULL, ComponentWidget::ExecContextType ec= ComponentWidget::ExecContextType::PERIODIC_EXECUTION_CONTEXT);
-	CPPComponentInfo(const CPPComponentInfo &obj);
-	RTC::RTObject_impl* _obj;
-	ComponentWidget::ExecContextType _ec;
-};
-class PythonComponentInfo
-{
-public:
-	PythonComponentInfo(std::string name="", ComponentWidget::ExecContextType ec = ComponentWidget::ExecContextType::PERIODIC_EXECUTION_CONTEXT);
-	PythonComponentInfo(const PythonComponentInfo &obj);
-	std::string _name;
-	ComponentWidget::ExecContextType _ec;
-};
-
-/**
- * @class ComponentTabWidget
- * @brief ƒJƒeƒSƒŠ•ÊRTC•\¦ƒ^ƒu
- */
-class ComponentTabWidget : public QWidget
-{
-	Q_OBJECT
-public:
-	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	 * @class ScrollArea
+	 * @brief ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã‚¨ãƒªã‚¢
 	 */
-	ComponentTabWidget();
-	/**
-	 * @brief RTC’Ç‰Á
-	 * @param cw RTC•\¦ƒEƒBƒWƒFƒbƒg
-	 */
-	void addComponent(ComponentWidget *cw);
-	/**
-	 * @brief ƒƒCƒ“ƒŒƒCƒAƒEƒg‚ÌLk•İ’è
-	 * @param v Lk•
-	 */
-	void addStretchMain(int v = 0);
-	/**
-	 * @brief ƒTƒuƒŒƒCƒAƒEƒg‚ÌLk•İ’è
-	 * @param v Lk•
-	 */
-	void addStretchSub(int v = 0);
-	/**
-	* @brief I—¹ˆ—
-	*/
-	void killprocess();
-	/**
-	* @brief RTCƒEƒBƒWƒFƒbƒgˆê——æ“¾
-	* @return RTCƒEƒBƒWƒFƒbƒgˆê——
-	*/
-	QMap<QString, ComponentWidget *>  getComponents();
-
-private:
-	QMap<QString, ComponentWidget *> _complist;
-	QVBoxLayout *_mainLayout;
-	QVector<QHBoxLayout*> _subLayouts;
-};
-
-/**
- * @class ComponentList
- * @brief RTCƒ‰ƒ“ƒ`ƒƒ[•\¦ƒEƒBƒWƒFƒbƒg
- */
-class ComponentList : public QTabWidget
-{
-	Q_OBJECT
-public:
-	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param parent eƒEƒBƒWƒFƒbƒg
-	 */
-	ComponentList(QWidget *parent = Q_NULLPTR);
-	/**
-	 * @brief RTC’Ç‰Á
-	 * @param path ƒ‚ƒWƒ…[ƒ‹ƒpƒX
-	 */
-	void addComponent(QString path);
-	/**
-	 * @brief ƒ‚ƒWƒ…[ƒ‹ˆê——‚ğƒ[ƒh
-	 * @param path ƒ‚ƒWƒ…[ƒ‹ƒŠƒXƒg‚ÌƒpƒX
-	 */
-	void load(QString path);
-	/**
-	* @brief I—¹ˆ—
-	*/
-	void killprocess();
-	/**
-	* @brief •Û‘¶‚·‚é
-	* @param archive
-	*/
-	void store(cnoid::Archive& archive);
-	/**
-	* @brief •œŒ³‚·‚é
-	* @param archive
-	*/
-	void restore(const cnoid::Archive& archive);
-	/**
-	* @brief •œŒ³‚·‚é
-	* @param archive
-	*/
-	void restore_process(const cnoid::Archive& archive);
-	/**
-	* @brief ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“ŠJnÀsŠÖ”
-	* @return
-	*/
-	void start();
-	/**
-	* @brief ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“XV‘OÀsŠÖ”
-	*/
-	void input();
-	/**
-	* @brief ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“XV’†ÀsŠÖ”
-	*/
-	void control();
-	/**
-	* @brief ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“XVŒãÀsŠÖ”
-	*/
-	void output();
-	/**
-	* @brief ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“I—¹ÀsŠÖ”
-	*/
-	void stop();
-private:
-	QMap<QString, ComponentTabWidget*> tabList;
+	class ScrollArea : public QScrollArea
+	{
+		Q_OBJECT
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		ScrollArea(QWidget* parent = Q_NULLPTR);
+	private Q_SLOTS:
+		/**
+		 * @brief ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«æ™‚ã®ã‚¹ãƒ­ãƒƒãƒˆ
+		 * @param v ç§»å‹•é‡
+		 */
+		void valueChanged(int v);
+	};
 
 
-};
+	class ComponentListView : public cnoid::View
+	{
+		Q_OBJECT
+	public:
+		/**
+		* @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		*/
+		ComponentListView();
+		/**
+		* @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		*/
+		virtual ~ComponentListView();
+		/**
+		* @brief åˆæœŸåŒ–
+		* @param ext
+		*/
+		static void initializeClass(cnoid::ExtensionManager* ext);
+		/**
+		* @brief ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹å–å¾—
+		* @return ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
+		*/
+		static ComponentListView* instance();
+		/**
+		* @brief çµ‚äº†å‡¦ç†
+		*/
+		void killprocess();
+		/**
+		* @brief ä¿å­˜ã™ã‚‹
+		* @param archive
+		*/
+		void store(cnoid::Archive& archive);
+		/**
+		* @brief å¾©å…ƒã™ã‚‹
+		* @param archive
+		*/
+		void restore(const cnoid::Archive& archive);
+		/**
+		* @brief ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³é–‹å§‹æ™‚å®Ÿè¡Œé–¢æ•°
+		* @return
+		*/
+		void start();
+		/**
+		* @brief ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³æ›´æ–°å‰å®Ÿè¡Œé–¢æ•°
+		*/
+		void input();
+		/**
+		* @brief ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³æ›´æ–°ä¸­å®Ÿè¡Œé–¢æ•°
+		*/
+		void control();
+		/**
+		* @brief ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³æ›´æ–°å¾Œå®Ÿè¡Œé–¢æ•°
+		*/
+		void output();
+		/**
+		* @brief ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³çµ‚äº†æ™‚å®Ÿè¡Œé–¢æ•°
+		*/
+		void stop();
+	private:
+		ScrollArea* _area;
+		ComponentList* _mwin;
+	};
+}
 
-/**
- * @class ScrollArea
- * @brief ƒXƒNƒ[ƒ‹ƒGƒŠƒA
- */
-class ScrollArea : public QScrollArea
-{
-	Q_OBJECT
-public:
-	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param parent eƒEƒBƒWƒFƒbƒg
-	 */
-	ScrollArea(QWidget *parent = Q_NULLPTR);
-private Q_SLOTS:
-	/**
-	 * @brief ƒXƒNƒ[ƒ‹‚ÌƒXƒƒbƒg
-	 * @param v ˆÚ“®—Ê
-	 */
-	void valueChanged(int v);
-};
-
-
-class ComponentListView : public cnoid::View
-{
-	Q_OBJECT
-public:
-	/**
-	* @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	*/
-	ComponentListView();
-	/**
-	* @brief ƒfƒXƒgƒ‰ƒNƒ^
-	*/
-	virtual ~ComponentListView();
-	/**
-	* @brief ‰Šú‰»
-	* @param ext 
-	*/
-	static void initializeClass(cnoid::ExtensionManager* ext);
-	/**
-	* @brief ƒCƒ“ƒXƒ^ƒ“ƒXæ“¾
-	* @return ƒCƒ“ƒXƒ^ƒ“ƒX
-	*/
-	static ComponentListView* instance();
-	/**
-	* @brief I—¹ˆ—
-	*/
-	void killprocess();
-	/**
-	* @brief •Û‘¶‚·‚é
-	* @param archive 
-	*/
-	void store(cnoid::Archive& archive);
-	/**
-	* @brief •œŒ³‚·‚é
-	* @param archive
-	*/
-	void restore(const cnoid::Archive& archive);
-	/**
-	* @brief ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“ŠJnÀsŠÖ”
-	* @return
-	*/
-	void start();
-	/**
-	* @brief ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“XV‘OÀsŠÖ”
-	*/
-	void input();
-	/**
-	* @brief ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“XV’†ÀsŠÖ”
-	*/
-	void control();
-	/**
-	* @brief ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“XVŒãÀsŠÖ”
-	*/
-	void output();
-	/**
-	* @brief ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“I—¹ÀsŠÖ”
-	*/
-	void stop();
-private:
-	ScrollArea *_area;
-	ComponentList *_mwin;
-};
-
-#endif // TEXTEDIT_H
+#endif // COMPONENTLIST_H

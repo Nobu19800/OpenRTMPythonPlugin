@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file  ActivityTab.h
- * @brief ŠeƒR[ƒ‹ƒoƒbƒNŠÖ”•ÒWƒ^ƒu
+ * @brief å„ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°ç·¨é›†ã‚¿ãƒ–
  *
  */
 
@@ -32,67 +32,70 @@ class QVBoxLayout;
 QT_END_NAMESPACE
 
 
+namespace rtmiddleware {
 
-
-/**
- * @class ActivityTab
- * @brief ŠeƒR[ƒ‹ƒoƒbƒNŠÖ”•ÒWƒ^ƒu
- */
-class ActivityTab : public BaseTab
-{
-    Q_OBJECT
-
-public:
 	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param name ƒAƒNƒeƒBƒrƒeƒB‚ÌID
-	 * @param text ƒeƒLƒXƒg
-	 * @param parent eƒEƒBƒWƒFƒbƒg
+	 * @class ActivityTab
+	 * @brief å„ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°ç·¨é›†ã‚¿ãƒ–
 	 */
-	ActivityTab(ActivityCode name, QString text, QWidget *parent = Q_NULLPTR);
-	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param name ƒAƒNƒeƒBƒrƒeƒB–¼
-	 * @param text ƒeƒLƒXƒg
-	 * @param parent eƒEƒBƒWƒFƒbƒg
-	 */
-	ActivityTab(QString name, QString text, QWidget *parent = Q_NULLPTR);
+	class ActivityTab : public BaseTab
+	{
+		Q_OBJECT
 
-	/**
-	 * @brief ƒeƒLƒXƒgæ“¾
-	 * @return ƒeƒLƒXƒg
-	 */
-	QString getText();
-	/**
-	 * @brief ƒtƒHƒ“ƒgƒTƒCƒYİ’è
-	 * @param s ƒtƒHƒ“ƒgƒTƒCƒY
-	 */
-	void setFontSize(int s);
-	/**
-	* @brief ƒeƒLƒXƒgİ’è
-	* @return ƒeƒLƒXƒg
-	*/
-	void setText(QString code);
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param name ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£ã®ID
+		 * @param text ãƒ†ã‚­ã‚¹ãƒˆ
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		ActivityTab(ActivityCode name, QString text, QWidget* parent = Q_NULLPTR);
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param name ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£å
+		 * @param text ãƒ†ã‚­ã‚¹ãƒˆ
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		ActivityTab(QString name, QString text, QWidget* parent = Q_NULLPTR);
+
+		/**
+		 * @brief ãƒ†ã‚­ã‚¹ãƒˆå–å¾—
+		 * @return ãƒ†ã‚­ã‚¹ãƒˆ
+		 */
+		QString getText();
+		/**
+		 * @brief ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚ºè¨­å®š
+		 * @param s ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚º
+		 */
+		void setFontSize(int s);
+		/**
+		* @brief ãƒ†ã‚­ã‚¹ãƒˆè¨­å®š
+		* @return ãƒ†ã‚­ã‚¹ãƒˆ
+		*/
+		void setText(QString code);
 
 
-public Q_SLOTS:
+	public Q_SLOTS:
 
 
-protected:
+	protected:
 
 
 
 
 
-//    void fileOpen();
+		//    void fileOpen();
 
 
-private:
-	ActivityCode _name;
-	QString _text;
-	
-	PythonEditor *_editor;
-	Highlighter *_highlight;
-};
+	private:
+		ActivityCode _name;
+		QString _text;
 
-#endif // TEXTEDIT_H
+		PythonEditor* _editor;
+		Highlighter* _highlight;
+	};
+
+}
+
+#endif // ACTIVITYTAB_H
+

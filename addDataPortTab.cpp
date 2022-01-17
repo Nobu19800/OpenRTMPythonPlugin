@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file  addDataPortTab.cpp
- * @brief ƒf[ƒ^ƒ|[ƒgİ’èƒ^ƒu
+ * @brief ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆè¨­å®šã‚¿ãƒ–
  *
  */
 
@@ -37,106 +37,107 @@
 
 #include "gettext.h"
 
-
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @param comp ƒRƒ“ƒ|[ƒlƒ“ƒgƒvƒƒtƒ@ƒCƒ‹ƒIƒuƒWƒFƒNƒg
- * @param viewWidget RTC•\¦ƒEƒBƒWƒFƒbƒg
- * @param listWidget ƒf[ƒ^ƒ|[ƒgˆê——•\¦ƒEƒBƒWƒFƒbƒg
- * @param parent eƒEƒBƒWƒFƒbƒg
- */
-addDataPortTab::addDataPortTab(RTC_XML::RTC_ProfileRTP *comp, RTCViewWidget *viewWidget, DataPortTable *listWidget, QWidget *parent)
-	: BaseTab(parent)
-{
-	_comp = comp;
-
-	_viewWidget = viewWidget;
-	_listWidget = listWidget;
-
-	QList<QString> key_list = dataTypeList.keys();
-	key_list.sort();
-
-	QVector<QString> key_vec = QVector<QString>::fromList(key_list);
-	
-	
-	
-	
-	_portNameTextbox  = addTextBox("portNameTextbox", _("Port Name"), QVector<QString>(), "port");
-	_portTypeCombox = addCombox("portTypeCombox", _("Port Type"), QVector<QString>(), QVector<QString>({ "DataOutPort", "DataInPort" }), "DataOutPort");
-	_dataTypeCombox = addCombox("dataTypeCombox ", _("Data Type"), QVector<QString>(), key_vec, "RTC::TimedLong");
-
-	_createButton = new QPushButton(_("Create"));
-	QObject::connect(_createButton, SIGNAL(clicked()),this, SLOT(createButtonSlot()));
-
-	subLayouts.back()->addWidget(_createButton);
-	mainLayout->addStretch();
-	
-
-}
-
-
-
-/**
- * @brief ƒf[ƒ^ƒ|[ƒgŒŸõ
- * @param name ƒ|[ƒg–¼
- * @param ret ƒf[ƒ^ƒ|[ƒgƒvƒƒtƒ@ƒCƒ‹ƒIƒuƒWƒFƒNƒg
- * @param return trueFw’èƒ|[ƒg–¼‚Ìƒf[ƒ^ƒ|[ƒg‚ª‘¶İ‚µ‚½ false:‘¶İ‚µ‚È‚©‚Á‚½
- */
-bool addDataPortTab::searchPort(QString name, RTC_XML::DataPorts &ret)
-{
-	QVector<RTC_XML::DataPorts> ports = _comp->get_dataports();
-	for (QVector<RTC_XML::DataPorts>::iterator itr = ports.begin(); itr != ports.end(); itr++)
+namespace rtmiddleware {
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param comp ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	 * @param viewWidget RTCè¡¨ç¤ºã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+	 * @param listWidget ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆä¸€è¦§è¡¨ç¤ºã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+	 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+	 */
+	addDataPortTab::addDataPortTab(RTC_XML::RTC_ProfileRTP* comp, RTCViewWidget* viewWidget, DataPortTable* listWidget, QWidget* parent)
+		: BaseTab(parent)
 	{
-		if ((*itr).get_name() == name)
+		_comp = comp;
+
+		_viewWidget = viewWidget;
+		_listWidget = listWidget;
+
+		QList<QString> key_list = dataTypeList.keys();
+		key_list.sort();
+
+		QVector<QString> key_vec = QVector<QString>::fromList(key_list);
+
+
+
+
+		_portNameTextbox = addTextBox("portNameTextbox", _("Port Name"), QVector<QString>(), "port");
+		_portTypeCombox = addCombox("portTypeCombox", _("Port Type"), QVector<QString>(), QVector<QString>({ "DataOutPort", "DataInPort" }), "DataOutPort");
+		_dataTypeCombox = addCombox("dataTypeCombox ", _("Data Type"), QVector<QString>(), key_vec, "RTC::TimedLong");
+
+		_createButton = new QPushButton(_("Create"));
+		QObject::connect(_createButton, SIGNAL(clicked()), this, SLOT(createButtonSlot()));
+
+		subLayouts.back()->addWidget(_createButton);
+		mainLayout->addStretch();
+
+
+	}
+
+
+
+	/**
+	 * @brief ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆæ¤œç´¢
+	 * @param name ãƒãƒ¼ãƒˆå
+	 * @param ret ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	 * @param return trueï¼šæŒ‡å®šãƒãƒ¼ãƒˆåã®ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆãŒå­˜åœ¨ã—ãŸ false:å­˜åœ¨ã—ãªã‹ã£ãŸ
+	 */
+	bool addDataPortTab::searchPort(QString name, RTC_XML::DataPorts& ret)
+	{
+		QVector<RTC_XML::DataPorts> ports = _comp->get_dataports();
+		for (QVector<RTC_XML::DataPorts>::iterator itr = ports.begin(); itr != ports.end(); itr++)
 		{
-			ret = (*itr);
-			return true;
+			if ((*itr).get_name() == name)
+			{
+				ret = (*itr);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * @brief ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆè¿½åŠ 
+	 * @param profile ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	 */
+	void addDataPortTab::addPort(RTC_XML::DataPorts profile)
+	{
+
+		if (_comp != NULL)
+		{
+
+			if (!searchPort(profile.get_name(), profile))
+			{
+
+				_comp->addDataPort(profile);
+				_viewWidget->getRenderRTC()->addDataPort(profile);
+				_listWidget->list_update(_comp->get_dataports());
+
+				sigAddPort(profile);
+			}
+
 		}
 	}
-	return false;
-}
 
-/**
- * @brief ƒf[ƒ^ƒ|[ƒg’Ç‰Á
- * @param profile ƒf[ƒ^ƒ|[ƒgƒvƒƒtƒ@ƒCƒ‹ƒIƒuƒWƒFƒNƒg
- */
-void addDataPortTab::addPort(RTC_XML::DataPorts profile)
-{
 
-	if (_comp != NULL)
+	/**
+	 * @brief ç”Ÿæˆãƒœã‚¿ãƒ³æŠ¼ä¸‹æ™‚ã®ã‚¹ãƒ­ãƒƒãƒˆ
+	 */
+	void addDataPortTab::createButtonSlot()
 	{
-		
-		if (!searchPort(profile.get_name(), profile))
+		RTC_XML::DataPorts profile;
+		QString name = _portNameTextbox.getText();
+		name = name.replace(" ", "");
+		name = name.replace("\t", "");
+		if (name.isEmpty())
 		{
-			
-			_comp->addDataPort(profile);
-			_viewWidget->getRenderRTC()->addDataPort(profile);
-			_listWidget->list_update(_comp->get_dataports());
-
-			sigAddPort(profile);
+			QMessageBox::question(this, _("Creation Faild"), _("Please Input Name"), QMessageBox::Ok);
+			return;
 		}
-		
+		profile.set_name(name);
+		profile.set_portType(_portTypeCombox.getItemText());
+		profile.set_type(_dataTypeCombox.getItemText());
+
+		addPort(profile);
 	}
-}
-
-
-/**
- * @brief ¶¬ƒ{ƒ^ƒ“‰Ÿ‰º‚ÌƒXƒƒbƒg
- */
-void addDataPortTab::createButtonSlot()
-{
-	RTC_XML::DataPorts profile;
-	QString name = _portNameTextbox.getText();
-	name = name.replace(" ", "");
-	name = name.replace("\t", "");
-	if (name.isEmpty())
-	{
-		QMessageBox::question(this, _("Creation Faild"), _("Please Input Name"), QMessageBox::Ok);
-		return;
-	}
-	profile.set_name(name);
-	profile.set_portType(_portTypeCombox.getItemText());
-	profile.set_type(_dataTypeCombox.getItemText());
-
-	addPort(profile);
 }

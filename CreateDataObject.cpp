@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file  CreateDataObject.cpp
- * @brief ƒf[ƒ^Œ^ˆê——
+ * @brief ãƒ‡ãƒ¼ã‚¿å‹ä¸€è¦§
  *
  */
 

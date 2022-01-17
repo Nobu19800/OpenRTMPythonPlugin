@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file  ControlCompWidget.h
- * @brief ƒRƒ“ƒ|[ƒlƒ“ƒgŠÄ‹ƒEƒBƒWƒFƒbƒg
+ * @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆç›£è¦–ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
  *
  */
 
@@ -29,65 +29,66 @@ class QPrinter;
 class QLayout;
 class QLabel;
 class QVBoxLayout;
+class QPushButton;
 QT_END_NAMESPACE
 
 
 
-
-/**
- * @class ControlCompWidget
- * @brief ƒRƒ“ƒ|[ƒlƒ“ƒgŠÄ‹ƒEƒBƒWƒFƒbƒg
- */
-class ControlCompWidget : public BaseTab
-{
-    Q_OBJECT
-
-public:
+namespace rtmiddleware {
 	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param parent eƒEƒBƒWƒFƒbƒg
+	 * @class ControlCompWidget
+	 * @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆç›£è¦–ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
 	 */
-	ControlCompWidget(QWidget *parent = Q_NULLPTR);
-	/**
-	 * @brief İ’è‚µ‚Ä‚¢‚éÀsƒRƒ“ƒeƒLƒXƒg‚ÌIDæ“¾
-	 * @retuen ÀsƒRƒ“ƒeƒLƒXƒg‚ÌID
-	 */
-	int getECNum();
-	cnoid::Signal<void()>  sigActiveButton;
-	cnoid::Signal<void()>  sigDeactiveButton;
-	cnoid::Signal<void()>  sigResetButton;
+	class ControlCompWidget : public BaseTab
+	{
+		Q_OBJECT
 
-	
-
-
-public Q_SLOTS:
-	/**
-	 * @brief ƒAƒNƒeƒBƒuƒ{ƒ^ƒ“‚ÌƒXƒƒbƒg
-	 */
-	void activeButtonSlot();
-	/**
-	 * @brief ”ñƒAƒNƒeƒBƒuƒ{ƒ^ƒ“‚ÌƒXƒƒbƒg
-	 */
-	void deactiveButtonSlot();
-	/**
-	 * @brief ƒŠƒZƒbƒgƒ{ƒ^ƒ“‚ÌƒXƒƒbƒg
-	 */
-	void resetButtonSlot();
-
-protected:
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		ControlCompWidget(QWidget* parent = Q_NULLPTR);
+		/**
+		 * @brief è¨­å®šã—ã¦ã„ã‚‹å®Ÿè¡Œã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã®IDå–å¾—
+		 * @retuen å®Ÿè¡Œã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã®ID
+		 */
+		int getECNum();
+		cnoid::Signal<void()>  sigActiveButton;
+		cnoid::Signal<void()>  sigDeactiveButton;
+		cnoid::Signal<void()>  sigResetButton;
 
 
 
 
+	public Q_SLOTS:
+		/**
+		 * @brief ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãƒœã‚¿ãƒ³ã®ã‚¹ãƒ­ãƒƒãƒˆ
+		 */
+		void activeButtonSlot();
+		/**
+		 * @brief éã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãƒœã‚¿ãƒ³ã®ã‚¹ãƒ­ãƒƒãƒˆ
+		 */
+		void deactiveButtonSlot();
+		/**
+		 * @brief ãƒªã‚»ãƒƒãƒˆãƒœã‚¿ãƒ³ã®ã‚¹ãƒ­ãƒƒãƒˆ
+		 */
+		void resetButtonSlot();
 
-//    void fileOpen();
+	protected:
 
 
-private:
-	QPushButton *_activeButton;
-	QPushButton *_deactiveButton;
-	QPushButton *_resetButton;
-	BaseWidget _ECCombox;
-};
 
-#endif // TEXTEDIT_H
+
+
+		//    void fileOpen();
+
+
+	private:
+		QPushButton* _activeButton;
+		QPushButton* _deactiveButton;
+		QPushButton* _resetButton;
+		BaseWidget _ECCombox;
+	};
+}
+#endif // CONTROLCOMPWIDGET_H

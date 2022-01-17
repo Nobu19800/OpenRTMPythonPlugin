@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file  RTCViewWidget.h
- * @brief RTC•\¦ƒEƒBƒWƒFƒbƒg
+ * @brief RTCè¡¨ç¤ºã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
  *
  */
 
@@ -35,586 +35,586 @@ class QGraphicsView;
 QT_END_NAMESPACE
 
 
-class RenderRTC;
-class RenderRTCRTP;
-class RenderPath;
-class GraphicsView;
-class RTCViewWidget;
-class RTC_MainWindow;
-class DataPortRTP;
-class DataPortDialog;
-class ServicePortRTP;
-class ServicePortDialog;
-
-
-/**
- * @class RenderPath
- * @brief }Œ`•`‰æƒx[ƒXƒIƒuƒWƒFƒNƒg
- */
-class RenderPath : public QObject, public QGraphicsItem
-{
-
-public:
+namespace rtmiddleware {
+	class RenderRTC;
+	class RenderRTCRTP;
+	class RenderPath;
+	class GraphicsView;
+	class RTCViewWidget;
+	class RTC_MainWindow;
+	class DataPortRTP;
+	class DataPortDialog;
+	class ServicePortRTP;
+	class ServicePortDialog;
 	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param scene ƒV[ƒ“ƒIƒuƒWƒFƒNƒg
-	 * @param parent eƒEƒBƒWƒFƒbƒg
+	 * @class RenderPath
+	 * @brief å›³å½¢æç”»ãƒ™ãƒ¼ã‚¹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 	 */
-	RenderPath(QGraphicsScene* scene, QWidget *parent);
-	/**
-	 * @brief ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param obj ƒRƒs[Œ³
-	 */
-	RenderPath(const RenderPath &obj);
-	/**
-	 * @brief •`‰æƒpƒXİ’è
-	 * @param path •`‰æƒpƒXİ’è
-	 */
-	void setPath(QPainterPath path);
-	/**
-	 * @brief FillRule‚Ìİ’è
-	 * @param rule FillRule
-	 */
-	void setFillRule(Qt::FillRule rule);
-	/**
-	 * @brief FillGradient‚Ìİ’è
-	 * @param color1 
-	 * @param color2 
-	 */
-	void setFillGradient(QColor color1, QColor color2);
-	/**
-	 * @brief ƒyƒ“‘¾‚³‚Ìİ’è
-	 * @param width ‘¾‚³
-	 */
-	void setPenWidth(int width);
-	/**
-	 * @brief ƒyƒ“‚ÌFİ’è
-	 * @param color F
-	 */
-	void setPenColor(QColor color);
-	/**
-	 * @brief ‰ñ“]Šp“xİ’è
-	 * @param degrees Šp“x
-	 */
-	void setRotationAngle(int degrees);
-	/**
-	 * @brief ’†SˆÊ’uİ’è
-	 * @param x ˆÊ’u(X)
-	 * @param y ˆÊ’u(Y)
-	 */
-	void setCenterPoint(int x, int y);
-	/**
-	 * @brief ˆÊ’uİ’è
-	 * @param x ˆÊ’u(X)
-	 * @param y ˆÊ’u(Y)
-	 */
-	void setPosition(int x, int y);
-	/**
-	 * @brief ƒTƒCƒYİ’è
-	 * @param width •
-	 * @param height ‚‚³
-	 */
-	void setSize(int width, int height);
-	/**
-	 * @brief ‹éŒ`æ“¾
-	 * @param obj ƒRƒs[Œ³
-	 */
-	QRectF boundingRect() const;
-	/**
-	 * @brief •`‰æÀs
-	 * @param painter 
-	 * @param option 
-	 * @param widget 
-	 */
-	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-	/**
-	 * @brief •`‰æXV
-	 * @param painter 
-	 */
-	void updatePaint(QPainter *painter);
-
-public Q_SLOTS:
-//    void fileNew();
-
-protected:
-
-
-
-
-
-protected:
-
-	QPainterPath _path;
-	int _penWidth;
-	int _rotationAngle;
-	int _pos_x;
-	int _pos_y;
-	int _width;
-	int _height;
-	QColor _fillColor1;
-	QColor _fillColor2;
-	QColor _penColor;
-	int _centerPoint_x;
-	int _centerPoint_y;
-	
-
-};
-
-/**
- * @class RTCViewWidgetBase
- * @brief RTC•\¦ƒx[ƒXƒNƒ‰ƒX
- */
-class RTCViewWidgetBase: public QWidget
-{
-	Q_OBJECT
-public:
-	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param parent eƒEƒBƒWƒFƒbƒg
-	 */
-	RTCViewWidgetBase(QWidget *parent = Q_NULLPTR);
-	/**
-	 * @brief •`‰æRTCƒIƒuƒWƒFƒNƒgæ“¾
-	 * @return •`‰æRTCƒIƒuƒWƒFƒNƒg
-	 */
-	RenderRTC *getRenderRTC();
-protected:
-	QGraphicsScene *_scene;
-	QVBoxLayout *_mainLayout;
-	GraphicsView *_view;
-	RenderRTC *_renderWindow;
-};
-
-/**
- * @class RTCViewWidget
- * @brief RTC•\¦ƒNƒ‰ƒX
- */
-class RTCViewWidget : public RTCViewWidgetBase
-{
-	Q_OBJECT
-public:
-	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param profile RTCƒvƒƒtƒ@ƒCƒ‹
-	 * @param parent eƒEƒBƒWƒFƒbƒg
-	 */
-	RTCViewWidget(RTC_XML::RTC_Profile* profile, QWidget *parent = Q_NULLPTR);
-protected:
-
-
-
-};
-
-/**
- * @class RTCViewWidgetRTP
- * @brief RTC•\¦ƒNƒ‰ƒX(“®“I•ÒW)
- */
-class RTCViewWidgetRTP : public RTCViewWidget
-{
-	Q_OBJECT
-public:
-	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param comp RTCƒvƒƒtƒ@ƒCƒ‹
-	 * @param parent eƒEƒBƒWƒFƒbƒg
-	 */
-	RTCViewWidgetRTP(RTC_XML::RTC_ProfileRTP* comp, QWidget *parent = Q_NULLPTR);
-	/**
-	 * @brief •`‰æRTCƒIƒuƒWƒFƒNƒgæ“¾
-	 * @return •`‰æRTCƒIƒuƒWƒFƒNƒg
-	 */
-	RenderRTCRTP* getRenderRTC();
-private:
-
-};
-
-/**
- * @class GraphicsView
- * @brief }Œ`•\¦ƒIƒuƒWƒFƒNƒg
- */
-class GraphicsView : public QGraphicsView
-{
-	Q_OBJECT
-public:
-	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param scene ƒV[ƒ“ƒIƒuƒWƒFƒNƒg
-	 * @param parent eƒEƒBƒWƒFƒbƒg
-	 */
-	GraphicsView(QGraphicsScene * scene, QWidget * parent = Q_NULLPTR);
-};
-
-/**
- * @class Port
- * @brief Port•`‰æƒx[ƒXƒNƒ‰ƒX
- */
-class Port : public RenderPath
-{
-	Q_OBJECT
-public:
-	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param defsize ƒfƒtƒHƒ‹ƒgƒTƒCƒY
-	 * @param scene ƒV[ƒ“ƒIƒuƒWƒFƒNƒg
-	 * @param parent eƒEƒBƒWƒFƒbƒg
-	 */
-	Port(int defsize, QGraphicsScene* scene, QWidget* parent = Q_NULLPTR);
-	/**
-	 * @brief ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param obj ƒRƒs[Œ³
-	 */
-	Port(const Port &obj);
-	/**
-	 * @brief ƒTƒCƒYİ’è
-	 * @param size ƒTƒCƒY
-	 */
-	void setBoxSize(int size);
-	/**
-	 * @brief •`‰æƒpƒXæ“¾
-	 * @return •`‰æƒpƒX
-	 */
-	virtual QPainterPath getPath() = 0;
-	/**
-	 * @enum PortDir
-	 * @brief ƒ|[ƒg•ûŒüˆê——
-	 */
-	enum PortDir
+	class RenderPath : public QObject, public QGraphicsItem
 	{
-		PORT_LEFT,
-		PORT_RIGHT,
-		PORT_TOP,
-		PORT_BOTTOM
+
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param scene ã‚·ãƒ¼ãƒ³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		RenderPath(QGraphicsScene* scene, QWidget* parent);
+		/**
+		 * @brief ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param obj ã‚³ãƒ”ãƒ¼å…ƒ
+		 */
+		RenderPath(const RenderPath& obj);
+		/**
+		 * @brief æç”»ãƒ‘ã‚¹è¨­å®š
+		 * @param path æç”»ãƒ‘ã‚¹è¨­å®š
+		 */
+		void setPath(QPainterPath path);
+		/**
+		 * @brief FillRuleã®è¨­å®š
+		 * @param rule FillRule
+		 */
+		void setFillRule(Qt::FillRule rule);
+		/**
+		 * @brief FillGradientã®è¨­å®š
+		 * @param color1
+		 * @param color2
+		 */
+		void setFillGradient(QColor color1, QColor color2);
+		/**
+		 * @brief ãƒšãƒ³å¤ªã•ã®è¨­å®š
+		 * @param width å¤ªã•
+		 */
+		void setPenWidth(int width);
+		/**
+		 * @brief ãƒšãƒ³ã®è‰²è¨­å®š
+		 * @param color è‰²
+		 */
+		void setPenColor(QColor color);
+		/**
+		 * @brief å›è»¢è§’åº¦è¨­å®š
+		 * @param degrees è§’åº¦
+		 */
+		void setRotationAngle(int degrees);
+		/**
+		 * @brief ä¸­å¿ƒä½ç½®è¨­å®š
+		 * @param x ä½ç½®(X)
+		 * @param y ä½ç½®(Y)
+		 */
+		void setCenterPoint(int x, int y);
+		/**
+		 * @brief ä½ç½®è¨­å®š
+		 * @param x ä½ç½®(X)
+		 * @param y ä½ç½®(Y)
+		 */
+		void setPosition(int x, int y);
+		/**
+		 * @brief ã‚µã‚¤ã‚ºè¨­å®š
+		 * @param width å¹…
+		 * @param height é«˜ã•
+		 */
+		void setSize(int width, int height);
+		/**
+		 * @brief çŸ©å½¢å–å¾—
+		 * @param obj ã‚³ãƒ”ãƒ¼å…ƒ
+		 */
+		QRectF boundingRect() const;
+		/**
+		 * @brief æç”»å®Ÿè¡Œ
+		 * @param painter
+		 * @param option
+		 * @param widget
+		 */
+		void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
+		/**
+		 * @brief æç”»æ›´æ–°
+		 * @param painter
+		 */
+		void updatePaint(QPainter* painter);
+
+	public Q_SLOTS:
+		//    void fileNew();
+
+	protected:
+
+
+
+
+
+	protected:
+
+		QPainterPath _path;
+		int _penWidth;
+		int _rotationAngle;
+		int _pos_x;
+		int _pos_y;
+		int _width;
+		int _height;
+		QColor _fillColor1;
+		QColor _fillColor2;
+		QColor _penColor;
+		int _centerPoint_x;
+		int _centerPoint_y;
+
+
 	};
-	PortDir _position;
-	int _size;
-protected:
 
+	/**
+	 * @class RTCViewWidgetBase
+	 * @brief RTCè¡¨ç¤ºãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹
+	 */
+	class RTCViewWidgetBase : public QWidget
+	{
+		Q_OBJECT
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		RTCViewWidgetBase(QWidget* parent = Q_NULLPTR);
+		/**
+		 * @brief æç”»RTCã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå–å¾—
+		 * @return æç”»RTCã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		 */
+		RenderRTC* getRenderRTC();
+	protected:
+		QGraphicsScene* _scene;
+		QVBoxLayout* _mainLayout;
+		GraphicsView* _view;
+		RenderRTC* _renderWindow;
+	};
 
-};
-
-/**
- * @class ServicePortWidget
- * @brief ƒT[ƒrƒXƒ|[ƒg•ÒWƒEƒBƒWƒFƒbƒg
- */
-class ServicePortWidget : public BaseTab
-{
-	Q_OBJECT
-public:
 	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param sport ƒT[ƒrƒXƒ|[ƒgƒvƒƒtƒ@ƒCƒ‹
-	 * @param dialog ƒT[ƒrƒXƒ|[ƒgİ’èƒ_ƒCƒAƒƒO
-	 * @param parent eƒEƒBƒWƒFƒbƒg
+	 * @class RTCViewWidget
+	 * @brief RTCè¡¨ç¤ºã‚¯ãƒ©ã‚¹
 	 */
-	ServicePortWidget(ServicePortRTP *sport, ServicePortDialog *dialog, QWidget * parent = Q_NULLPTR);
-	BaseWidget _portNameTextbox;
-	BaseWidget _interfaceNameTextbox;
-	BaseWidget _dinterfaceDirCombox;
-	BaseWidget _interfaceDirCombox;
-	BaseWidget _IDLTextbox;
-	BaseWidget _interfaceTypeCombox;
-	BaseWidget _IDLPathTextbox;
-private Q_SLOTS :
-	/**
-	 * @brief íœƒ{ƒ^ƒ“‰Ÿ‰ºƒXƒƒbƒg
-	 */
-	void deleteButtonSlot();
-
-private:
-	ServicePortDialog *_dialog;
-	QPushButton *_deleteButton;
-};
-
-
-/**
- * @class ServicePortDialog
- * @brief ƒT[ƒrƒXƒ|[ƒgİ’èƒ_ƒCƒAƒƒO
- */
-class ServicePortDialog : public QDialog
-{
-	Q_OBJECT
-public:
-	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param sport ƒT[ƒrƒXƒ|[ƒg•`‰æƒIƒuƒWƒFƒNƒg
-	 * @param parent eƒEƒBƒWƒFƒbƒg
-	 */
-	ServicePortDialog(ServicePortRTP *sport, QWidget * parent = Q_NULLPTR);
-};
-
-/**
- * @class ServicePort
- * @brief ƒT[ƒrƒXƒ|[ƒg•`‰æ
- */
-class ServicePort : public Port
-{
-	Q_OBJECT
-public:
-	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param profile ƒT[ƒrƒXƒ|[ƒgƒvƒƒtƒ@ƒCƒ‹
-	 * @param defsize ƒfƒtƒHƒ‹ƒgƒTƒCƒY
-	 * @param scene ƒV[ƒ“ƒIƒuƒWƒFƒNƒg
-	 * @param parent eƒEƒBƒWƒFƒbƒg
-	 */
-	ServicePort(RTC_XML::ServicePorts profile, int defsize, QGraphicsScene* scene, QWidget* parent = Q_NULLPTR);
-	/**
-	 * @brief •`‰æƒpƒXæ“¾
-	 * @return •`‰æƒpƒX
-	 */
-	virtual QPainterPath getPath();
-	/**
-	 * @brief •`‰æÀs
-	 * @param painter 
-	 * @param option 
-	 * @param widget 
-	 */
-	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-	RTC_XML::ServicePorts _profile;
-protected:
-	QPainterPath _rectPath;
-};
-
-/**
- * @class ServicePortRTP
- * @brief ƒT[ƒrƒXƒ|[ƒg•`‰æ(“®“I•ÒW)
- */
-class ServicePortRTP : public ServicePort
-{
-	Q_OBJECT
-public:
-	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param profile ƒT[ƒrƒXƒ|[ƒgƒvƒƒtƒ@ƒCƒ‹
-	 * @param defsize ƒfƒtƒHƒ‹ƒgƒTƒCƒY
-	 * @param scene ƒV[ƒ“ƒIƒuƒWƒFƒNƒg
-	 * @param mainwindow RTCEditorƒƒCƒ“ƒEƒCƒ“ƒhƒE
-	 * @param parent eƒEƒBƒWƒFƒbƒg
-	 */
-	ServicePortRTP(RTC_XML::ServicePorts profile, int size, QGraphicsScene* scene, RTC_MainWindow *mainwindow, QWidget* parent = Q_NULLPTR);
-protected:
-	/**
-	 * @brief ƒ}ƒEƒXƒ_ƒuƒ‹ƒNƒŠƒbƒN‚ÌƒXƒƒbƒg
-	 * @param event ƒCƒxƒ“ƒg“à—e
-	 */
-	void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
-private:
-	RTC_MainWindow *_mainwindow;
-};
-
-
-/**
- * @class DataPortWidget
- * @brief ƒf[ƒ^ƒ|[ƒg•ÒWƒEƒBƒWƒFƒbƒg
- */
-class DataPortWidget : public BaseTab
-{
-	Q_OBJECT
-public:
-	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param dport ƒf[ƒ^ƒ|[ƒg•`‰æƒIƒuƒWƒFƒNƒg
-	 * @param dialog ƒf[ƒ^ƒ|[ƒg•ÒWƒ_ƒCƒAƒƒO
-	 * @param parent eƒEƒBƒWƒFƒbƒg
-	 */
-	DataPortWidget(DataPortRTP *dport, DataPortDialog *dialog, QWidget * parent = Q_NULLPTR);
-	BaseWidget _portNameTextbox;
-	BaseWidget _portTypeCombox;
-	BaseWidget _dataTypeCombox;
-private Q_SLOTS :
-	/**
-	 * @brief íœƒ{ƒ^ƒ“‰Ÿ‰ºƒXƒƒbƒg
-	 */
-	void deleteButtonSlot();
-
-private:
-	DataPortDialog *_dialog;
-	QPushButton *_deleteButton;
-
-
-};
-
-/**
- * @class DataPortDialog
- * @brief ƒf[ƒ^ƒ|[ƒg•ÒWƒ_ƒCƒAƒƒO
- */
-class DataPortDialog : public QDialog
-{
-	Q_OBJECT
-public:
-	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param dport ƒf[ƒ^ƒ|[ƒg•`‰æƒIƒuƒWƒFƒNƒg
-	 * @param parent eƒEƒBƒWƒFƒbƒg
-	 */
-	DataPortDialog(DataPortRTP *dport, QWidget * parent = Q_NULLPTR);
-};
-
-/**
- * @class DataPort
- * @brief ƒf[ƒ^ƒ|[ƒg•`‰æƒIƒuƒWƒFƒNƒg
- */
-class DataPort : public Port
-{
-	Q_OBJECT
-public:
-	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param profile ƒf[ƒ^ƒ|[ƒgƒvƒƒtƒ@ƒCƒ‹
-	 * @param defsize ƒfƒtƒHƒ‹ƒgƒTƒCƒY
-	 * @param scene ƒV[ƒ“ƒIƒuƒWƒFƒNƒg
-	 * @param parent eƒEƒBƒWƒFƒbƒg
-	 */
-	DataPort(RTC_XML::DataPorts profile, int defsize, QGraphicsScene* scene, QWidget* parent = Q_NULLPTR);
-	/**
-	 * @brief ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param obj ƒRƒs[Œ³
-	 */
-	DataPort(const DataPort &obj);
-	/**
-	 * @brief •`‰æƒpƒXæ“¾
-	 * @return •`‰æƒpƒX
-	 */
-	virtual QPainterPath getPath();
-	/**
-	 * @brief •`‰æÀs
-	 * @param painter 
-	 * @param option 
-	 * @param widget 
-	 */
-	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-	RTC_XML::DataPorts _profile;
-protected:
-	QPainterPath _rectPath;
-
-};
-
-/**
- * @class DataPortRTP
- * @brief ƒf[ƒ^ƒ|[ƒg•`‰æƒIƒuƒWƒFƒNƒg(“®“I•ÒW)
- */
-class DataPortRTP : public DataPort
-{
-	Q_OBJECT
-public:
-	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param profile ƒf[ƒ^ƒ|[ƒgƒvƒƒtƒ@ƒCƒ‹
-	 * @param defsize ƒfƒtƒHƒ‹ƒgƒTƒCƒY
-	 * @param scene ƒV[ƒ“ƒIƒuƒWƒFƒNƒg
-	 * @param mainwindow RTCEditorƒƒCƒ“ƒEƒCƒ“ƒhƒE
-	 * @param parent eƒEƒBƒWƒFƒbƒg
-	 */
-	DataPortRTP(RTC_XML::DataPorts profile, int size, QGraphicsScene* scene, RTC_MainWindow *mainwindow, QWidget* parent = Q_NULLPTR);
-protected:
-	/**
-	 * @brief ƒ}ƒEƒXƒ_ƒuƒ‹ƒNƒŠƒbƒN‚ÌƒXƒƒbƒg
-	 * @param event ƒCƒxƒ“ƒg“à—e
-	 */
-	void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
-private:
-	RTC_MainWindow *_mainwindow;
-};
-
-/**
- * @class RenderRTC
- * @brief RTC•`‰æƒIƒuƒWƒFƒNƒg
- */
-class RenderRTC : public RenderPath
-{
-public:
-	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param scene ƒV[ƒ“ƒIƒuƒWƒFƒNƒg
-	 * @param comp RTCƒvƒƒtƒ@ƒCƒ‹
-	 * @param parent eƒEƒBƒWƒFƒbƒg
-	 */
-	RenderRTC(QGraphicsScene* scene,  RTC_XML::RTC_Profile* comp, QWidget* parent=0);
-	/**
-	 * @brief RTC•`‰æİ’èXV
-	 */
-	void setRTC();
-	/**
-	 * @brief ƒf[ƒ^ƒ|[ƒg’Ç‰Á
-	 * @param profile ƒf[ƒ^ƒ|[ƒgƒvƒƒtƒ@ƒCƒ‹
-	 */
-	virtual void addDataPort(RTC_XML::DataPorts profile);
-	/**
-	 * @brief ƒT[ƒrƒXƒ|[ƒg’Ç‰Á
-	 * @param profile ƒT[ƒrƒXƒ|[ƒgƒvƒƒtƒ@ƒCƒ‹
-	 */
-	virtual void addServicePort(RTC_XML::ServicePorts profile);
-	/**
-	 * @brief ƒ|[ƒgíœ
-	 * @param name ƒ|[ƒg–¼
-	 */
-	virtual void removePort(QString name);
-	/**
-	 * @brief ‘Sƒ|[ƒgíœ
-	 */
-	virtual void removeAllPort();
-	/**
-	 * @brief RTCƒvƒƒtƒ@ƒCƒ‹İ’è
-	 * @param comp RTCƒvƒƒtƒ@ƒCƒ‹
-	 */
-	virtual void load(RTC_XML::RTC_Profile* comp);
-	const int def_size_x = 50;
-	const int def_size_y = 10;
-	/**
-	 * @brief ƒ|[ƒg‘”æ“¾
-	 * @return ƒ|[ƒg‘”
-	 */
-	int getPortNum();
-	
+	class RTCViewWidget : public RTCViewWidgetBase
+	{
+		Q_OBJECT
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param profile RTCãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		RTCViewWidget(RTC_XML::RTC_Profile* profile, QWidget* parent = Q_NULLPTR);
+	protected:
 
 
 
-	int _port_size;
+	};
 
-	QMap <QString, Port*> _ports;
-private:
-	RTC_XML::RTC_Profile* _comp_base;
-	//QMap <QString, QString> _config_params;
-};
+	/**
+	 * @class RTCViewWidgetRTP
+	 * @brief RTCè¡¨ç¤ºã‚¯ãƒ©ã‚¹(å‹•çš„ç·¨é›†)
+	 */
+	class RTCViewWidgetRTP : public RTCViewWidget
+	{
+		Q_OBJECT
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param comp RTCãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		RTCViewWidgetRTP(RTC_XML::RTC_ProfileRTP* comp, QWidget* parent = Q_NULLPTR);
+		/**
+		 * @brief æç”»RTCã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå–å¾—
+		 * @return æç”»RTCã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		 */
+		RenderRTCRTP* getRenderRTC();
+	private:
+
+	};
+
+	/**
+	 * @class GraphicsView
+	 * @brief å›³å½¢è¡¨ç¤ºã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	 */
+	class GraphicsView : public QGraphicsView
+	{
+		Q_OBJECT
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param scene ã‚·ãƒ¼ãƒ³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		GraphicsView(QGraphicsScene* scene, QWidget* parent = Q_NULLPTR);
+	};
+
+	/**
+	 * @class Port
+	 * @brief Portæç”»ãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹
+	 */
+	class Port : public RenderPath
+	{
+		Q_OBJECT
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param defsize ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚µã‚¤ã‚º
+		 * @param scene ã‚·ãƒ¼ãƒ³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		Port(int defsize, QGraphicsScene* scene, QWidget* parent = Q_NULLPTR);
+		/**
+		 * @brief ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param obj ã‚³ãƒ”ãƒ¼å…ƒ
+		 */
+		Port(const Port& obj);
+		/**
+		 * @brief ã‚µã‚¤ã‚ºè¨­å®š
+		 * @param size ã‚µã‚¤ã‚º
+		 */
+		void setBoxSize(int size);
+		/**
+		 * @brief æç”»ãƒ‘ã‚¹å–å¾—
+		 * @return æç”»ãƒ‘ã‚¹
+		 */
+		virtual QPainterPath getPath() = 0;
+		/**
+		 * @enum PortDir
+		 * @brief ãƒãƒ¼ãƒˆæ–¹å‘ä¸€è¦§
+		 */
+		enum PortDir
+		{
+			PORT_LEFT,
+			PORT_RIGHT,
+			PORT_TOP,
+			PORT_BOTTOM
+		};
+		PortDir _position;
+		int _size;
+	protected:
 
 
-/**
- * @class RenderRTCRTP
- * @brief RTC•`‰æƒIƒuƒWƒFƒNƒg(“®“I•ÒW)
- */
-class RenderRTCRTP : public RenderRTC
-{
-	Q_OBJECT
-public:
-	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param mainwindow RTCƒƒCƒ“ƒEƒCƒ“ƒhƒE
-	 * @param scene ƒV[ƒ“ƒIƒuƒWƒFƒNƒg
-	 * @param comp RTCƒvƒƒtƒ@ƒCƒ‹
-	 * @param parent eƒEƒBƒWƒFƒbƒg
-	 */
-	RenderRTCRTP(QGraphicsScene* scene, RTC_MainWindow *mainwindow, RTC_XML::RTC_ProfileRTP* comp, QWidget* parent = Q_NULLPTR);
-	/**
-	 * @brief ƒf[ƒ^ƒ|[ƒg’Ç‰Á
-	 * @param profile ƒf[ƒ^ƒ|[ƒgƒvƒƒtƒ@ƒCƒ‹
-	 */
-	virtual void addDataPort(RTC_XML::DataPorts profile);
-	/**
-	 * @brief ƒT[ƒrƒXƒ|[ƒg’Ç‰Á
-	 * @param profile ƒT[ƒrƒXƒ|[ƒgƒvƒƒtƒ@ƒCƒ‹
-	 */
-	virtual void addServicePort(RTC_XML::ServicePorts profile);
-	RTC_MainWindow *_mainwindow;
-	cnoid::Signal<void(RTC_XML::RTC_ProfileRTP::RTC_State&)>  updateStatus;
-private Q_SLOTS :
-	/**
-	 * @brief RTCó‘ÔŠm”FƒXƒƒbƒg
-	 */
-	void check_rtc();
-private:
-	QTimer *_timer;
-	RTC_XML::RTC_ProfileRTP* _comp;
-	RTC_XML::RTC_ProfileRTP::RTC_State current_state;
-};
+	};
 
-#endif
+	/**
+	 * @class ServicePortWidget
+	 * @brief ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆç·¨é›†ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+	 */
+	class ServicePortWidget : public BaseTab
+	{
+		Q_OBJECT
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param sport ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
+		 * @param dialog ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆè¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		ServicePortWidget(ServicePortRTP* sport, ServicePortDialog* dialog, QWidget* parent = Q_NULLPTR);
+		BaseWidget _portNameTextbox;
+		BaseWidget _interfaceNameTextbox;
+		BaseWidget _dinterfaceDirCombox;
+		BaseWidget _interfaceDirCombox;
+		BaseWidget _IDLTextbox;
+		BaseWidget _interfaceTypeCombox;
+		BaseWidget _IDLPathTextbox;
+	private Q_SLOTS:
+		/**
+		 * @brief å‰Šé™¤ãƒœã‚¿ãƒ³æŠ¼ä¸‹æ™‚ã‚¹ãƒ­ãƒƒãƒˆ
+		 */
+		void deleteButtonSlot();
+
+	private:
+		ServicePortDialog* _dialog;
+		QPushButton* _deleteButton;
+	};
+
+
+	/**
+	 * @class ServicePortDialog
+	 * @brief ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆè¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°
+	 */
+	class ServicePortDialog : public QDialog
+	{
+		Q_OBJECT
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param sport ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆæç”»ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		ServicePortDialog(ServicePortRTP* sport, QWidget* parent = Q_NULLPTR);
+	};
+
+	/**
+	 * @class ServicePort
+	 * @brief ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆæç”»
+	 */
+	class ServicePort : public Port
+	{
+		Q_OBJECT
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param profile ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
+		 * @param defsize ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚µã‚¤ã‚º
+		 * @param scene ã‚·ãƒ¼ãƒ³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		ServicePort(RTC_XML::ServicePorts profile, int defsize, QGraphicsScene* scene, QWidget* parent = Q_NULLPTR);
+		/**
+		 * @brief æç”»ãƒ‘ã‚¹å–å¾—
+		 * @return æç”»ãƒ‘ã‚¹
+		 */
+		virtual QPainterPath getPath();
+		/**
+		 * @brief æç”»å®Ÿè¡Œ
+		 * @param painter
+		 * @param option
+		 * @param widget
+		 */
+		void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
+		RTC_XML::ServicePorts _profile;
+	protected:
+		QPainterPath _rectPath;
+	};
+
+	/**
+	 * @class ServicePortRTP
+	 * @brief ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆæç”»(å‹•çš„ç·¨é›†)
+	 */
+	class ServicePortRTP : public ServicePort
+	{
+		Q_OBJECT
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param profile ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
+		 * @param defsize ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚µã‚¤ã‚º
+		 * @param scene ã‚·ãƒ¼ãƒ³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		 * @param mainwindow RTCEditorãƒ¡ã‚¤ãƒ³ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		ServicePortRTP(RTC_XML::ServicePorts profile, int size, QGraphicsScene* scene, RTC_MainWindow* mainwindow, QWidget* parent = Q_NULLPTR);
+	protected:
+		/**
+		 * @brief ãƒã‚¦ã‚¹ãƒ€ãƒ–ãƒ«ã‚¯ãƒªãƒƒã‚¯æ™‚ã®ã‚¹ãƒ­ãƒƒãƒˆ
+		 * @param event ã‚¤ãƒ™ãƒ³ãƒˆå†…å®¹
+		 */
+		void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
+	private:
+		RTC_MainWindow* _mainwindow;
+	};
+
+
+	/**
+	 * @class DataPortWidget
+	 * @brief ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆç·¨é›†ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+	 */
+	class DataPortWidget : public BaseTab
+	{
+		Q_OBJECT
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param dport ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆæç”»ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		 * @param dialog ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆç·¨é›†ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		DataPortWidget(DataPortRTP* dport, DataPortDialog* dialog, QWidget* parent = Q_NULLPTR);
+		BaseWidget _portNameTextbox;
+		BaseWidget _portTypeCombox;
+		BaseWidget _dataTypeCombox;
+	private Q_SLOTS:
+		/**
+		 * @brief å‰Šé™¤ãƒœã‚¿ãƒ³æŠ¼ä¸‹æ™‚ã‚¹ãƒ­ãƒƒãƒˆ
+		 */
+		void deleteButtonSlot();
+
+	private:
+		DataPortDialog* _dialog;
+		QPushButton* _deleteButton;
+
+
+	};
+
+	/**
+	 * @class DataPortDialog
+	 * @brief ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆç·¨é›†ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
+	 */
+	class DataPortDialog : public QDialog
+	{
+		Q_OBJECT
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param dport ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆæç”»ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		DataPortDialog(DataPortRTP* dport, QWidget* parent = Q_NULLPTR);
+	};
+
+	/**
+	 * @class DataPort
+	 * @brief ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆæç”»ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	 */
+	class DataPort : public Port
+	{
+		Q_OBJECT
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param profile ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
+		 * @param defsize ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚µã‚¤ã‚º
+		 * @param scene ã‚·ãƒ¼ãƒ³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		DataPort(RTC_XML::DataPorts profile, int defsize, QGraphicsScene* scene, QWidget* parent = Q_NULLPTR);
+		/**
+		 * @brief ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param obj ã‚³ãƒ”ãƒ¼å…ƒ
+		 */
+		DataPort(const DataPort& obj);
+		/**
+		 * @brief æç”»ãƒ‘ã‚¹å–å¾—
+		 * @return æç”»ãƒ‘ã‚¹
+		 */
+		virtual QPainterPath getPath();
+		/**
+		 * @brief æç”»å®Ÿè¡Œ
+		 * @param painter
+		 * @param option
+		 * @param widget
+		 */
+		void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
+		RTC_XML::DataPorts _profile;
+	protected:
+		QPainterPath _rectPath;
+
+	};
+
+	/**
+	 * @class DataPortRTP
+	 * @brief ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆæç”»ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ(å‹•çš„ç·¨é›†)
+	 */
+	class DataPortRTP : public DataPort
+	{
+		Q_OBJECT
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param profile ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
+		 * @param defsize ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚µã‚¤ã‚º
+		 * @param scene ã‚·ãƒ¼ãƒ³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		 * @param mainwindow RTCEditorãƒ¡ã‚¤ãƒ³ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		DataPortRTP(RTC_XML::DataPorts profile, int size, QGraphicsScene* scene, RTC_MainWindow* mainwindow, QWidget* parent = Q_NULLPTR);
+	protected:
+		/**
+		 * @brief ãƒã‚¦ã‚¹ãƒ€ãƒ–ãƒ«ã‚¯ãƒªãƒƒã‚¯æ™‚ã®ã‚¹ãƒ­ãƒƒãƒˆ
+		 * @param event ã‚¤ãƒ™ãƒ³ãƒˆå†…å®¹
+		 */
+		void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
+	private:
+		RTC_MainWindow* _mainwindow;
+	};
+
+	/**
+	 * @class RenderRTC
+	 * @brief RTCæç”»ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	 */
+	class RenderRTC : public RenderPath
+	{
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param scene ã‚·ãƒ¼ãƒ³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		 * @param comp RTCãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		RenderRTC(QGraphicsScene* scene, RTC_XML::RTC_Profile* comp, QWidget* parent = 0);
+		/**
+		 * @brief RTCæç”»è¨­å®šæ›´æ–°
+		 */
+		void setRTC();
+		/**
+		 * @brief ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆè¿½åŠ 
+		 * @param profile ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
+		 */
+		virtual void addDataPort(RTC_XML::DataPorts profile);
+		/**
+		 * @brief ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆè¿½åŠ 
+		 * @param profile ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
+		 */
+		virtual void addServicePort(RTC_XML::ServicePorts profile);
+		/**
+		 * @brief ãƒãƒ¼ãƒˆå‰Šé™¤
+		 * @param name ãƒãƒ¼ãƒˆå
+		 */
+		virtual void removePort(QString name);
+		/**
+		 * @brief å…¨ãƒãƒ¼ãƒˆå‰Šé™¤
+		 */
+		virtual void removeAllPort();
+		/**
+		 * @brief RTCãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«è¨­å®š
+		 * @param comp RTCãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
+		 */
+		virtual void load(RTC_XML::RTC_Profile* comp);
+		const int def_size_x = 50;
+		const int def_size_y = 10;
+		/**
+		 * @brief ãƒãƒ¼ãƒˆç·æ•°å–å¾—
+		 * @return ãƒãƒ¼ãƒˆç·æ•°
+		 */
+		int getPortNum();
+
+
+
+
+		int _port_size;
+
+		QMap <QString, Port*> _ports;
+	private:
+		RTC_XML::RTC_Profile* _comp_base;
+		//QMap <QString, QString> _config_params;
+	};
+
+
+	/**
+	 * @class RenderRTCRTP
+	 * @brief RTCæç”»ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ(å‹•çš„ç·¨é›†)
+	 */
+	class RenderRTCRTP : public RenderRTC
+	{
+		Q_OBJECT
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param mainwindow RTCãƒ¡ã‚¤ãƒ³ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦
+		 * @param scene ã‚·ãƒ¼ãƒ³ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		 * @param comp RTCãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		RenderRTCRTP(QGraphicsScene* scene, RTC_MainWindow* mainwindow, RTC_XML::RTC_ProfileRTP* comp, QWidget* parent = Q_NULLPTR);
+		/**
+		 * @brief ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆè¿½åŠ 
+		 * @param profile ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
+		 */
+		virtual void addDataPort(RTC_XML::DataPorts profile);
+		/**
+		 * @brief ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆè¿½åŠ 
+		 * @param profile ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
+		 */
+		virtual void addServicePort(RTC_XML::ServicePorts profile);
+		RTC_MainWindow* _mainwindow;
+		cnoid::Signal<void(RTC_XML::RTC_ProfileRTP::RTC_State&)>  updateStatus;
+	private Q_SLOTS:
+		/**
+		 * @brief RTCçŠ¶æ…‹ç¢ºèªã‚¹ãƒ­ãƒƒãƒˆ
+		 */
+		void check_rtc();
+	private:
+		QTimer* _timer;
+		RTC_XML::RTC_ProfileRTP* _comp;
+		RTC_XML::RTC_ProfileRTP::RTC_State current_state;
+	};
+}
+
+#endif //RTCVIEWWIDGET_H

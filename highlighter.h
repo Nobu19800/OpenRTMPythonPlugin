@@ -1,7 +1,7 @@
-/*!
+ï»¿/*!
  * @file  highlighter.h
- * @brief ƒGƒfƒBƒ^‚ÌƒnƒCƒ‰ƒCƒg‹@”\ƒNƒ‰ƒX
- *        Qt‚ÌƒTƒ“ƒvƒ‹(http://doc.qt.io/qt-5/qtwidgets-richtext-syntaxhighlighter-example.html)‚ğˆê•”•ÏX
+ * @brief ã‚¨ãƒ‡ã‚£ã‚¿ã®ãƒã‚¤ãƒ©ã‚¤ãƒˆæ©Ÿèƒ½ã‚¯ãƒ©ã‚¹
+ *        Qtã®ã‚µãƒ³ãƒ—ãƒ«(http://doc.qt.io/qt-5/qtwidgets-richtext-syntaxhighlighter-example.html)ã‚’ä¸€éƒ¨å¤‰æ›´
  *
  */
 
@@ -16,46 +16,47 @@ class QTextDocument;
 QT_END_NAMESPACE
 
 
-/**
- * @class Highlighter
- * @brief ƒGƒfƒBƒ^‚ÌƒnƒCƒ‰ƒCƒg‹@”\ƒNƒ‰ƒX
- */
-class Highlighter : public QSyntaxHighlighter
-{
-    Q_OBJECT
-
-public:
+namespace rtmiddleware {
 	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param parent eƒEƒBƒWƒFƒbƒg
+	 * @class Highlighter
+	 * @brief ã‚¨ãƒ‡ã‚£ã‚¿ã®ãƒã‚¤ãƒ©ã‚¤ãƒˆæ©Ÿèƒ½ã‚¯ãƒ©ã‚¹
 	 */
-	Highlighter(QTextDocument *parent = Q_NULLPTR);
-
-protected:
-	/**
-	 * @brief 
-	 * @param text 
-	 */
-	void highlightBlock(const QString &text) override;
-
-private:
-	struct HighlightingRule
+	class Highlighter : public QSyntaxHighlighter
 	{
-		QRegExp pattern;
-		QTextCharFormat format;
+		Q_OBJECT
+
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		Highlighter(QTextDocument* parent = Q_NULLPTR);
+
+	protected:
+		/**
+		 * @brief
+		 * @param text
+		 */
+		void highlightBlock(const QString& text) override;
+
+	private:
+		struct HighlightingRule
+		{
+			QRegExp pattern;
+			QTextCharFormat format;
+		};
+		QVector<HighlightingRule> highlightingRules;
+
+		QRegExp commentStartExpression;
+		QRegExp commentEndExpression;
+
+		QTextCharFormat keywordFormat;
+		QTextCharFormat classFormat;
+		QTextCharFormat singleLineCommentFormat;
+		QTextCharFormat multiLineCommentFormat;
+		QTextCharFormat quotationFormat;
+		QTextCharFormat functionFormat;
 	};
-	QVector<HighlightingRule> highlightingRules;
-
-	QRegExp commentStartExpression;
-	QRegExp commentEndExpression;
-
-	QTextCharFormat keywordFormat;
-	QTextCharFormat classFormat;
-	QTextCharFormat singleLineCommentFormat;
-	QTextCharFormat multiLineCommentFormat;
-	QTextCharFormat quotationFormat;
-	QTextCharFormat functionFormat;
-};
-
+}
 
 #endif // HIGHLIGHTER_H

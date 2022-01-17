@@ -1,4 +1,4 @@
-/*
+﻿/*
   This header should not be included in other header files,
   but included in the most bottom position of the inclusion part in the implementation (.cpp) files
   where the message internationalization (texts with _("...") form) is required.

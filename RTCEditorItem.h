@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file  RTCEditorItem.h
- * @brief RTCEditorƒAƒCƒeƒ€
+ * @brief RTCEditorã‚¢ã‚¤ãƒ†ãƒ 
  *
  */
 
@@ -14,10 +14,8 @@
 
 
 
-#include <src/OpenRTMPlugin/RTSItem.h>
-
-#include <coil/Mutex.h>
-#include <coil/Time.h>
+#include <cnoid/OpenRTMPlugin>
+#include <mutex>
 
 
 
@@ -40,74 +38,74 @@ namespace rtmiddleware {
 	
 	/**
 	 * @class RTCEditorItem
-	 * @brief RTCEditorƒAƒCƒeƒ€
+	 * @brief RTCEditorã‚¢ã‚¤ãƒ†ãƒ 
 	 */
 	class CNOID_EXPORT RTCEditorItem : public PyRTCItemBase
 	{
 		
 	public:
 		/**
-		 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		 */
 		RTCEditorItem();
 		/**
-		 * @brief ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-		 * @param org ƒRƒs[Œ³
+		 * @brief ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param org ã‚³ãƒ”ãƒ¼å…ƒ
 		 */
 		RTCEditorItem(const RTCEditorItem& org);
 		/**
-		 * @brief ƒfƒXƒgƒ‰ƒNƒ^
+		 * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		 */
 		virtual ~RTCEditorItem();
 		/**
-		 * @brief ‰Šú‰»ŠÖ”
+		 * @brief åˆæœŸåŒ–é–¢æ•°
 		 * @param ext 
 		 */
 		static void initialize(cnoid::ExtensionManager* ext);
 		/**
-		 * @brief RTCƒ_ƒCƒAƒOƒ‰ƒ€ã‚Ì‘I‘ğƒAƒCƒeƒ€•ÏXÀsŠÖ”
-		 * @param item RTCƒ_ƒCƒAƒOƒ‰ƒ€ã‚Å‘I‘ğ’†‚ÌRTC
+		 * @brief RTCãƒ€ã‚¤ã‚¢ã‚°ãƒ©ãƒ ä¸Šã®é¸æŠã‚¢ã‚¤ãƒ†ãƒ å¤‰æ›´æ™‚å®Ÿè¡Œé–¢æ•°
+		 * @param item RTCãƒ€ã‚¤ã‚¢ã‚°ãƒ©ãƒ ä¸Šã§é¸æŠä¸­ã®RTC
 		 */
 		void onItemSelectionChanged(cnoid::RTSComp* item);
 		/**
-		 * @brief RTC¶¬
-		 * @param name RTC–¼
+		 * @brief RTCç”Ÿæˆ
+		 * @param name RTCå
 		 */
 		void createEditComp(const char* name);
 		/**
-		 * @brief RTC‚Ìƒtƒ@ƒCƒ‹XV
-		 * @param filename Pythonƒtƒ@ƒCƒ‹‚ÌƒpƒX
+		 * @brief RTCã®ãƒ•ã‚¡ã‚¤ãƒ«æ›´æ–°
+		 * @param filename Pythonãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹
 		 */
 		void update_comp(const char *filename);
 		/**
-		 * @brief RTC‚ÌƒAƒNƒeƒBƒu‰»
+		 * @brief RTCã®ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–
 		 */
 		void activate_comp();
 		/**
-		 * @brief RTC‚Ì”ñƒAƒNƒeƒBƒu‰»
+		 * @brief RTCã®éã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–
 		 */
 		void deactivate_comp();
 		/**
-		 * @brief RTC‚ÌƒŠƒZƒbƒg
+		 * @brief RTCã®ãƒªã‚»ãƒƒãƒˆ
 		 */
 		void reset_comp();
 		/**
-		 * @brief RTC‚Ìó‘Ôæ“¾
-		 * @param status RTCƒvƒƒtƒ@ƒCƒ‹
+		 * @brief RTCã®çŠ¶æ…‹å–å¾—
+		 * @param status RTCãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
 		 */
 		void get_status(RTC_XML::RTC_ProfileRTP::RTC_State& status);
 		/**
-		 * @brief ƒf[ƒ^ƒ|[ƒg’Ç‰Á
-		 * @param port ƒf[ƒ^ƒ|[ƒgƒvƒƒtƒ@ƒCƒ‹
+		 * @brief ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆè¿½åŠ 
+		 * @param port ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«
 		 */
 		void add_dataport(RTC_XML::DataPorts port);
 		/**
-		* @brief ƒEƒCƒ“ƒhƒE•\¦
+		* @brief ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦è¡¨ç¤º
 		*/
 		void showWindows();
 		/**
-		* @brief ƒrƒ…[’Ç‰ÁÀsŠÖ”
-		* @param item RTCƒ_ƒCƒAƒOƒ‰ƒ€ã‚Å‘I‘ğ’†‚ÌRTC
+		* @brief ãƒ“ãƒ¥ãƒ¼è¿½åŠ æ™‚å®Ÿè¡Œé–¢æ•°
+		* @param item RTCãƒ€ã‚¤ã‚¢ã‚°ãƒ©ãƒ ä¸Šã§é¸æŠä¸­ã®RTC
 		*/
 		void onVeiwAdded(cnoid::View* view);
 
@@ -115,36 +113,36 @@ namespace rtmiddleware {
 		cnoid::Connection selectionChangedConnection;
 		cnoid::Connection viewAddConnection;
 		RTC_MainWindow *mwin;
-		coil::Mutex m_mutex;
+		std::mutex m_mutex;
 	
 	protected:
 		/**
-		 * @brief ƒvƒƒpƒeƒBİ’è
-		 * @param putProperty ƒvƒƒpƒeƒB 
+		 * @brief ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£è¨­å®š
+		 * @param putProperty ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ 
 		 */
 		virtual void doPutProperties(cnoid::PutPropertyFunction& putProperty);
 		/**
-		 * @brief •¡»‚·‚é
-		 * @return •¡»ƒIƒuƒWƒFƒNƒg
+		 * @brief è¤‡è£½ã™ã‚‹
+		 * @return è¤‡è£½ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 		 */
 		virtual cnoid::Item* doDuplicate() const override;
 		/**
-		 * @brief •Û‘¶‚·‚é
+		 * @brief ä¿å­˜ã™ã‚‹
 		 * @param archive 
 		 */
 		virtual bool store(cnoid::Archive& archive) override;
 		/**
-		 * @brief •œŒ³‚·‚é
+		 * @brief å¾©å…ƒã™ã‚‹
 		 * @param archive 
 		 */
 		virtual bool restore(const cnoid::Archive& archive) override;
 		
 
 		/**
-		 * @brief ‰Šú‰»ÀsŠÖ”
+		 * @brief åˆæœŸåŒ–æ™‚å®Ÿè¡Œé–¢æ•°
 		 * @param ext 
 		 */
-		virtual bool initialize(cnoid::ControllerItemIO* io) override;
+		virtual bool initialize(cnoid::ControllerIO* io) override;
 		/**
 		 * @brief 
 		 */
@@ -156,4 +154,4 @@ namespace rtmiddleware {
 };
 
 
-#endif
+#endif //RTCEDITORITEM_H

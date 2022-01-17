@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file  RTC_MainWindow.cpp
- * @brief RTCEditorƒƒCƒ“ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX
+ * @brief RTCEditorãƒ¡ã‚¤ãƒ³ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹
  *
  */
 
@@ -38,303 +38,304 @@
 #include "gettext.h"
 
 
-
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @param parent eƒEƒBƒWƒFƒbƒg
- */
-ModuleSettingWidget::ModuleSettingWidget(QWidget *parent)
-	: QWidget(parent)
-{
-	mainLayout = new QHBoxLayout();
-	setLayout(mainLayout);
-
-
+namespace rtmiddleware {
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+	 */
+	ModuleSettingWidget::ModuleSettingWidget(QWidget* parent)
+		: QWidget(parent)
+	{
+		mainLayout = new QHBoxLayout();
+		setLayout(mainLayout);
 
 
-	editLayout = new QHBoxLayout();
-	mainLayout->addLayout(editLayout);
-
-	textEdit = new PythonEditor(this);
-	editLayout->addWidget(textEdit);
-
-	Highlighter *highlighter = new Highlighter(textEdit->document());
-}
 
 
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @param parent eƒEƒBƒWƒFƒbƒg
- * @param flags 
- */
-RTC_MainWindow::RTC_MainWindow(QWidget *parent, Qt::WindowFlags flags)
-    : QMainWindow(parent, flags)
-{
-	
-	
-    setObjectName("RTC_MainWindow");
-    setWindowTitle(_("RTC Editor"));
+		editLayout = new QHBoxLayout();
+		mainLayout->addLayout(editLayout);
+
+		textEdit = new PythonEditor(this);
+		editLayout->addWidget(textEdit);
+
+		Highlighter* highlighter = new Highlighter(textEdit->document());
+	}
 
 
-	_comp = new RTC_XML::RTC_ProfileRTP();
-	
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+	 * @param flags
+	 */
+	RTC_MainWindow::RTC_MainWindow(QWidget* parent, Qt::WindowFlags flags)
+		: QMainWindow(parent, flags)
+	{
 
 
-	cw = new QWidget(this);
-	tab_widget = new QTabWidget(this);
+		setObjectName("RTC_MainWindow");
+		setWindowTitle(_("RTC Editor"));
 
-	ml = new QVBoxLayout();
 
-	subLayout = new QHBoxLayout();
-	
+		_comp = new RTC_XML::RTC_ProfileRTP();
 
-	tabLayout = new QVBoxLayout();
-	subLayout->addLayout(tabLayout);
 
-	ml->addLayout(subLayout);
 
-	tabLayout->addWidget(tab_widget);
+		cw = new QWidget(this);
+		tab_widget = new QTabWidget(this);
 
-	/*
-	QHBoxLayout *mlayout = new QHBoxLayout();
-	mlayout->addWidget(cw);
-	setLayout(mlayout);
+		ml = new QVBoxLayout();
+
+		subLayout = new QHBoxLayout();
+
+
+		tabLayout = new QVBoxLayout();
+		subLayout->addLayout(tabLayout);
+
+		ml->addLayout(subLayout);
+
+		tabLayout->addWidget(tab_widget);
+
+		/*
+		QHBoxLayout *mlayout = new QHBoxLayout();
+		mlayout->addWidget(cw);
+		setLayout(mlayout);
+		*/
+		setCentralWidget(cw);
+
+		//setCentralWidget(cw);
+		cw->setLayout(ml);
+		//setCentralWidget(textEdit);
+
+		vw = new RTCViewWidgetRTP(_comp, this);
+		vw->setFixedWidth(350);
+
+		rtcLayout = new QHBoxLayout();
+		subLayout->addLayout(rtcLayout);
+
+		viewLayout = new QVBoxLayout();
+		viewLayout->addWidget(vw);
+
+		_controlCompWidget = new ControlCompWidget();
+		viewLayout->addWidget(_controlCompWidget);
+
+		rtcLayout->addLayout(viewLayout);
+
+
+		rtc_tab_widget = new QTabWidget(this);
+
+		rtc_tab_widget->setFixedWidth(350);
+		rtcLayout->addWidget(rtc_tab_widget);
+
+		_dataport_widget = new DataPortTable();
+		_addDataPortTab = new addDataPortTab(_comp, vw, _dataport_widget, this);
+		rtc_tab_widget->addTab(_addDataPortTab, _("DataPort"));
+		rtc_tab_widget->addTab(_dataport_widget, _("DataPort Variable Name"));
+
+		_config_widget = new ConfigurationTable(this);
+		_addConfigurationTab = new addConfigurationTab(_comp, vw, _config_widget, this);
+		rtc_tab_widget->addTab(_addConfigurationTab, _("Configuration Parameter"));
+		rtc_tab_widget->addTab(_config_widget, _("Configuration Parameter Variable Name"));
+
+
+
+		_serviceport_widget = new ServicePortTable();
+		_addServicePortTab = new addServicePortTab(_comp, vw, _serviceport_widget, this);
+		rtc_tab_widget->addTab(_addServicePortTab, _("ServicePort"));
+		rtc_tab_widget->addTab(_serviceport_widget, _("ServicePort Variable Name"));
+
+
+
+
+
+		//ModuleSettingWidget *msw = new ModuleSettingWidget();
+		//rtcLayout->addWidget(msw);
+		/**/
+		for (int i = 0; i < code_num; i++)
+		{
+			activities[(ActivityCode)i] = "\n\nreturn RTC.RTC_OK";
+			addActivityTab((ActivityCode)i, activities[(ActivityCode)i]);
+
+		}
+
+
+		global_tab = new ActivityTab("global", "");
+		tab_widget->addTab(global_tab, _("Global"));
+
+		tab_widget->setCurrentIndex(code_onExecute);
+
+		save_button = new QPushButton(_("Update"));
+		tabLayout->addWidget(save_button);
+		QObject::connect(save_button, SIGNAL(clicked()), this, SLOT(save_button_slot()));
+
+	}
+
+	/**
+	 * @brief ç·¨é›†ä¸­ã®Pythonãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹å–å¾—
+	 * @return Pythonãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹
+	 */
+	QString RTC_MainWindow::getFileName()
+	{
+		QString filename = "rtc_module.py";
+
+		return _tmp_dir.path() + "/" + filename;
+	}
+
+	/**
+	 * @brief ä¿å­˜ãƒœã‚¿ãƒ³æŠ¼ä¸‹æ™‚ã®ã‚¹ãƒ­ãƒƒãƒˆ
+	 */
+	void RTC_MainWindow::save_button_slot()
+	{
+		//cnoid::MessageView::instance()->putln(0, "save");
+		//std::cout << tmp_dir.path().toStdString() << std::endl;
+
+		QTextCodec* codec = QTextCodec::codecForName("UTF-8");
+		QString file_name = getFileName();
+		QFile file(file_name);
+
+		//std::cout << QDir().mkdir(tmp_dir.path()) << std::endl;
+
+		//std::cout << (_tmp_dir.path() + "/" + filename).toStdString() << std::endl;
+		if (!file.open(QIODevice::WriteOnly))
+		{
+			//std::cout << "test" << std::endl;
+			return;
+		}
+		QTextStream stream(&file);
+		stream.setCodec(codec);
+
+		stream << "#!/usr/bin/env python\n";
+		stream << "# -*- coding: utf-8 -*-\n";
+		stream << "import RTC\n";
+		stream << "import OpenRTM_aist\n";
+
+		{
+			QString text = global_tab->getText();
+
+			stream << text;
+		}
+
+		for (int i = 0; i < code_num; i++)
+		{
+			QString s = Activity_toString((ActivityCode)i);
+			stream << "def " + s + "(self):" + "\n";
+			QString text = tab_list[(ActivityCode)i]->getText();
+			if (text.isEmpty())
+			{
+				text = "return RTC.RTC_OK";
+			}
+			QStringList split_text = text.split("\n");
+			for (QStringList::iterator itr = split_text.begin(); itr < split_text.end(); itr++)
+			{
+				stream << "\t" << (*itr) << "\n";
+			}
+
+		}
+		file.close();
+		//Q_EMIT save_button_signal(file_name);
+		sigSaveButton((const char*)file_name.toLocal8Bit());
+
+	}
+
+
+
+	/**
+	 * @brief ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£ç·¨é›†ã‚¿ãƒ–è¿½åŠ 
+	 * @param name åå‰
+	 * @param text ãƒ†ã‚­ã‚¹ãƒˆ
+	 */
+	void RTC_MainWindow::addActivityTab(ActivityCode name, QString text)
+	{
+		tab_list[name] = new ActivityTab(name, text);
+		QString s = Activity_toString(name);
+
+		tab_widget->addTab(tab_list[name], s);
+
+
+	}
+
+	/**
+	 * @brief ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆå‰Šé™¤
+	 * @param name ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆå
+	 */
+	void RTC_MainWindow::deleteServicePort(QString name)
+	{
+		vw->getRenderRTC()->removePort(name);
+		if (_comp != NULL)
+		{
+			RTC_XML::ServicePorts profile;
+
+			_comp->removeServicePort(name);
+			_serviceport_widget->list_update(_comp->get_svcports());
+		}
+	}
+
+	/**
+	 * @brief ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆå‰Šé™¤
+	 * @param name ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆå
+	 */
+	void RTC_MainWindow::deleteDataPort(QString name)
+	{
+		vw->getRenderRTC()->removePort(name);
+		if (_comp != NULL)
+		{
+			RTC_XML::DataPorts profile;
+
+			_comp->removeDataPort(name);
+			_dataport_widget->list_update(_comp->get_dataports());
+		}
+	}
+
+	/**
+	 * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å‰Šé™¤
+	 * @param name ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å
+	 */
+	void RTC_MainWindow::deleteConfig(QString name)
+	{
+
+		if (_comp != NULL)
+		{
+			RTC_XML::ConfigurationSet profile;
+
+			_comp->removeConfigurationSet(name);
+			_config_widget->list_update(_comp->get_confsets());
+		}
+	}
+
+	/**
+	 * @brief ãƒ¡ãƒ‹ãƒ¥ãƒ¼ä½œæˆ
+	 */
+	void RTC_MainWindow::createMenus()
+	{
+
+	}
+
+	/**
+	* @brief RTCãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå–å¾—
+	* @return RTCãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 	*/
-	setCentralWidget(cw);
-
-	//setCentralWidget(cw);
-	cw->setLayout(ml);
-	//setCentralWidget(textEdit);
-
-	vw = new RTCViewWidgetRTP(_comp, this);
-	vw->setFixedWidth(350);
-
-	rtcLayout = new QHBoxLayout();
-	subLayout->addLayout(rtcLayout);
-
-	viewLayout = new QVBoxLayout();
-	viewLayout->addWidget(vw);
-
-	_controlCompWidget = new ControlCompWidget();
-	viewLayout->addWidget(_controlCompWidget);
-
-	rtcLayout->addLayout(viewLayout);
-
-
-	rtc_tab_widget = new QTabWidget(this);
-
-	rtc_tab_widget->setFixedWidth(350);
-	rtcLayout->addWidget(rtc_tab_widget);
-
-	_dataport_widget = new DataPortTable();
-	_addDataPortTab = new addDataPortTab(_comp, vw, _dataport_widget, this);
-	rtc_tab_widget->addTab(_addDataPortTab, _("DataPort"));
-	rtc_tab_widget->addTab(_dataport_widget, _("DataPort Variable Name"));
-
-	_config_widget = new ConfigurationTable(this);
-	_addConfigurationTab = new addConfigurationTab(_comp, vw, _config_widget, this);
-	rtc_tab_widget->addTab(_addConfigurationTab, _("Configuration Parameter"));
-	rtc_tab_widget->addTab(_config_widget, _("Configuration Parameter Variable Name"));
-
-
-
-	_serviceport_widget = new ServicePortTable();
-	_addServicePortTab = new addServicePortTab(_comp, vw, _serviceport_widget, this);
-	rtc_tab_widget->addTab(_addServicePortTab, _("ServicePort"));
-	rtc_tab_widget->addTab(_serviceport_widget, _("ServicePort Variable Name"));
-
-	
-
-
-
-	//ModuleSettingWidget *msw = new ModuleSettingWidget();
-	//rtcLayout->addWidget(msw);
-	/**/
-	for (int i = 0; i < code_num; i++)
+	RTC_XML::RTC_ProfileRTP* RTC_MainWindow::getRTCProfile()
 	{
-		activities[(ActivityCode)i] = "\n\nreturn RTC.RTC_OK";
-		addActivityTab((ActivityCode)i, activities[(ActivityCode)i]);
-
+		return _comp;
 	}
 
 
-	global_tab = new ActivityTab("global", "");
-	tab_widget->addTab(global_tab, _("Global"));
-	
-	tab_widget->setCurrentIndex(code_onExecute);
-
-	save_button = new QPushButton(_("Update"));
-	tabLayout->addWidget(save_button);
-	QObject::connect(save_button, SIGNAL(clicked()), this, SLOT(save_button_slot()));
-
-}
-
-/**
- * @brief •ÒW’†‚ÌPythonƒtƒ@ƒCƒ‹ƒpƒXŽæ“¾
- * @return Pythonƒtƒ@ƒCƒ‹‚ÌƒpƒX
- */
-QString RTC_MainWindow::getFileName()
-{
-	QString filename = "rtc_module.py";
-	
-	return _tmp_dir.path() + "/" + filename;
-}
-
-/**
- * @brief •Û‘¶ƒ{ƒ^ƒ“‰Ÿ‰ºŽž‚ÌƒXƒƒbƒg
- */
-void RTC_MainWindow::save_button_slot()
-{
-	//cnoid::MessageView::instance()->putln(0, "save");
-	//std::cout << tmp_dir.path().toStdString() << std::endl;
-	
-	QTextCodec* codec = QTextCodec::codecForName("UTF-8");
-	QString file_name = getFileName();
-	QFile file(file_name);
-	
-	//std::cout << QDir().mkdir(tmp_dir.path()) << std::endl;
-
-	//std::cout << (_tmp_dir.path() + "/" + filename).toStdString() << std::endl;
-	if (!file.open(QIODevice::WriteOnly))
+	/**
+	* @brief å®Ÿè£…ã‚³ãƒ¼ãƒ‰å–å¾—
+	* @return å®Ÿè£…ã‚³ãƒ¼ãƒ‰æ–‡å­—åˆ—
+	*/
+	QString RTC_MainWindow::get_code(ActivityCode id)
 	{
-		//std::cout << "test" << std::endl;
-		return;
-	}
-	QTextStream stream(&file);
-	stream.setCodec(codec);
-
-	stream << "#!/usr/bin/env python\n";
-	stream << "# -*- coding: utf-8 -*-\n";
-	stream << "import RTC\n";
-	stream << "import OpenRTM_aist\n";
-	
-	{
-		QString text = global_tab->getText();
-
-		stream << text;
+		return tab_list[id]->getText();
 	}
 
-	for (int i = 0; i < code_num; i++)
+
+	/**
+	* @brief å®Ÿè£…ã‚³ãƒ¼ãƒ‰è¨­å®š
+	* @param id ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã®ID
+	* @param code å®Ÿè£…ã‚³ãƒ¼ãƒ‰æ–‡å­—åˆ—
+	*/
+	void RTC_MainWindow::set_code(ActivityCode id, QString code)
 	{
-		QString s = Activity_toString((ActivityCode)i);
-		stream << "def " + s + "(self):" + "\n";
-		QString text = tab_list[(ActivityCode)i]->getText();
-		if (text.isEmpty())
-		{
-			text = "return RTC.RTC_OK";
-		}
-		QStringList split_text = text.split("\n");
-		for (QStringList::iterator itr = split_text.begin(); itr < split_text.end(); itr++)
-		{
-			stream << "\t" << (*itr) << "\n";
-		}
-		
+		tab_list[id]->setText(code);
 	}
-	file.close();
-	//Q_EMIT save_button_signal(file_name);
-	sigSaveButton((const char*)file_name.toLocal8Bit());
-	
-}
-
-
-
-/**
- * @brief ƒAƒNƒeƒBƒrƒeƒB•ÒWƒ^ƒu’Ç‰Á
- * @param name –¼‘O
- * @param text ƒeƒLƒXƒg
- */
-void RTC_MainWindow::addActivityTab(ActivityCode name, QString text)
-{
-	tab_list[name] = new ActivityTab(name, text);
-	QString s = Activity_toString(name);
-	
-	tab_widget->addTab(tab_list[name], s);
-	
-
-}
-
-/**
- * @brief ƒT[ƒrƒXƒ|[ƒgíœ
- * @param name ƒT[ƒrƒXƒ|[ƒg–¼
- */
-void RTC_MainWindow::deleteServicePort(QString name)
-{
-	vw->getRenderRTC()->removePort(name);
-	if (_comp != NULL)
-	{
-		RTC_XML::ServicePorts profile;
-
-		_comp->removeServicePort(name);
-		_serviceport_widget->list_update(_comp->get_svcports());
-	}
-}
-
-/**
- * @brief ƒf[ƒ^ƒ|[ƒgíœ
- * @param name ƒf[ƒ^ƒ|[ƒg–¼
- */
-void RTC_MainWindow::deleteDataPort(QString name)
-{
-	vw->getRenderRTC()->removePort(name);
-	if (_comp != NULL)
-	{
-		RTC_XML::DataPorts profile;
-
-		_comp->removeDataPort(name);
-		_dataport_widget->list_update(_comp->get_dataports());
-	}
-}
-
-/**
- * @brief ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^íœ
- * @param name ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^–¼
- */
-void RTC_MainWindow::deleteConfig(QString name)
-{
-
-	if (_comp != NULL)
-	{
-		RTC_XML::ConfigurationSet profile;
-
-		_comp->removeConfigurationSet(name);
-		_config_widget->list_update(_comp->get_confsets());
-	}
-}
-
-/**
- * @brief ƒƒjƒ…[ì¬
- */
-void RTC_MainWindow::createMenus()
-{
-
-}
-
-/**
-* @brief RTCƒvƒƒtƒ@ƒCƒ‹ƒIƒuƒWƒFƒNƒgŽæ“¾
-* @return RTCƒvƒƒtƒ@ƒCƒ‹ƒIƒuƒWƒFƒNƒg
-*/
-RTC_XML::RTC_ProfileRTP *RTC_MainWindow::getRTCProfile()
-{
-	return _comp;
-}
-
-
-/**
-* @brief ŽÀ‘•ƒR[ƒhŽæ“¾
-* @return ŽÀ‘•ƒR[ƒh•¶Žš—ñ
-*/
-QString RTC_MainWindow::get_code(ActivityCode id)
-{
-	return tab_list[id]->getText();
-}
-
-
-/**
-* @brief ŽÀ‘•ƒR[ƒhÝ’è
-* @param id ƒR[ƒ‹ƒoƒbƒN‚ÌID
-* @param code ŽÀ‘•ƒR[ƒh•¶Žš—ñ
-*/
-void RTC_MainWindow::set_code(ActivityCode id, QString code)
-{
-	tab_list[id]->setText(code);
 }

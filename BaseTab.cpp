@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file  BaseTab.cpp
- * @brief ƒ^ƒu‚ÌŠî–{ƒNƒ‰ƒX
+ * @brief ã‚¿ãƒ–ã®åŸºæœ¬ã‚¯ãƒ©ã‚¹
  *
  */
 
@@ -32,180 +32,181 @@
 
 #include "BaseTab.h"
 
-
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @param parent eƒEƒBƒWƒFƒbƒg
- */
-BaseTab::BaseTab(QWidget *parent)
-    : QWidget(parent),
-	widNum(0)
-{
-
-	mainLayout = new QVBoxLayout();
-	setLayout(mainLayout);
-	subLayouts.append(new QVBoxLayout());
-	mainLayout->addLayout(subLayouts[subLayouts.size()-1]);
-}
-
-
-/**
- * @brief ƒEƒBƒWƒFƒbƒg’Ç‰Á
- * @param wid ’Ç‰ÁƒEƒBƒWƒFƒbƒg
- * @param name –¼‘O
- * @param label ƒ‰ƒxƒ‹–¼
- * @param t ƒEƒBƒWƒFƒbƒg‚Ìí•Ê
- * @return ƒEƒBƒWƒFƒbƒgŠi”[ƒNƒ‰ƒX
- */
-BaseWidget BaseTab::apendWidget(QWidget *wid, QString name, QString label, WidgetType t)
-{
-	QGroupBox *widget = new QGroupBox(label);
-	QVBoxLayout *layout = new QVBoxLayout();
-	widget->setLayout(layout);
-
-	layout->addWidget(wid);
-	subLayouts.back()->addWidget(widget);
-	subLayouts.back()->addStretch();
-
-
-	WidList[name] = BaseWidget(wid, layout, t);
-
-	return WidList[name];
-}
-
-
-
-/**
- * @brief ƒRƒ“ƒ{ƒ{ƒbƒNƒX’Ç‰Á
- * @param name –¼‘O
- * @param label ƒ‰ƒxƒ‹–¼
- * @param value ‰Šú‚Ì’l
- * @param ls ƒAƒCƒeƒ€ƒŠƒXƒg
- * @param default_s ƒfƒtƒHƒ‹ƒg’l
- * @return ƒEƒBƒWƒFƒbƒgŠi”[ƒNƒ‰ƒX
- */
-BaseWidget BaseTab::addCombox(QString name, QString label, QVector<QString> value, QVector<QString> ls, QString default_s)
-{
-	QComboBox *wid_combo = new QComboBox();
-	QWidget *wid = wid_combo;
-	
-
-	for(QVector<QString>::iterator it = ls.begin();it != ls.end(); ++it)
+namespace rtmiddleware {
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+	 */
+	BaseTab::BaseTab(QWidget* parent)
+		: QWidget(parent),
+		widNum(0)
 	{
-		wid_combo->addItem(*it);
+
+		mainLayout = new QVBoxLayout();
+		setLayout(mainLayout);
+		subLayouts.append(new QVBoxLayout());
+		mainLayout->addLayout(subLayouts[subLayouts.size() - 1]);
 	}
 
-	if(!value.isEmpty())
+
+	/**
+	 * @brief ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆè¿½åŠ 
+	 * @param wid è¿½åŠ ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+	 * @param name åå‰
+	 * @param label ãƒ©ãƒ™ãƒ«å
+	 * @param t ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆã®ç¨®åˆ¥
+	 * @return ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆæ ¼ç´ã‚¯ãƒ©ã‚¹
+	 */
+	BaseWidget BaseTab::apendWidget(QWidget* wid, QString name, QString label, WidgetType t)
 	{
-		if(!value[0].isEmpty())
+		QGroupBox* widget = new QGroupBox(label);
+		QVBoxLayout* layout = new QVBoxLayout();
+		widget->setLayout(layout);
+
+		layout->addWidget(wid);
+		subLayouts.back()->addWidget(widget);
+		subLayouts.back()->addStretch();
+
+
+		WidList[name] = BaseWidget(wid, layout, t);
+
+		return WidList[name];
+	}
+
+
+
+	/**
+	 * @brief ã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹è¿½åŠ 
+	 * @param name åå‰
+	 * @param label ãƒ©ãƒ™ãƒ«å
+	 * @param value åˆæœŸã®å€¤
+	 * @param ls ã‚¢ã‚¤ãƒ†ãƒ ãƒªã‚¹ãƒˆ
+	 * @param default_s ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤
+	 * @return ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆæ ¼ç´ã‚¯ãƒ©ã‚¹
+	 */
+	BaseWidget BaseTab::addCombox(QString name, QString label, QVector<QString> value, QVector<QString> ls, QString default_s)
+	{
+		QComboBox* wid_combo = new QComboBox();
+		QWidget* wid = wid_combo;
+
+
+		for (QVector<QString>::iterator it = ls.begin(); it != ls.end(); ++it)
 		{
-			wid_combo->setCurrentIndex(wid_combo->findText(value[0]));
+			wid_combo->addItem(*it);
+		}
+
+		if (!value.isEmpty())
+		{
+			if (!value[0].isEmpty())
+			{
+				wid_combo->setCurrentIndex(wid_combo->findText(value[0]));
+			}
+			else
+			{
+				wid_combo->setCurrentIndex(wid_combo->findText(default_s));
+			}
 		}
 		else
 		{
 			wid_combo->setCurrentIndex(wid_combo->findText(default_s));
 		}
+
+		BaseWidget wl = apendWidget(wid, name, label, Combox);
+
+		return wl;
+
+
 	}
-	else
+
+
+	/**
+	 * @brief ãƒ©ã‚¤ãƒ³ãƒ†ã‚­ã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹è¿½åŠ 
+	 * @param name åå‰
+	 * @param label ãƒ©ãƒ™ãƒ«å
+	 * @param value åˆæœŸã®å€¤
+	 * @param default_s ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤
+	 * @return ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆæ ¼ç´ã‚¯ãƒ©ã‚¹
+	 */
+	BaseWidget BaseTab::addTextBox(QString name, QString label, QVector<QString> value, QString default_s)
 	{
-		wid_combo->setCurrentIndex(wid_combo->findText(default_s));
+		QLineEdit* wid_line = new QLineEdit();
+		QWidget* wid = wid_line;
+
+
+
+
+		if (value.isEmpty())
+		{
+			wid_line->setText(default_s);
+		}
+		else if (value[0].isEmpty())
+		{
+			wid_line->setText(default_s);
+		}
+		else
+		{
+			wid_line->setText(value[0]);
+		}
+
+		BaseWidget wl = apendWidget(wid, name, label, TextBox);
+
+		return wl;
+
+
 	}
 
-	BaseWidget wl = apendWidget(wid, name, label, Combox);
 
-	return wl;
-
-
-}
-
-
-/**
- * @brief ƒ‰ƒCƒ“ƒeƒLƒXƒgƒ{ƒbƒNƒX’Ç‰Á
- * @param name –¼‘O
- * @param label ƒ‰ƒxƒ‹–¼
- * @param value ‰Šú‚Ì’l
- * @param default_s ƒfƒtƒHƒ‹ƒg’l
- * @return ƒEƒBƒWƒFƒbƒgŠi”[ƒNƒ‰ƒX
- */
-BaseWidget BaseTab::addTextBox(QString name, QString label, QVector<QString> value, QString default_s)
-{
-	QLineEdit *wid_line = new QLineEdit();
-	QWidget *wid = wid_line;
-	
-
-	
-
-	if(value.isEmpty())
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param widget ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+	 * @param layout ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆ
+	 * @param t ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆç¨®åˆ¥
+	 */
+	BaseWidget::BaseWidget(QWidget* widget, QLayout* layout, WidgetType t)
+		: _widget(widget),
+		_layout(layout),
+		_type(t)
 	{
-		wid_line->setText(default_s);
 	}
-	else if(value[0].isEmpty())
+
+	/**
+	 * @brief ãƒ©ã‚¤ãƒ³ãƒ†ã‚­ã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã«ãƒ†ã‚­ã‚¹ãƒˆè¨­å®š
+	 * @param text ãƒ†ã‚­ã‚¹ãƒˆ
+	 */
+	void BaseWidget::setText(QString text)
 	{
-		wid_line->setText(default_s);
+		QLineEdit* wid = dynamic_cast<QLineEdit*>(_widget);
+		if (wid != NULL)
+		{
+			wid->setText(text);
+		}
 	}
-	else
+
+	/**
+	 * @brief ãƒ©ã‚¤ãƒ³ãƒ†ã‚­ã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã®ãƒ†ã‚­ã‚¹ãƒˆå–å¾—
+	 * @return ãƒ†ã‚­ã‚¹ãƒˆ
+	 */
+	QString BaseWidget::getText()
 	{
-		wid_line->setText(value[0]);
+		QLineEdit* wid = dynamic_cast<QLineEdit*>(_widget);
+		if (wid != NULL)
+		{
+			return wid->text();
+		}
+		return "";
 	}
 
-	BaseWidget wl = apendWidget(wid, name, label, TextBox);
-
-	return wl;
-
-
-}
-
-
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @param widget ƒEƒBƒWƒFƒbƒg
- * @param layout ƒŒƒCƒAƒEƒg
- * @param t ƒEƒBƒWƒFƒbƒgí•Ê
- */
-BaseWidget::BaseWidget(QWidget *widget, QLayout *layout, WidgetType t)
-	: _widget(widget),
-	  _layout(layout),
-	  _type(t)
-{
-}
-
-/**
- * @brief ƒ‰ƒCƒ“ƒeƒLƒXƒgƒ{ƒbƒNƒX‚ÉƒeƒLƒXƒgİ’è
- * @param text ƒeƒLƒXƒg
- */
-void BaseWidget::setText(QString text)
-{
-	QLineEdit *wid = dynamic_cast<QLineEdit*>(_widget);
-	if (wid != NULL)
+	/**
+	 * @brief ã‚³ãƒ³ãƒœãƒœãƒƒã‚¯ã‚¹ã®ãƒ†ã‚­ã‚¹ãƒˆå–å¾—
+	 * @return ãƒ†ã‚­ã‚¹ãƒˆ
+	 */
+	QString BaseWidget::getItemText()
 	{
-		wid->setText(text);
+		QComboBox* wid = dynamic_cast<QComboBox*>(_widget);
+		if (wid != NULL)
+		{
+			return wid->currentText();
+		}
+		return "";
 	}
-}
-
-/**
- * @brief ƒ‰ƒCƒ“ƒeƒLƒXƒgƒ{ƒbƒNƒX‚ÌƒeƒLƒXƒgæ“¾
- * @return ƒeƒLƒXƒg
- */
-QString BaseWidget::getText()
-{
-	QLineEdit *wid = dynamic_cast<QLineEdit*>(_widget);
-	if (wid != NULL)
-	{
-		return wid->text();
-	}
-	return "";
-}
-
-/**
- * @brief ƒRƒ“ƒ{ƒ{ƒbƒNƒX‚ÌƒeƒLƒXƒgæ“¾
- * @return ƒeƒLƒXƒg
- */
-QString BaseWidget::getItemText()
-{
-	QComboBox *wid = dynamic_cast<QComboBox*>(_widget);
-	if (wid != NULL)
-	{
-		return wid->currentText();
-	}
-	return "";
 }

@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file  ComponentListItem.h
- * @brief ƒRƒ“ƒ|[ƒlƒ“ƒgƒŠƒXƒgƒAƒCƒeƒ€
+ * @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãƒªã‚¹ãƒˆã‚¢ã‚¤ãƒ†ãƒ 
  *
  */
 
@@ -60,75 +60,75 @@ QT_END_NAMESPACE
 namespace rtmiddleware {
 	/**
 	 * @class ComponentListItem
-	 * @brief ƒRƒ“ƒ|[ƒlƒ“ƒgƒŠƒXƒgƒAƒCƒeƒ€
+	 * @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãƒªã‚¹ãƒˆã‚¢ã‚¤ãƒ†ãƒ 
 	 */
 	class CNOID_EXPORT ComponentListItem : public cnoid::ControllerItem
 	{
 	public:
 		/**
-		 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		 */
 		ComponentListItem();
 		/**
-		 * @brief ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-		 * @param org ƒRƒs[Œ³
+		 * @brief ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param org ã‚³ãƒ”ãƒ¼å…ƒ
 		 */
 		ComponentListItem(const ComponentListItem& org);
 		/**
-		 * @brief ƒfƒXƒgƒ‰ƒNƒ^
+		 * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		 */
 		virtual ~ComponentListItem();
 		/**
-		 * @brief ‰Šú‰»ŠÖ”
+		 * @brief åˆæœŸåŒ–é–¢æ•°
 		 * @param ext 
 		 */
 		static void initialize(cnoid::ExtensionManager* ext);
 
 		/**
-		* @brief ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“ŠJnÀsŠÖ”
+		* @brief ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³é–‹å§‹æ™‚å®Ÿè¡Œé–¢æ•°
 		* @return
 		*/
 		virtual bool start();
 		/**
-		* @brief ‚İ•æ“¾
-		* @return ‚İ•
+		* @brief åˆ»ã¿å¹…å–å¾—
+		* @return åˆ»ã¿å¹…
 		*/
 		virtual double timeStep() const;
 		/**
-		* @brief ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“XV‘OÀsŠÖ”
+		* @brief ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³æ›´æ–°å‰å®Ÿè¡Œé–¢æ•°
 		*/
 		virtual void input();
 		/**
-		* @brief ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“XV’†ÀsŠÖ”
+		* @brief ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³æ›´æ–°ä¸­å®Ÿè¡Œé–¢æ•°
 		*/
 		virtual bool control();
 		/**
-		* @brief ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“XVŒãÀsŠÖ”
+		* @brief ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³æ›´æ–°å¾Œå®Ÿè¡Œé–¢æ•°
 		*/
 		virtual void output();
 		/**
-		* @brief ƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“I—¹ÀsŠÖ”
+		* @brief ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³çµ‚äº†æ™‚å®Ÿè¡Œé–¢æ•°
 		*/
 		virtual void stop();
 
 	protected:
 		/**
-		 * @brief ƒvƒƒpƒeƒBİ’è
-		 * @param putProperty ƒvƒƒpƒeƒB 
+		 * @brief ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£è¨­å®š
+		 * @param putProperty ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ 
 		 */
 		virtual void doPutProperties(cnoid::PutPropertyFunction& putProperty);
 		/**
-		 * @brief •¡»‚·‚é
-		 * @return •¡»ƒIƒuƒWƒFƒNƒg
+		 * @brief è¤‡è£½ã™ã‚‹
+		 * @return è¤‡è£½ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 		 */
 		virtual cnoid::Item* doDuplicate() const override;
 		/**
-		 * @brief •Û‘¶‚·‚é
+		 * @brief ä¿å­˜ã™ã‚‹
 		 * @param archive 
 		 */
 		virtual bool store(cnoid::Archive& archive) override;
 		/**
-		 * @brief •œŒ³‚·‚é
+		 * @brief å¾©å…ƒã™ã‚‹
 		 * @param archive 
 		 */
 		virtual bool restore(const cnoid::Archive& archive) override;
@@ -148,4 +148,4 @@ namespace rtmiddleware {
 };
 
 
-#endif
+#endif // COMPONENTLISTITEM_H

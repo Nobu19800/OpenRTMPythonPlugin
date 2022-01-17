@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file  ActivityTab.cpp
- * @brief ŠeƒR[ƒ‹ƒoƒbƒNŠÖ”•ÒWƒ^ƒu
+ * @brief å„ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°ç·¨é›†ã‚¿ãƒ–
  *
  */
 
@@ -35,96 +35,97 @@
 #include "ActivityTab.h"
 
 
+namespace rtmiddleware {
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param name ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£ã®ID
+	 * @param text ãƒ†ã‚­ã‚¹ãƒˆ
+	 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+	 */
+	ActivityTab::ActivityTab(ActivityCode name, QString text, QWidget* parent)
+		: BaseTab(parent)
+	{
 
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @param name ƒAƒNƒeƒBƒrƒeƒB‚ÌID
- * @param text ƒeƒLƒXƒg
- * @param parent eƒEƒBƒWƒFƒbƒg
- */
-ActivityTab::ActivityTab(ActivityCode name, QString text, QWidget *parent)
-	: BaseTab(parent)
-{
 
-
-	_name = name;
-	_text = text;
-
-	
-
-	_editor = new PythonEditor();
-	
-	
-	mainLayout->addWidget(_editor);
-
-	_highlight = new Highlighter(_editor->document());
-	_editor->setPlainText(_text);
-	setLayout(mainLayout);
-	
-	_editor->textCursor().setPosition(0, QTextCursor::MoveAnchor);
-	
-	
-	this->setMinimumWidth(300);
-
-}
-
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @param name ƒAƒNƒeƒBƒrƒeƒB–¼
- * @param text ƒeƒLƒXƒg
- * @param parent eƒEƒBƒWƒFƒbƒg
- */
-ActivityTab::ActivityTab(QString name, QString text, QWidget *parent)
-	: BaseTab(parent)
-{
-
-	
-
-	_name = code_num;
-	_text = text;
+		_name = name;
+		_text = text;
 
 
 
-	_editor = new PythonEditor();
-	
-
-	mainLayout->addWidget(_editor);
-
-	_highlight = new Highlighter(_editor->document());
-	_editor->setPlainText(_text);
-	setLayout(mainLayout);
-
-	_editor->textCursor().setPosition(0, QTextCursor::MoveAnchor);
-
-	
-	this->setMinimumWidth(300);
-
-}
-
-/**
- * @brief ƒeƒLƒXƒgŽæ“¾
- * @return ƒeƒLƒXƒg
- */
-QString ActivityTab::getText()
-{
-	return _editor->toPlainText();
-}
-
-/**
-* @brief ƒeƒLƒXƒgÝ’è
-* @return ƒeƒLƒXƒg
-*/
-void ActivityTab::setText(QString code)
-{
-	_editor->setText(code);
-}
+		_editor = new PythonEditor();
 
 
-/**
- * @brief ƒtƒHƒ“ƒgƒTƒCƒYÝ’è
- * @param s ƒtƒHƒ“ƒgƒTƒCƒY
- */
-void ActivityTab::setFontSize(int s)
-{
-	_editor->setFontSize(s);
+		mainLayout->addWidget(_editor);
+
+		_highlight = new Highlighter(_editor->document());
+		_editor->setPlainText(_text);
+		setLayout(mainLayout);
+
+		_editor->textCursor().setPosition(0, QTextCursor::MoveAnchor);
+
+
+		this->setMinimumWidth(300);
+
+	}
+
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param name ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£å
+	 * @param text ãƒ†ã‚­ã‚¹ãƒˆ
+	 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+	 */
+	ActivityTab::ActivityTab(QString name, QString text, QWidget* parent)
+		: BaseTab(parent)
+	{
+
+
+
+		_name = code_num;
+		_text = text;
+
+
+
+		_editor = new PythonEditor();
+
+
+		mainLayout->addWidget(_editor);
+
+		_highlight = new Highlighter(_editor->document());
+		_editor->setPlainText(_text);
+		setLayout(mainLayout);
+
+		_editor->textCursor().setPosition(0, QTextCursor::MoveAnchor);
+
+
+		this->setMinimumWidth(300);
+
+	}
+
+	/**
+	 * @brief ãƒ†ã‚­ã‚¹ãƒˆå–å¾—
+	 * @return ãƒ†ã‚­ã‚¹ãƒˆ
+	 */
+	QString ActivityTab::getText()
+	{
+		return _editor->toPlainText();
+	}
+
+	/**
+	* @brief ãƒ†ã‚­ã‚¹ãƒˆè¨­å®š
+	* @return ãƒ†ã‚­ã‚¹ãƒˆ
+	*/
+	void ActivityTab::setText(QString code)
+	{
+		_editor->setText(code);
+	}
+
+
+	/**
+	 * @brief ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚ºè¨­å®š
+	 * @param s ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚º
+	 */
+	void ActivityTab::setFontSize(int s)
+	{
+		_editor->setFontSize(s);
+	}
 }

@@ -1,21 +1,15 @@
-/*!
+Ôªø/*!
  * @file  PyRTCItem.cpp
- * @brief PyRTCÉAÉCÉeÉÄ
+ * @brief PyRTC„Ç¢„Ç§„ÉÜ„É†
  *
  */
 
 #include <cnoid/MenuManager>
 #include <cnoid/MessageView>
-#include <boost/bind.hpp>
-
-
-
-
-#include <boost/ref.hpp>
 
 #include <cnoid/PythonExecutor>
 #include <cnoid/PyUtil>
-#include <boost/version.hpp>
+#include "cnoid/PythonPlugin"
 
 #include <cnoid/Item>
 #include <cnoid/ItemManager>
@@ -26,7 +20,8 @@
 #include <cnoid/Body>
 #include <cnoid/Light>
 #include <cnoid/Archive>
-
+#include <cnoid/stdx/filesystem>
+#include <fmt/format.h>
 
 
 #include <QLayout>
@@ -44,39 +39,32 @@
 #include <cnoid/FileUtil>
 #include <cnoid/ExecutablePath>
 
-#ifdef CNOID_USE_PYBIND11
 #include <pybind11/embed.h>
 namespace py = pybind11;
-#else
-#include <boost/python.hpp>
-namespace py = boost::python;
-#endif
 
 
 #include "PyRTCItem.h"
 #include "gettext.h"
 
 using namespace cnoid;
-using namespace boost;
-using namespace rtmiddleware;
 
 
 /**
  * @class PyGILock
- * @brief Pythoné¿çséûÇÃÉçÉbÉNÉIÉuÉWÉFÉNÉg
+ * @brief PythonÂÆüË°åÊôÇ„ÅÆ„É≠„ÉÉ„ÇØ„Ç™„Éñ„Ç∏„Çß„ÇØ„Éà
  */
 class PyGILock
 {
 	PyGILState_STATE gstate;
 public:
 	/**
-	 * @brief ÉRÉìÉXÉgÉâÉNÉ^
+	 * @brief „Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø
 	 */
 	PyGILock() {
 		gstate = PyGILState_Ensure();
 	};
 	/**
-	 * @brief ÉfÉXÉgÉâÉNÉ^
+	 * @brief „Éá„Çπ„Éà„É©„ÇØ„Çø
 	 */
 	~PyGILock() {
 		PyGILState_Release(gstate);
@@ -86,458 +74,421 @@ public:
 
 
 
+namespace rtmiddleware {
 
-namespace cnoid {
-# if defined _WIN32 || defined __CYGWIN__
-	__declspec(dllimport) python::object getGlobalNamespace();
-#else
-	python::object getGlobalNamespace();
-#endif
-}
-
-
-
-
-/**
- * @brief ÉRÉìÉXÉgÉâÉNÉ^
- */
-PyRTCItemBase::PyRTCItemBase() :
-	relativePathBaseType(N_RELATIVE_PATH_BASE_TYPES, CNOID_GETTEXT_DOMAIN_NAME),
-	execContextType(N_EXEC_CONTEXT_TYPES, CNOID_GETTEXT_DOMAIN_NAME)
-{
-	body_item = NULL;
-}
-
-/**
- * @brief ÉRÉìÉXÉgÉâÉNÉ^
- */
-PyRTCItem::PyRTCItem()
-{
-	
-
-
-	relativePathBaseType.setSymbol(RTC_DIRECTORY, N_("RTC directory"));
-	relativePathBaseType.setSymbol(PROJECT_DIRECTORY, N_("Project directory"));
-	relativePathBaseType.select(RTC_DIRECTORY);
-
-	execContextType.setSymbol(PERIODIC_EXECUTION_CONTEXT,  N_("PeriodicExecutionContext"));
-	execContextType.setSymbol(CHOREONOID_EXECUTION_CONTEXT,  N_("SimulatorExecutionContext"));
-	execContextType.select(CHOREONOID_EXECUTION_CONTEXT);
-
-};
-
-/**
- * @brief ÉRÉsÅ[ÉRÉìÉXÉgÉâÉNÉ^
- * @param org ÉRÉsÅ[å≥
- */
-PyRTCItem::PyRTCItem(const PyRTCItem& org)
-{
-	setName(org.name());
-	relativePathBaseType = org.relativePathBaseType;
-	moduleNameProperty = org.moduleNameProperty;
-	execContextType = org.execContextType;
-};
-
-/**
- * @brief ÉfÉXÉgÉâÉNÉ^
- */
-PyRTCItem::~PyRTCItem()
-{
-}
-
-
-
-/**
- * @brief èâä˙âªä÷êî
- * @param ext 
- */
-void PyRTCItem::initialize(ExtensionManager* ext)
-{
-	static bool initialized = false;
-	if(!initialized){
-		ext->itemManager().registerClass<PyRTCItem>(N_("PyRTCItem"));
-		ext->itemManager().addCreationPanel<PyRTCItem>(NULL);
-		initialized = true;
-	}
-}
-
-/**
- * @brief ÉvÉçÉpÉeÉBê›íË
- * @param putProperty ÉvÉçÉpÉeÉB 
- */
-void PyRTCItem::doPutProperties(PutPropertyFunction& putProperty)
-{
-	FileDialogFilter filter;
-	filter.push_back(std::string("RT-Component module file(*.py)"));
-	std::string dir;
-
-	ControllerItem::doPutProperties(putProperty);
-	if(!moduleNameProperty.empty() && checkAbsolute(filesystem::path(moduleNameProperty))){
-		dir = filesystem::path(moduleNameProperty).parent_path().generic_string();
-	} else if(relativePathBaseType.is(RTC_DIRECTORY)) {
-		dir = (filesystem::path(executableTopDirectory()) / CNOID_PLUGIN_SUBDIR / "rtc_python").generic_string();
-		
-	}
-	
-	
-	
-
-	putProperty(_("RTC module"), FilePath(moduleNameProperty, filter, dir),
-                [&](const std::string& name){ this->createComp(name);return true; });
-
-
-
-
-
-
-	putProperty(_("Execution context"), execContextType,
-	[&](int which){ this->setExecContextType(which); return true; });
-
-
-	putProperty(_("Relative path base"), relativePathBaseType,
-                [&](int which){ this->setRelativePathBaseType(which); return true; });
-
-}
-
-/**
- * @brief é¿çsÉRÉìÉeÉLÉXÉgê›íË
- * @param which é¿çsÉRÉìÉeÉLÉXÉgID 
- */
-void PyRTCItemBase::setExecContextType(int which)
-{
-	if(which != execContextType.which()){
-        		execContextType.select(which);
-    		}
-}
-
-
-/**
- * @brief ëäëŒÉpÉXê›íË
- * @param which ID
- */
-void PyRTCItem::setRelativePathBaseType(int which)
-{
-	if(which != relativePathBaseType.which()){
-		relativePathBaseType.select(which);
-	}
-}
-
-/**
- * @brief RTCê∂ê¨
- * @param name ñºëO
- */
-void PyRTCItem::createComp(std::string name)
-{
-	//MessageView::instance()->putln(MessageView::ERROR,
-	//	format(_(name.c_str())));
-	if (name.empty())
+	/**
+	 * @brief „Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø
+	 */
+	PyRTCItemBase::PyRTCItemBase() :
+		relativePathBaseType(N_RELATIVE_PATH_BASE_TYPES, CNOID_GETTEXT_DOMAIN_NAME),
+		execContextType(N_EXEC_CONTEXT_TYPES, CNOID_GETTEXT_DOMAIN_NAME)
 	{
-		return;
+		body_item = NULL;
 	}
-	{
-		PyGILock lock;
 
-		try
+	/**
+	 * @brief „Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø
+	 */
+	PyRTCItem::PyRTCItem()
+	{
+
+
+
+		relativePathBaseType.setSymbol(RTC_DIRECTORY, N_("RTC directory"));
+		relativePathBaseType.setSymbol(PROJECT_DIRECTORY, N_("Project directory"));
+		relativePathBaseType.select(RTC_DIRECTORY);
+
+		execContextType.setSymbol(PERIODIC_EXECUTION_CONTEXT, N_("PeriodicExecutionContext"));
+		execContextType.setSymbol(CHOREONOID_EXECUTION_CONTEXT, N_("SimulatorExecutionContext"));
+		execContextType.select(CHOREONOID_EXECUTION_CONTEXT);
+
+	};
+
+	/**
+	 * @brief „Ç≥„Éî„Éº„Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø
+	 * @param org „Ç≥„Éî„ÉºÂÖÉ
+	 */
+	PyRTCItem::PyRTCItem(const PyRTCItem& org)
+	{
+		setName(org.name());
+		relativePathBaseType = org.relativePathBaseType;
+		moduleNameProperty = org.moduleNameProperty;
+		execContextType = org.execContextType;
+	};
+
+	/**
+	 * @brief „Éá„Çπ„Éà„É©„ÇØ„Çø
+	 */
+	PyRTCItem::~PyRTCItem()
+	{
+	}
+
+
+
+	/**
+	 * @brief ÂàùÊúüÂåñÈñ¢Êï∞
+	 * @param ext
+	 */
+	void PyRTCItem::initialize(ExtensionManager* ext)
+	{
+		static bool initialized = false;
+		if (!initialized) {
+			ext->itemManager().registerClass<PyRTCItem>(N_("PyRTCItem"));
+			ext->itemManager().addCreationPanel<PyRTCItem>(NULL);
+			initialized = true;
+		}
+	}
+
+	/**
+	 * @brief „Éó„É≠„Éë„ÉÜ„Ç£Ë®≠ÂÆö
+	 * @param putProperty „Éó„É≠„Éë„ÉÜ„Ç£
+	 */
+	void PyRTCItem::doPutProperties(PutPropertyFunction& putProperty)
+	{
+		FilePathProperty pyFileProperty(
+			moduleNameProperty,
+			{ _("RT-Component module file(*.py)") });
+
+		ControllerItem::doPutProperties(putProperty);
+		if (!moduleNameProperty.empty() && checkAbsolute(cnoid::stdx::filesystem::path(moduleNameProperty))) {
+			cnoid::stdx::filesystem::path dir = cnoid::stdx::filesystem::path(moduleNameProperty).parent_path().generic_string();
+			pyFileProperty.setBaseDirectory(dir.string());
+		}
+		else if (relativePathBaseType.is(RTC_DIRECTORY)) {
+			cnoid::stdx::filesystem::path dir = cnoid::stdx::filesystem::path(executableTopDirectory()) / CNOID_PLUGIN_SUBDIR / "rtc_python";
+			pyFileProperty.setBaseDirectory(dir.string());
+
+		}
+
+		putProperty(_("RTC module"), pyFileProperty,
+			[&](const std::string& name) { this->createComp(name); return true; });
+
+
+		putProperty(_("Execution context"), execContextType,
+			[&](int which) { this->setExecContextType(which); return true; });
+
+
+		putProperty(_("Relative path base"), relativePathBaseType,
+			[&](int which) { this->setRelativePathBaseType(which); return true; });
+
+	}
+
+	/**
+	 * @brief ÂÆüË°å„Ç≥„É≥„ÉÜ„Ç≠„Çπ„ÉàË®≠ÂÆö
+	 * @param which ÂÆüË°å„Ç≥„É≥„ÉÜ„Ç≠„Çπ„ÉàID
+	 */
+	void PyRTCItemBase::setExecContextType(int which)
+	{
+		if (which != execContextType.which()) {
+			execContextType.select(which);
+		}
+	}
+
+
+	/**
+	 * @brief Áõ∏ÂØæ„Éë„ÇπË®≠ÂÆö
+	 * @param which ID
+	 */
+	void PyRTCItem::setRelativePathBaseType(int which)
+	{
+		if (which != relativePathBaseType.which()) {
+			relativePathBaseType.select(which);
+		}
+	}
+
+	/**
+	 * @brief RTCÁîüÊàê
+	 * @param name ÂêçÂâç
+	 */
+	void PyRTCItem::createComp(std::string name)
+	{
+		//MessageView::instance()->putln(MessageView::ERROR,
+		//	format(_(name.c_str())));
+		if (name.empty())
 		{
-			if(!comp_name.empty())
+			return;
+		}
+		{
+			PyGILock lock;
+
+			try
 			{
-#ifdef CNOID_USE_PYBIND11
-				getGlobalNamespace()["exitComp"](comp_name.c_str());
-#else
-				python::extract<std::string>(cnoid::getGlobalNamespace()["exitComp"](comp_name.c_str()));
-				//python::extract<std::string>(cnoid::pythonMainNamespace()["exitComp"](comp_name.c_str()));
-#endif
+				cnoid::PythonPlugin* pythonPlugin = cnoid::PythonPlugin::instance();
+				if (pythonPlugin)
+				{
+					if (!comp_name.empty())
+					{
+						pythonPlugin->globalNamespace()["exitComp"](comp_name.c_str());
+					}
+					comp_name = pybind11::str(pythonPlugin->globalNamespace()["createComp"](name.c_str())).cast<std::string>();
+					moduleNameProperty = name;
+				}
 			}
-#ifdef CNOID_USE_PYBIND11
-			comp_name = pybind11::str(getGlobalNamespace()["createComp"](name.c_str())).cast<std::string>();
-#else
-			comp_name = python::extract<std::string>(cnoid::getGlobalNamespace()["createComp"](name.c_str()));
-			//comp_name = python::extract<std::string>(cnoid::pythonMainNamespace()["createComp"](name.c_str()));
-#endif
-			moduleNameProperty = name;
-		}
-		catch (const py::error_already_set&e)
-		{
-#ifdef CNOID_USE_PYBIND11
-			MessageView::instance()->putln(MessageView::ERROR,
-				format(_("%1%")) % e.what());
-#else
-			PyErr_Print();
-#endif
-		}
-		catch (...)
-		{
-	
-		}
+			catch (const py::error_already_set& e)
+			{
+				MessageView::instance()->putln(MessageView::ERROR,
+					fmt::format(_("{}"), e.what()));
+			}
+			catch (...)
+			{
 
+			}
 
-		
-		
+		}
 	}
-}
 
-/**
- * @brief ï°êªÇ∑ÇÈ
- * @return ï°êªÉIÉuÉWÉFÉNÉg
- */
-Item* PyRTCItem::doDuplicate() const
-{
-	return new PyRTCItem(*this);
-}
-
-
-
-/**
- * @brief ï€ë∂Ç∑ÇÈ
- * @param archive 
- */
-bool PyRTCItem::store(Archive& archive)
-{
-	archive.writeRelocatablePath("moduleName", moduleNameProperty);
-	archive.write("executionContext", execContextType.selectedSymbol(), DOUBLE_QUOTED);
-
-	return ControllerItem::store(archive);
-}
-
-
-
-/**
- * @brief ïúå≥Ç∑ÇÈ
- * @param archive 
- */
-bool PyRTCItem::restore(const Archive& archive)
-{
-	std::string value;
-	if(archive.read("moduleName", value)){
-        		filesystem::path path(archive.expandPathVariables(value));
-        		moduleNameProperty = getNativePathString(path);
-		if(!moduleNameProperty.empty())createComp(moduleNameProperty);
-    		}
-	std::string symbol;
-	if(archive.read("executionContext", symbol)){
-		execContextType.select(symbol);
-	}
-    return ControllerItem::restore(archive);
-}
-
-/**
- * @brief èâä˙âªéûé¿çsä÷êî
- * @param ext 
- */
-bool PyRTCItemBase::initialize(ControllerItemIO* io)
-{
-	
+	/**
+	 * @brief Ë§áË£Ω„Åô„Çã
+	 * @return Ë§áË£Ω„Ç™„Éñ„Ç∏„Çß„ÇØ„Éà
+	 */
+	Item* PyRTCItem::doDuplicate() const
 	{
-		PyGILock lock;
-		try
-		{
-			//controlLink *c = &m_crl;
-			//cnoid::pythonMainNamespace()["ControlLinkObj"] = boost::ref(c);
-			Body *b = io->body();
-#ifdef CNOID_USE_PYBIND11;
-			getGlobalNamespace()["setBody"](b, comp_name.c_str());
-#else
-			python::extract<std::string>(cnoid::getGlobalNamespace()["setBody"](boost::ref(b), comp_name.c_str()));
-			//python::extract<std::string>(cnoid::pythonMainNamespace()["setBody"](boost::ref(b), comp_name.c_str()));
-#endif
-			
-		}
-		catch (const py::error_already_set&e)
-		{
-#ifdef CNOID_USE_PYBIND11
-			MessageView::instance()->putln(MessageView::ERROR,
-					format(_("%1%")) % e.what());
-#else
-			PyErr_Print();
-#endif
-		}
-		catch (...)
-		{
-	
-		}
-		
-		
+		return new PyRTCItem(*this);
 	}
-	return true;
-}
-
-/**
- * @brief 
- */
-void PyRTCItem::onPositionChanged()
-{
-	
-}
-
-/**
- * @brief ÉVÉ~ÉÖÉåÅ[ÉVÉáÉìäJénéûé¿çsä÷êî
- * @return
- */
-bool PyRTCItemBase::start()
-{
-	if(!comp_name.empty()){
-		PyGILock lock;
-		try
-		{
-#ifdef CNOID_USE_PYBIND11
-			getGlobalNamespace()["startSimulation"](comp_name, execContextType.which());
-#else
-			python::extract<std::string>(cnoid::getGlobalNamespace()["startSimulation"](comp_name, execContextType.which()));
-			//python::extract<std::string>(cnoid::pythonMainNamespace()["startSimulation"](comp_name,execContextType.which()));
-#endif
-			
-		}
-		catch (const py::error_already_set&e)
-		{
-#ifdef CNOID_USE_PYBIND11
-			MessageView::instance()->putln(MessageView::ERROR,
-				format(_("%1%")) % e.what());
-#else
-			PyErr_Print();
-#endif
-		}
-		catch (...)
-		{
-	
-		}
 
 
-		
-		
-	}
-	return true;
-};
 
-/**
- * @brief çèÇ›ïùéÊìæ
- * @return çèÇ›ïù
- */
-double PyRTCItemBase::timeStep() const
-{
-	return 0;
-};
-
-/**
- * @brief ÉVÉ~ÉÖÉåÅ[ÉVÉáÉìçXêVëOé¿çsä÷êî
- */
-void PyRTCItemBase::input()
-{
+	/**
+	 * @brief ‰øùÂ≠ò„Åô„Çã
+	 * @param archive
+	 */
+	bool PyRTCItem::store(Archive& archive)
 	{
-		PyGILock lock;
-		try
-		{
-			cnoid::getGlobalNamespace()["inputFromSimulator"](comp_name);
-			//cnoid::pythonMainNamespace()["inputFromSimulator"](comp_name);
-		}
-		catch (const py::error_already_set&e)
-		{
-			PyErr_Print();
-		}
-		catch (...)
-		{
-	
-		}
+		archive.writeRelocatablePath("moduleName", moduleNameProperty);
+		archive.write("executionContext", execContextType.selectedSymbol(), DOUBLE_QUOTED);
+
+		return ControllerItem::store(archive);
 	}
 
-};
 
 
-/**
- * @brief ÉVÉ~ÉÖÉåÅ[ÉVÉáÉìçXêVíÜé¿çsä÷êî
- */
-bool PyRTCItemBase::control()
-{
-	if(!comp_name.empty()){
-		PyGILock lock;
-		try
-		{
-#ifdef CNOID_USE_PYBIND11
-			getGlobalNamespace()["tickEC"](comp_name, execContextType.which());
-#else
-			python::extract<std::string>(cnoid::getGlobalNamespace()["tickEC"](comp_name, execContextType.which()));
-			//python::extract<std::string>(cnoid::pythonMainNamespace()["tickEC"](comp_name,execContextType.which()));
-#endif
-			
-		}
-		catch (const py::error_already_set&e)
-		{
-#ifdef CNOID_USE_PYBIND11
-			MessageView::instance()->putln(MessageView::ERROR,
-				format(_("%1%")) % e.what());
-#else
-			PyErr_Print();
-#endif
-		}
-		catch (...)
-		{
-	
-		}
-
-
-		
-		
-	}
-	return true;
-};
-
-/**
- * @brief ÉVÉ~ÉÖÉåÅ[ÉVÉáÉìçXêVå„é¿çsä÷êî
- */
-void PyRTCItemBase::output()
-{
+	/**
+	 * @brief Âæ©ÂÖÉ„Åô„Çã
+	 * @param archive
+	 */
+	bool PyRTCItem::restore(const Archive& archive)
 	{
-		PyGILock lock;
-		try
-		{
-			cnoid::getGlobalNamespace()["outputToSimulator"](comp_name);
-			//cnoid::pythonMainNamespace()["outputToSimulator"](comp_name);
+		std::string value;
+		if (archive.read("moduleName", value)) {
+			cnoid::stdx::filesystem::path path(archive.expandPathVariables(value));
+			moduleNameProperty = getNativePathString(path);
+			if (!moduleNameProperty.empty())createComp(moduleNameProperty);
 		}
-		catch (const py::error_already_set&e)
-		{
-			PyErr_Print();
+		std::string symbol;
+		if (archive.read("executionContext", symbol)) {
+			execContextType.select(symbol);
 		}
-		catch (...)
-		{
-	
-		}
+		return ControllerItem::restore(archive);
 	}
 
-};
+	/**
+	 * @brief ÂàùÊúüÂåñÊôÇÂÆüË°åÈñ¢Êï∞
+	 * @param ext
+	 */
+	bool PyRTCItemBase::initialize(ControllerIO* io)
+	{
 
-/**
- * @brief ÉVÉ~ÉÖÉåÅ[ÉVÉáÉìèIóπéûé¿çsä÷êî
- */
-void PyRTCItemBase::stop()
-{
-	if(!comp_name.empty()){
-		PyGILock lock;
-		try
 		{
-#ifdef CNOID_USE_PYBIND11
-			getGlobalNamespace()["stopSimulation"](comp_name, execContextType.which());
-#else
-			python::extract<std::string>(cnoid::getGlobalNamespace()["stopSimulation"](comp_name, execContextType.which()));
-			//python::extract<std::string>(cnoid::pythonMainNamespace()["stopSimulation"](comp_name,execContextType.which()));
-#endif
-			
-		}
-		catch (const py::error_already_set&e)
-		{
-#ifdef CNOID_USE_PYBIND11
-			MessageView::instance()->putln(MessageView::ERROR,
-				format(_("%1%")) % e.what());
-#else
-			PyErr_Print();
-#endif
-		}
-		catch (...)
-		{
-	
-		}
+			PyGILock lock;
+			try
+			{
+				cnoid::PythonPlugin* pythonPlugin = cnoid::PythonPlugin::instance();
+				if (pythonPlugin)
+				{
+					//controlLink *c = &m_crl;
+					//cnoid::pythonMainNamespace()["ControlLinkObj"] = boost::ref(c);
+					Body* b = io->body();
+					pythonPlugin->globalNamespace()["setBody"](b, comp_name.c_str());
+				}
+
+			}
+			catch (const py::error_already_set& e)
+			{
+				MessageView::instance()->putln(MessageView::ERROR,
+					fmt::format(_("{}"), e.what()));
+			}
+			catch (...)
+			{
+
+			}
 
 
-		
-		
+		}
+		return true;
 	}
 
-};
+	/**
+	 * @brief
+	 */
+	void PyRTCItem::onPositionChanged()
+	{
+
+	}
+
+	/**
+	 * @brief „Ç∑„Éü„É•„É¨„Éº„Ç∑„Éß„É≥ÈñãÂßãÊôÇÂÆüË°åÈñ¢Êï∞
+	 * @return
+	 */
+	bool PyRTCItemBase::start()
+	{
+		if (!comp_name.empty()) {
+			PyGILock lock;
+			try
+			{
+				cnoid::PythonPlugin* pythonPlugin = cnoid::PythonPlugin::instance();
+				if (pythonPlugin)
+				{
+					pythonPlugin->globalNamespace()["startSimulation"](comp_name, execContextType.which());
+				}
+
+			}
+			catch (const py::error_already_set& e)
+			{
+				MessageView::instance()->putln(MessageView::ERROR,
+					fmt::format(_("{}"), e.what()));
+
+			}
+			catch (...)
+			{
+
+			}
+
+
+
+
+		}
+		return true;
+	};
+
+	/**
+	 * @brief Âàª„ÅøÂπÖÂèñÂæó
+	 * @return Âàª„ÅøÂπÖ
+	 */
+	double PyRTCItemBase::timeStep() const
+	{
+		return 0;
+	};
+
+	/**
+	 * @brief „Ç∑„Éü„É•„É¨„Éº„Ç∑„Éß„É≥Êõ¥Êñ∞ÂâçÂÆüË°åÈñ¢Êï∞
+	 */
+	void PyRTCItemBase::input()
+	{
+		{
+			PyGILock lock;
+			try
+			{
+				cnoid::PythonPlugin* pythonPlugin = cnoid::PythonPlugin::instance();
+				if (pythonPlugin)
+				{
+					pythonPlugin->globalNamespace()["inputFromSimulator"](comp_name);
+					//cnoid::pythonMainNamespace()["inputFromSimulator"](comp_name);
+				}
+			}
+			catch (const py::error_already_set& e)
+			{
+				PyErr_Print();
+			}
+			catch (...)
+			{
+
+			}
+		}
+
+	};
+
+
+	/**
+	 * @brief „Ç∑„Éü„É•„É¨„Éº„Ç∑„Éß„É≥Êõ¥Êñ∞‰∏≠ÂÆüË°åÈñ¢Êï∞
+	 */
+	bool PyRTCItemBase::control()
+	{
+		if (!comp_name.empty()) {
+			PyGILock lock;
+			try
+			{
+				cnoid::PythonPlugin* pythonPlugin = cnoid::PythonPlugin::instance();
+				if (pythonPlugin)
+				{
+					pythonPlugin->globalNamespace()["tickEC"](comp_name, execContextType.which());
+				}
+			}
+			catch (const py::error_already_set& e)
+			{
+				MessageView::instance()->putln(MessageView::ERROR,
+					fmt::format(_("{}"), e.what()));
+			}
+			catch (...)
+			{
+
+			}
+
+
+
+
+		}
+		return true;
+	};
+
+	/**
+	 * @brief „Ç∑„Éü„É•„É¨„Éº„Ç∑„Éß„É≥Êõ¥Êñ∞ÂæåÂÆüË°åÈñ¢Êï∞
+	 */
+	void PyRTCItemBase::output()
+	{
+		{
+			PyGILock lock;
+			try
+			{
+				cnoid::PythonPlugin* pythonPlugin = cnoid::PythonPlugin::instance();
+				if (pythonPlugin)
+				{
+					pythonPlugin->globalNamespace()["outputToSimulator"](comp_name);
+					//cnoid::pythonMainNamespace()["outputToSimulator"](comp_name);
+				}
+			}
+			catch (const py::error_already_set& e)
+			{
+				PyErr_Print();
+			}
+			catch (...)
+			{
+
+			}
+		}
+
+	};
+
+	/**
+	 * @brief „Ç∑„Éü„É•„É¨„Éº„Ç∑„Éß„É≥ÁµÇ‰∫ÜÊôÇÂÆüË°åÈñ¢Êï∞
+	 */
+	void PyRTCItemBase::stop()
+	{
+		if (!comp_name.empty()) {
+			PyGILock lock;
+			try
+			{
+				cnoid::PythonPlugin* pythonPlugin = cnoid::PythonPlugin::instance();
+				if (pythonPlugin)
+				{
+					pythonPlugin->globalNamespace()["stopSimulation"](comp_name, execContextType.which());
+				}
+
+			}
+			catch (const py::error_already_set& e)
+			{
+				MessageView::instance()->putln(MessageView::ERROR,
+					fmt::format(_("{}"), e.what()));
+			}
+			catch (...)
+			{
+
+			}
+
+
+
+
+		}
+
+	};
+
+}

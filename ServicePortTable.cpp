@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file  ServicePortTable.cpp
- * @brief ƒT[ƒrƒXƒ|[ƒgˆê——•\Ž¦ƒNƒ‰ƒX
+ * @brief ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆä¸€è¦§è¡¨ç¤ºã‚¯ãƒ©ã‚¹
  *
  */
 
@@ -33,74 +33,75 @@
 #include "ServicePortTable.h"
 #include "gettext.h"
 
-
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @param parent eƒEƒBƒWƒFƒbƒg
- */
-ServicePortOperationDialog::ServicePortOperationDialog(QWidget *parent)
-{
-	setWindowTitle(_("Function List"));
-
-	_mainLayout = new QVBoxLayout();
-	setLayout(_mainLayout);
-}
-
-
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @param name •\Ž¦–¼
- */
-ServicePortSettingButton::ServicePortSettingButton(QString name)
-	:QPushButton(name),
-	_dialog(0)
-{
-	QObject::connect(this, SIGNAL(clicked()), this, SLOT(pushSlot()));
-}
-
-/**
- * @brief ƒ{ƒ^ƒ“‰Ÿ‰ºŽžƒXƒƒbƒg
- */
-void ServicePortSettingButton::pushSlot()
-{
-	_dialog = new ServicePortOperationDialog();
-	_dialog->show();
-}
-
-
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- */
-ServicePortTable::ServicePortTable()
-	: QTableWidget(5,3)
-{
-	QStringList horzHeaders;
-	horzHeaders << _("Name")
-		<< _("Variable Name")
-		<< _("Function");
-	setHorizontalHeaderLabels(horzHeaders);
-	setSelectionMode(QAbstractItemView::NoSelection);
-}
-
-
-/**
- * @brief ƒŠƒXƒgXV
- * @param ports ƒf[ƒ^ƒ|[ƒgˆê——
- */
-void ServicePortTable::list_update(QVector<RTC_XML::ServicePorts> ports)
-{
-	setRowCount(ports.size());
-	int num = 0;
-
-	for (QVector<RTC_XML::ServicePorts>::iterator itr = ports.begin(); itr != ports.end(); itr++)
+namespace rtmiddleware {
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+	 */
+	ServicePortOperationDialog::ServicePortOperationDialog(QWidget* parent)
 	{
-		setItem(num, 0, new QTableWidgetItem((*itr).get_name()));
-		if ((*itr).get_interfaces().size() > 0)
+		setWindowTitle(_("Function List"));
+
+		_mainLayout = new QVBoxLayout();
+		setLayout(_mainLayout);
+	}
+
+
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param name è¡¨ç¤ºå
+	 */
+	ServicePortSettingButton::ServicePortSettingButton(QString name)
+		:QPushButton(name),
+		_dialog(0)
+	{
+		QObject::connect(this, SIGNAL(clicked()), this, SLOT(pushSlot()));
+	}
+
+	/**
+	 * @brief ãƒœã‚¿ãƒ³æŠ¼ä¸‹æ™‚ã‚¹ãƒ­ãƒƒãƒˆ
+	 */
+	void ServicePortSettingButton::pushSlot()
+	{
+		_dialog = new ServicePortOperationDialog();
+		_dialog->show();
+	}
+
+
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 */
+	ServicePortTable::ServicePortTable()
+		: QTableWidget(5, 3)
+	{
+		QStringList horzHeaders;
+		horzHeaders << _("Name")
+			<< _("Variable Name")
+			<< _("Function");
+		setHorizontalHeaderLabels(horzHeaders);
+		setSelectionMode(QAbstractItemView::NoSelection);
+	}
+
+
+	/**
+	 * @brief ãƒªã‚¹ãƒˆæ›´æ–°
+	 * @param ports ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆä¸€è¦§
+	 */
+	void ServicePortTable::list_update(QVector<RTC_XML::ServicePorts> ports)
+	{
+		setRowCount(ports.size());
+		int num = 0;
+
+		for (QVector<RTC_XML::ServicePorts>::iterator itr = ports.begin(); itr != ports.end(); itr++)
 		{
-			QString data_variable = "self." + (*itr).get_interfaces()[0].get_data_name();
-			setItem(num, 1, new QTableWidgetItem(data_variable));
+			setItem(num, 0, new QTableWidgetItem((*itr).get_name()));
+			if ((*itr).get_interfaces().size() > 0)
+			{
+				QString data_variable = "self." + (*itr).get_interfaces()[0].get_data_name();
+				setItem(num, 1, new QTableWidgetItem(data_variable));
+			}
+			num += 1;
+
 		}
-		num += 1;
-		
 	}
 }

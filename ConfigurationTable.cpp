@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file  ConfigurationTable.cpp
- * @brief ƒRƒ“ƒtƒBƒMƒ…ƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^ˆê——•\¦ƒNƒ‰ƒX
+ * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ä¸€è¦§è¡¨ç¤ºã‚¯ãƒ©ã‚¹
  *
  */
 
@@ -35,146 +35,147 @@
 
 #include "gettext.h"
 
-
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @param parent eƒEƒBƒWƒFƒbƒg
- */
-ConfigParamWidgetBase::ConfigParamWidgetBase(QWidget *parent)
-	: BaseTab(parent)
-{
-	QVector<QString> type_list({ "short","long", "double", "float", "string" });
-	QVector<QString> widget_list({ "text","slider","spin","radio","checkbox","ordered_list" });
-
-
-	_paramNameTextbox = addTextBox("paramNameTextbox", _("Parameter Name"), QVector<QString>(), "param");
-	_paramTypeCombox = addCombox("paramTypeCombox", _("Parameter Type"), QVector<QString>(), type_list, "string");
-	_paramDefaultTextbox = addTextBox("paramDefaultTextbox", _("Default Value"), QVector<QString>(), "1");
-	_paramConstraintsTextbox = addTextBox("paramConstraintsTextbox", _("Constraints"), QVector<QString>(), "");
-	
-	_paramWidgetCombox = addCombox("paramNameTextbox ", _("Widget"), QVector<QString>(), widget_list, "text");
-	_paramStepTextbox = addTextBox("paramStepTextbox", _("Step"), QVector<QString>(), "");
-
-}
-
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @param dialog ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^•ÒWƒ_ƒCƒAƒƒO
- * @param parent eƒEƒBƒWƒFƒbƒg
- */
-ConfigParamWidget::ConfigParamWidget(ConfigParamDialog *dialog, QWidget *parent)
-	: ConfigParamWidgetBase(parent)
-{
-	_dialog = dialog;
-}
-
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @param parent eƒEƒBƒWƒFƒbƒg
- */
-ConfigParamDialog::ConfigParamDialog(QWidget *parent)
-	: QDialog(parent)
-{
-	setWindowTitle(_("Edit Configuration Parameter Dialog"));
-	_mainLayout = new QVBoxLayout();
-	setLayout(_mainLayout);
-	_cfwidget = new ConfigParamWidget(this);
-	_mainLayout->addWidget(_cfwidget);
-}
-
-/**
- * @brief íœƒ{ƒ^ƒ“‰Ÿ‰º‚ÌƒXƒƒbƒg
- */
-void ConfigParamDialog::deleteButtonSlot()
-{
-
-}
-
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @param name •\¦–¼
- * @param profile ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^ƒvƒƒtƒ@ƒCƒ‹ƒIƒuƒWƒFƒNƒg
- * @param parent eƒEƒBƒWƒFƒbƒg
- */
-ConfigSettingButton::ConfigSettingButton(QString name, RTC_XML::ConfigurationSet profile, RTC_MainWindow *parent)
-	: QPushButton(),
-	_profile(profile)
-{
-	_mainwindow = parent;
-	QObject::connect(this, SIGNAL(clicked()), this, SLOT(pushSlot()));
-}
-
-/**
- * @brief ƒ{ƒ^ƒ“‰Ÿ‰º‚ÌƒXƒƒbƒg
- */
-void ConfigSettingButton::pushSlot()
-{
-	ConfigParamDialog dialog;
-	dialog.show();
-	dialog.exec();
-	if (dialog.result())
+namespace rtmiddleware {
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+	 */
+	ConfigParamWidgetBase::ConfigParamWidgetBase(QWidget* parent)
+		: BaseTab(parent)
 	{
-		_mainwindow->deleteConfig(_profile.get_name());
+		QVector<QString> type_list({ "short","long", "double", "float", "string" });
+		QVector<QString> widget_list({ "text","slider","spin","radio","checkbox","ordered_list" });
+
+
+		_paramNameTextbox = addTextBox("paramNameTextbox", _("Parameter Name"), QVector<QString>(), "param");
+		_paramTypeCombox = addCombox("paramTypeCombox", _("Parameter Type"), QVector<QString>(), type_list, "string");
+		_paramDefaultTextbox = addTextBox("paramDefaultTextbox", _("Default Value"), QVector<QString>(), "1");
+		_paramConstraintsTextbox = addTextBox("paramConstraintsTextbox", _("Constraints"), QVector<QString>(), "");
+
+		_paramWidgetCombox = addCombox("paramNameTextbox ", _("Widget"), QVector<QString>(), widget_list, "text");
+		_paramStepTextbox = addTextBox("paramStepTextbox", _("Step"), QVector<QString>(), "");
+
 	}
-}
 
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @param parent eƒEƒBƒWƒFƒbƒg
- */
-ConfigurationTableRTP::ConfigurationTableRTP(RTC_MainWindow *mainwindow, RTC_MainWindow *parent)
-	: ConfigurationTable(parent)
-{
-	_mainwindow = mainwindow;
-}
-
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @param parent eƒEƒBƒWƒFƒbƒg
- */
-ConfigurationTable::ConfigurationTable(RTC_MainWindow *parent)
-	: QTableWidget(5, 3)
-{
-	_mainLayout = parent;
-
-	QStringList horzHeaders;
-	horzHeaders << _("Name")
-		<< _("Variable Name");
-	setHorizontalHeaderLabels(horzHeaders);
-	setSelectionMode(QAbstractItemView::NoSelection);
-}
-
-void ConfigurationTable::list_update(QVector<RTC_XML::ConfigurationSet> confsets)
-{
-	setRowCount(confsets.size());
-	int num = 0;
-	for (QVector<RTC_XML::ConfigurationSet>::iterator itr = confsets.begin(); itr != confsets.end(); itr++)
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param dialog ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ç·¨é›†ãƒ€ã‚¤ã‚¢ãƒ­ã‚°
+	 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+	 */
+	ConfigParamWidget::ConfigParamWidget(ConfigParamDialog* dialog, QWidget* parent)
+		: ConfigParamWidgetBase(parent)
 	{
+		_dialog = dialog;
+	}
+
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+	 */
+	ConfigParamDialog::ConfigParamDialog(QWidget* parent)
+		: QDialog(parent)
+	{
+		setWindowTitle(_("Edit Configuration Parameter Dialog"));
+		_mainLayout = new QVBoxLayout();
+		setLayout(_mainLayout);
+		_cfwidget = new ConfigParamWidget(this);
+		_mainLayout->addWidget(_cfwidget);
+	}
+
+	/**
+	 * @brief å‰Šé™¤ãƒœã‚¿ãƒ³æŠ¼ä¸‹æ™‚ã®ã‚¹ãƒ­ãƒƒãƒˆ
+	 */
+	void ConfigParamDialog::deleteButtonSlot()
+	{
+
+	}
+
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param name è¡¨ç¤ºå
+	 * @param profile ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+	 */
+	ConfigSettingButton::ConfigSettingButton(QString name, RTC_XML::ConfigurationSet profile, RTC_MainWindow* parent)
+		: QPushButton(),
+		_profile(profile)
+	{
+		_mainwindow = parent;
+		QObject::connect(this, SIGNAL(clicked()), this, SLOT(pushSlot()));
+	}
+
+	/**
+	 * @brief ãƒœã‚¿ãƒ³æŠ¼ä¸‹æ™‚ã®ã‚¹ãƒ­ãƒƒãƒˆ
+	 */
+	void ConfigSettingButton::pushSlot()
+	{
+		ConfigParamDialog dialog;
+		dialog.show();
+		dialog.exec();
+		if (dialog.result())
+		{
+			_mainwindow->deleteConfig(_profile.get_name());
+		}
+	}
+
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+	 */
+	ConfigurationTableRTP::ConfigurationTableRTP(RTC_MainWindow* mainwindow, RTC_MainWindow* parent)
+		: ConfigurationTable(parent)
+	{
+		_mainwindow = mainwindow;
+	}
+
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+	 */
+	ConfigurationTable::ConfigurationTable(RTC_MainWindow* parent)
+		: QTableWidget(5, 3)
+	{
+		_mainLayout = parent;
+
+		QStringList horzHeaders;
+		horzHeaders << _("Name")
+			<< _("Variable Name");
+		setHorizontalHeaderLabels(horzHeaders);
+		setSelectionMode(QAbstractItemView::NoSelection);
+	}
+
+	void ConfigurationTable::list_update(QVector<RTC_XML::ConfigurationSet> confsets)
+	{
+		setRowCount(confsets.size());
+		int num = 0;
+		for (QVector<RTC_XML::ConfigurationSet>::iterator itr = confsets.begin(); itr != confsets.end(); itr++)
+		{
 
 			QString data_variable = "self." + (*itr).get_data_name();
 			setItem(num, 0, new QTableWidgetItem((*itr).get_name()));
 			setItem(num, 1, new QTableWidgetItem(data_variable));
-			
+
 			num += 1;
+		}
 	}
-}
 
-/**
- * @brief ƒŠƒXƒgXV
- * @param confsets ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^ˆê——
- */
-void ConfigurationTableRTP::list_update(QVector<RTC_XML::ConfigurationSet> confsets)
-{
-	setRowCount(confsets.size());
-	int num = 0;
-	for (QVector<RTC_XML::ConfigurationSet>::iterator itr = confsets.begin(); itr != confsets.end(); itr++)
+	/**
+	 * @brief ãƒªã‚¹ãƒˆæ›´æ–°
+	 * @param confsets ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ä¸€è¦§
+	 */
+	void ConfigurationTableRTP::list_update(QVector<RTC_XML::ConfigurationSet> confsets)
 	{
+		setRowCount(confsets.size());
+		int num = 0;
+		for (QVector<RTC_XML::ConfigurationSet>::iterator itr = confsets.begin(); itr != confsets.end(); itr++)
+		{
 
-		QString data_variable = "self." + (*itr).get_data_name();
-		setItem(num, 0, new QTableWidgetItem((*itr).get_name()));
-		setItem(num, 1, new QTableWidgetItem(data_variable));
-		setCellWidget(num, 2, new ConfigSettingButton(_("Setting"), (*itr), _mainwindow));
+			QString data_variable = "self." + (*itr).get_data_name();
+			setItem(num, 0, new QTableWidgetItem((*itr).get_name()));
+			setItem(num, 1, new QTableWidgetItem(data_variable));
+			setCellWidget(num, 2, new ConfigSettingButton(_("Setting"), (*itr), _mainwindow));
 
-		num += 1;
+			num += 1;
+		}
 	}
 }

@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file  RTC_MainWindow.h
- * @brief RTCEditorƒƒCƒ“ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX
+ * @brief RTCEditorãƒ¡ã‚¤ãƒ³ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹
  *
  */
 
@@ -36,134 +36,137 @@ QT_END_NAMESPACE
 class ToolBar;
 QT_FORWARD_DECLARE_CLASS(QMenu)
 
-/**
- * @class ModuleSettingWidget
- * @brief 
- */
-class ModuleSettingWidget : public QWidget
-{
-	Q_OBJECT
-public:
+
+namespace rtmiddleware {
 	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param parent eƒEƒBƒWƒFƒbƒg
+	 * @class ModuleSettingWidget
+	 * @brief
 	 */
-	ModuleSettingWidget(QWidget *parent = Q_NULLPTR);
-private:
-	PythonEditor *textEdit;
-	QHBoxLayout *mainLayout;
-	QHBoxLayout *editLayout;
-};
+	class ModuleSettingWidget : public QWidget
+	{
+		Q_OBJECT
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		ModuleSettingWidget(QWidget* parent = Q_NULLPTR);
+	private:
+		PythonEditor* textEdit;
+		QHBoxLayout* mainLayout;
+		QHBoxLayout* editLayout;
+	};
 
 
-/**
- * @class RTC_MainWindow
- * @brief RTCEditorƒƒCƒ“ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX
- */
-class RTC_MainWindow : public QMainWindow
-{
-    Q_OBJECT
+	/**
+	 * @class RTC_MainWindow
+	 * @brief RTCEditorãƒ¡ã‚¤ãƒ³ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹
+	 */
+	class RTC_MainWindow : public QMainWindow
+	{
+		Q_OBJECT
 
-public:
-	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param parent eƒEƒBƒWƒFƒbƒg
-	 * @param flags 
-	 */
-	explicit RTC_MainWindow(QWidget *parent = Q_NULLPTR, Qt::WindowFlags flags = 0);
-	/**
-	 * @brief ƒAƒNƒeƒBƒrƒeƒB•ÒWƒ^ƒu’Ç‰Á
-	 * @param name –¼‘O
-	 * @param text ƒeƒLƒXƒg
-	 */
-	void addActivityTab(ActivityCode name, QString text);
-	/**
-	 * @brief ƒT[ƒrƒXƒ|[ƒgíœ
-	 * @param name ƒT[ƒrƒXƒ|[ƒg–¼
-	 */
-	void deleteServicePort(QString name);
-	/**
-	 * @brief ƒf[ƒ^ƒ|[ƒgíœ
-	 * @param name ƒf[ƒ^ƒ|[ƒg–¼
-	 */
-	void deleteDataPort(QString name);
-	/**
-	 * @brief ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^íœ
-	 * @param name ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^–¼
-	 */
-	void deleteConfig(QString name);
-	/**
-	 * @brief ƒƒjƒ…[ì¬
-	 */
-	void createMenus();
-	/**
-	 * @brief •ÒW’†‚ÌPythonƒtƒ@ƒCƒ‹ƒpƒXæ“¾
-	 * @return Pythonƒtƒ@ƒCƒ‹‚ÌƒpƒX
-	 */
-	QString getFileName();
-	/**
-	* @brief RTCƒvƒƒtƒ@ƒCƒ‹ƒIƒuƒWƒFƒNƒgæ“¾
-	* @return RTCƒvƒƒtƒ@ƒCƒ‹ƒIƒuƒWƒFƒNƒg
-	*/
-	RTC_XML::RTC_ProfileRTP *getRTCProfile();
-	/**
-	* @brief À‘•ƒR[ƒhæ“¾
-	* @param id ƒR[ƒ‹ƒoƒbƒN‚ÌID
-	* @return À‘•ƒR[ƒh•¶š—ñ
-	*/
-	QString get_code(ActivityCode id);
-	/**
-	* @brief À‘•ƒR[ƒhİ’è
-	* @param id ƒR[ƒ‹ƒoƒbƒN‚ÌID
-	* @param code À‘•ƒR[ƒh•¶š—ñ
-	*/
-	void set_code(ActivityCode id, QString code);
-	cnoid::Signal<void(const char*)>  sigSaveButton;
-	
-public Q_SLOTS:
-	/**
-	 * @brief •Û‘¶ƒ{ƒ^ƒ“‰Ÿ‰º‚ÌƒXƒƒbƒg
-	 */
-	void save_button_slot();
-//public Q_SIGNAL:
-//	void save_button_signal(QString filename);
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 * @param flags
+		 */
+		explicit RTC_MainWindow(QWidget* parent = Q_NULLPTR, Qt::WindowFlags flags = 0);
+		/**
+		 * @brief ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£ç·¨é›†ã‚¿ãƒ–è¿½åŠ 
+		 * @param name åå‰
+		 * @param text ãƒ†ã‚­ã‚¹ãƒˆ
+		 */
+		void addActivityTab(ActivityCode name, QString text);
+		/**
+		 * @brief ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆå‰Šé™¤
+		 * @param name ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆå
+		 */
+		void deleteServicePort(QString name);
+		/**
+		 * @brief ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆå‰Šé™¤
+		 * @param name ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆå
+		 */
+		void deleteDataPort(QString name);
+		/**
+		 * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å‰Šé™¤
+		 * @param name ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å
+		 */
+		void deleteConfig(QString name);
+		/**
+		 * @brief ãƒ¡ãƒ‹ãƒ¥ãƒ¼ä½œæˆ
+		 */
+		void createMenus();
+		/**
+		 * @brief ç·¨é›†ä¸­ã®Pythonãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹å–å¾—
+		 * @return Pythonãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹
+		 */
+		QString getFileName();
+		/**
+		* @brief RTCãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå–å¾—
+		* @return RTCãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		*/
+		RTC_XML::RTC_ProfileRTP* getRTCProfile();
+		/**
+		* @brief å®Ÿè£…ã‚³ãƒ¼ãƒ‰å–å¾—
+		* @param id ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã®ID
+		* @return å®Ÿè£…ã‚³ãƒ¼ãƒ‰æ–‡å­—åˆ—
+		*/
+		QString get_code(ActivityCode id);
+		/**
+		* @brief å®Ÿè£…ã‚³ãƒ¼ãƒ‰è¨­å®š
+		* @param id ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã®ID
+		* @param code å®Ÿè£…ã‚³ãƒ¼ãƒ‰æ–‡å­—åˆ—
+		*/
+		void set_code(ActivityCode id, QString code);
+		cnoid::Signal<void(const char*)>  sigSaveButton;
 
-public:
-	QMap<ActivityCode, ActivityTab*> tab_list;
-	QWidget *cw;
-	QVBoxLayout *ml;
-	QHBoxLayout *subLayout;
-	QVBoxLayout *tabLayout;
-	QTabWidget *tab_widget;
-	QHBoxLayout *rtcLayout;
-	RTCViewWidgetRTP *vw;
-	QVBoxLayout* viewLayout;
-	QTabWidget *rtc_tab_widget;
-	addDataPortTab *_addDataPortTab;
-	DataPortTable *_dataport_widget;
-	addServicePortTab * _addServicePortTab;
-	ServicePortTable *_serviceport_widget;
-	addConfigurationTab *_addConfigurationTab;
-	ConfigurationTable *_config_widget;
-	QMap<ActivityCode, QString> activities;
-	ControlCompWidget *_controlCompWidget;
-	QPushButton *save_button;
-	ActivityTab *global_tab;
-	RTC_XML::RTC_ProfileRTP *_comp;
-	QTemporaryDir _tmp_dir;
-	/*
-	QMenu *fileMenu;
-	QMenu *exportMenu;
-	QMenu *editMenu;
-	QMenu *fontMenu;
-	QMenu *optionMenu;
-	QMenu *execMenu;
-	QMenu *helpMenu;
-	QAction *newAct;
-	QAction *openAct;
-	QAction *saveAct;
-	QAction *saveAsAct;
-	*/
-};
+	public Q_SLOTS:
+		/**
+		 * @brief ä¿å­˜ãƒœã‚¿ãƒ³æŠ¼ä¸‹æ™‚ã®ã‚¹ãƒ­ãƒƒãƒˆ
+		 */
+		void save_button_slot();
+		//public Q_SIGNAL:
+		//	void save_button_signal(QString filename);
+
+	public:
+		QMap<ActivityCode, ActivityTab*> tab_list;
+		QWidget* cw;
+		QVBoxLayout* ml;
+		QHBoxLayout* subLayout;
+		QVBoxLayout* tabLayout;
+		QTabWidget* tab_widget;
+		QHBoxLayout* rtcLayout;
+		RTCViewWidgetRTP* vw;
+		QVBoxLayout* viewLayout;
+		QTabWidget* rtc_tab_widget;
+		addDataPortTab* _addDataPortTab;
+		DataPortTable* _dataport_widget;
+		addServicePortTab* _addServicePortTab;
+		ServicePortTable* _serviceport_widget;
+		addConfigurationTab* _addConfigurationTab;
+		ConfigurationTable* _config_widget;
+		QMap<ActivityCode, QString> activities;
+		ControlCompWidget* _controlCompWidget;
+		QPushButton* save_button;
+		ActivityTab* global_tab;
+		RTC_XML::RTC_ProfileRTP* _comp;
+		QTemporaryDir _tmp_dir;
+		/*
+		QMenu *fileMenu;
+		QMenu *exportMenu;
+		QMenu *editMenu;
+		QMenu *fontMenu;
+		QMenu *optionMenu;
+		QMenu *execMenu;
+		QMenu *helpMenu;
+		QAction *newAct;
+		QAction *openAct;
+		QAction *saveAct;
+		QAction *saveAsAct;
+		*/
+	};
+}
 
 #endif // MAINWINDOW_H

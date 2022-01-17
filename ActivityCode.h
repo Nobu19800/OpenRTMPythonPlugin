@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file  ActivityCode.h
- * @brief ƒAƒNƒeƒBƒrƒeƒB‚Ì’è‹`
+ * @brief ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£ã®å®šç¾©
  *
  */
 
@@ -9,36 +9,38 @@
 
 #include <QString>
 
+namespace rtmiddleware {
+	/**
+	 * @enum ActivityCode
+	 * @brief ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£ä¸€è¦§
+	 */
+	enum ActivityCode
+	{
+		code_onInitialize = 0,
+		code_onFinalize = 1,
+		code_onStartup = 2,
+		code_onShutdown = 3,
+		code_onActivated = 4,
+		code_onDeactivated = 5,
+		code_onExecute = 6,
+		code_onAborting = 7,
+		code_onError = 8,
+		code_onReset = 9,
+		code_onStateUpdate = 10,
+		code_onRateChanged = 11,
+		code_inputFromSimulator = 12,
+		code_outputToSimulator = 13,
+		code_setBody = 14,
+		code_num = 15
+	};
 
-/**
- * @enum ActivityCode
- * @brief ƒAƒNƒeƒBƒrƒeƒBˆê——
- */
-enum ActivityCode
-{
-	code_onInitialize = 0,
-	code_onFinalize = 1,
-	code_onStartup = 2,
-	code_onShutdown = 3,
-	code_onActivated = 4,
-	code_onDeactivated = 5,
-	code_onExecute = 6,
-	code_onAborting = 7,
-	code_onError = 8,
-	code_onReset = 9,
-	code_onStateUpdate = 10,
-	code_onRateChanged = 11,
-	code_inputFromSimulator = 12,
-	code_outputToSimulator = 13,
-	code_setBody = 14,
-	code_num = 15
-};
+	/**
+	 * @fn
+	 * @brief ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£ã®IDã‚’æ–‡å­—åˆ—ã«å¤‰æ›ã™ã‚‹
+	 * @param id ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£ã®ID
+	 * @return æ–‡å­—åˆ—
+	 */
+	QString Activity_toString(ActivityCode id);
 
-/**
- * @fn
- * @brief ƒAƒNƒeƒBƒrƒeƒB‚ÌID‚ğ•¶š—ñ‚É•ÏŠ·‚·‚é
- * @param id ƒAƒNƒeƒBƒrƒeƒB‚ÌID
- * @return •¶š—ñ
- */
-QString Activity_toString(ActivityCode id);
-#endif // TEXTEDIT_H
+}
+#endif // ACTIVITYCODE_H

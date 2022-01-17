@@ -1,39 +1,26 @@
-/*!
+Ôªø/*!
  * @file  OpenRTMPythonPlugin.cpp
- * @brief OpenRTMòAågÉvÉâÉOÉCÉìPythonî≈
+ * @brief OpenRTMÈÄ£Êê∫„Éó„É©„Ç∞„Ç§„É≥PythonÁâà
  *
  */
 
 #include <cnoid/Plugin>
 #include <cnoid/MenuManager>
 #include <cnoid/MessageView>
-#include <boost/bind.hpp>
 
-
-
-#include <boost/ref.hpp>
+#include <fmt/format.h>
 
 #include <cnoid/PythonExecutor>
 #include <cnoid/PyUtil>
+#include "cnoid/PythonPlugin"
 
-#ifdef CNOID_USE_PYBIND11
 #include <pybind11/embed.h>
 namespace py = pybind11;
-#else
-#include <boost/python.hpp>
-namespace py = boost::python;
-#endif
 
 
 //#include <src/OpenRTMPlugin/RTSNameServerView.h>
 
-namespace cnoid {
-# if defined _WIN32 || defined __CYGWIN__
-	__declspec(dllimport) python::object getGlobalNamespace();
-#else
-	python::object getGlobalNamespace();
-#endif
-}
+
 
 
 
@@ -54,285 +41,275 @@ namespace cnoid {
 
 
 using namespace cnoid;
-using namespace boost;
-using namespace rtmiddleware;
-
 
 /**
  * @class PyGILock
- * @brief Pythoné¿çséûÇÃÉçÉbÉNÉIÉuÉWÉFÉNÉg
+ * @brief PythonÂÆüË°åÊôÇ„ÅÆ„É≠„ÉÉ„ÇØ„Ç™„Éñ„Ç∏„Çß„ÇØ„Éà
  */
 class PyGILock
 {
 	PyGILState_STATE gstate;
 public:
 	/**
-	 * @brief ÉRÉìÉXÉgÉâÉNÉ^
+	 * @brief „Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø
 	 */
 	PyGILock() {
 		gstate = PyGILState_Ensure();
 	};
 	/**
-	 * @brief ÉfÉXÉgÉâÉNÉ^
+	 * @brief „Éá„Çπ„Éà„É©„ÇØ„Çø
 	 */
 	~PyGILock() {
 		PyGILState_Release(gstate);
 	};
 };
 
+namespace rtmiddleware {
 
-/*
-class controlLink
-{
-public:
-
-	controlLink(){};
-
-	static LinkPtr getLink(Body *ioBody, const char* name)
-	{
-		return ioBody->link(name);
-	}
-
-
-	static void setJointPosition(LinkPtr *lb, double q)
-	{
-		(*lb)->q() = q;
-	};
-	static double getJointPosition(LinkPtr *lb)
-	{
-		return (*lb)->q();
-	};
-	static void setJointVelocity(LinkPtr *lb, double dq)
-	{
-
-		(*lb)->dq() = dq;
-	};
-	static double getJointVelocity(LinkPtr *lb)
-	{
-		return (*lb)->dq();
-	};
-	static void setJointAcceralation(LinkPtr *lb, double ddq)
-	{
-		(*lb)->ddq() = ddq;
-	};
-	static double getJointAcceralation(LinkPtr *lb)
-	{
-		return (*lb)->ddq();
-	};
-	static void setJointForce(LinkPtr *lb, double u)
-	{
-		(*lb)->u() = u;
-	};
-	static double getJointForce(LinkPtr *lb)
-	{
-		return (*lb)->u();
-	};
-	static LightPtr getLight(Body *ioBody, const char* name)
-	{
-		return ioBody->findDevice<Light>(name);
-	};
-	static void lightOn(LightPtr *lb, bool on)
-	{
-		(*lb)->on(on);
-		(*lb)->notifyStateChange();
-	};
-
-
-};
-
-
-
-
-
-
-
-
-BOOST_PYTHON_MODULE(CnoidLink)
-{
-	python::class_<Body>("Body", python::init<>())
-	;
-	python::class_<LinkPtr>("Link")
-	;
-	python::class_<LightPtr>("Light")
-	;
-
-	python::class_<controlLink>("controlLink")
-	.def("getLink", &controlLink::getLink).staticmethod("getLink")
-	.def("setJointPosition", &controlLink::setJointPosition, python::return_internal_reference<>()).staticmethod("setJointPosition")
-	.def("getJointPosition", &controlLink::getJointPosition).staticmethod("getJointPosition")
-	.def("setJointVelocity", &controlLink::setJointVelocity, python::return_internal_reference<>()).staticmethod("setJointVelocity")
-	.def("getJointVelocity", &controlLink::getJointVelocity).staticmethod("getJointVelocity")
-	.def("setJointAcceralation", &controlLink::setJointAcceralation, python::return_internal_reference<>()).staticmethod("setJointAcceralation")
-	.def("getJointAcceralation", &controlLink::getJointAcceralation).staticmethod("getJointAcceralation")
-	.def("setJointForce", &controlLink::setJointForce, python::return_internal_reference<>()).staticmethod("setJointForce")
-	.def("getJointForce", &controlLink::getJointForce).staticmethod("getJointForce")
-	.def("getLight", &controlLink::getLight).staticmethod("getLight")
-	.def("lightOn", &controlLink::lightOn).staticmethod("lightOn")
-	;
-
-}
-*/
-
-
-
-/**
- * @class OpenRTMPythonPlugin
- * @brief OpenRTMòAågÉvÉâÉOÉCÉìPythonî≈
- */
-class CNOID_EXPORT OpenRTMPythonPlugin : public Plugin
-{
-public:
-	/**
-	 * @brief ÉRÉìÉXÉgÉâÉNÉ^
-	 */
-	OpenRTMPythonPlugin();
-	/**
-	 * @brief ÉfÉXÉgÉâÉNÉ^
-	 */
-	virtual ~OpenRTMPythonPlugin();
-	/**
-	 * @brief èâä˙âªä÷êî
-	 * @return true:ê¨å˜ false:é∏îs
-	 */
-	virtual bool initialize();
-	/**
-	 * @brief èIóπä÷êî
-	 * @return true:ê¨å˜ false:é∏îs
-	 */
-	virtual bool finalize();
-
-
-};
-
-/**
- * @brief ÉRÉìÉXÉgÉâÉNÉ^
- */
-OpenRTMPythonPlugin::OpenRTMPythonPlugin() :
-Plugin("OpenRTMPython")
-{
-	require("Body");
-	require("Python");
-	require("Corba");
-	require("OpenRTM");
-	
-	
-	
-}
-
-/**
- * @brief ÉfÉXÉgÉâÉNÉ^
- */
-OpenRTMPythonPlugin::~OpenRTMPythonPlugin()
-{
-	
-}
-
-/**
- * @brief èâä˙âªä÷êî
- * @return true:ê¨å˜ false:é∏îs
- */
-bool OpenRTMPythonPlugin::initialize()
-{
-	//itemManager().registerClass<PyRTCItem>(N_("PyRTCItem"));
-	//itemManager().addCreationPanel<PyRTCItem>();
 	/*
-	if( PyImport_AppendInittab( "CnoidLink" , initCnoidLink ) == -1 )
+	class controlLink
 	{
-		return false;
-	}
+	public:
 
+		controlLink(){};
+
+		static LinkPtr getLink(Body *ioBody, const char* name)
+		{
+			return ioBody->link(name);
+		}
+
+
+		static void setJointPosition(LinkPtr *lb, double q)
+		{
+			(*lb)->q() = q;
+		};
+		static double getJointPosition(LinkPtr *lb)
+		{
+			return (*lb)->q();
+		};
+		static void setJointVelocity(LinkPtr *lb, double dq)
+		{
+
+			(*lb)->dq() = dq;
+		};
+		static double getJointVelocity(LinkPtr *lb)
+		{
+			return (*lb)->dq();
+		};
+		static void setJointAcceralation(LinkPtr *lb, double ddq)
+		{
+			(*lb)->ddq() = ddq;
+		};
+		static double getJointAcceralation(LinkPtr *lb)
+		{
+			return (*lb)->ddq();
+		};
+		static void setJointForce(LinkPtr *lb, double u)
+		{
+			(*lb)->u() = u;
+		};
+		static double getJointForce(LinkPtr *lb)
+		{
+			return (*lb)->u();
+		};
+		static LightPtr getLight(Body *ioBody, const char* name)
+		{
+			return ioBody->findDevice<Light>(name);
+		};
+		static void lightOn(LightPtr *lb, bool on)
+		{
+			(*lb)->on(on);
+			(*lb)->notifyStateChange();
+		};
+
+
+	};
+
+
+	BOOST_PYTHON_MODULE(CnoidLink)
+	{
+		python::class_<Body>("Body", python::init<>())
+		;
+		python::class_<LinkPtr>("Link")
+		;
+		python::class_<LightPtr>("Light")
+		;
+
+		python::class_<controlLink>("controlLink")
+		.def("getLink", &controlLink::getLink).staticmethod("getLink")
+		.def("setJointPosition", &controlLink::setJointPosition, python::return_internal_reference<>()).staticmethod("setJointPosition")
+		.def("getJointPosition", &controlLink::getJointPosition).staticmethod("getJointPosition")
+		.def("setJointVelocity", &controlLink::setJointVelocity, python::return_internal_reference<>()).staticmethod("setJointVelocity")
+		.def("getJointVelocity", &controlLink::getJointVelocity).staticmethod("getJointVelocity")
+		.def("setJointAcceralation", &controlLink::setJointAcceralation, python::return_internal_reference<>()).staticmethod("setJointAcceralation")
+		.def("getJointAcceralation", &controlLink::getJointAcceralation).staticmethod("getJointAcceralation")
+		.def("setJointForce", &controlLink::setJointForce, python::return_internal_reference<>()).staticmethod("setJointForce")
+		.def("getJointForce", &controlLink::getJointForce).staticmethod("getJointForce")
+		.def("getLight", &controlLink::getLight).staticmethod("getLight")
+		.def("lightOn", &controlLink::lightOn).staticmethod("lightOn")
+		;
+
+	}
 	*/
 
+
+
+	/**
+	 * @class OpenRTMPythonPlugin
+	 * @brief OpenRTMÈÄ£Êê∫„Éó„É©„Ç∞„Ç§„É≥PythonÁâà
+	 */
+	class CNOID_EXPORT OpenRTMPythonPlugin : public Plugin
 	{
-		PyGILock lock;
-		python::object obj;
-		try
-		{
-			std::string dir = (filesystem::path(executableTopDirectory()) / CNOID_PLUGIN_SUBDIR / "python/cnoid/OpenRTM_Python_plugin.py").generic_string();
-#ifdef CNOID_USE_PYBIND11
-			obj = py::eval_file
-#else
-			obj = py::exec_file
-#endif
-				(
-				dir.c_str(),
-				getGlobalNamespace()
-				//cnoid::pythonMainNamespace()
-				);
-		}
-		catch(const python::error_already_set&e)
-		{
-#ifdef CNOID_USE_PYBIND11
-			MessageView::instance()->putln(0,
-				format(_("%1%")) % e.what());
-#else
-			PyErr_Print();
-#endif
-		}
-		catch (...)
-		{
-		
-		}
+	public:
+		/**
+		 * @brief „Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø
+		 */
+		OpenRTMPythonPlugin();
+		/**
+		 * @brief „Éá„Çπ„Éà„É©„ÇØ„Çø
+		 */
+		virtual ~OpenRTMPythonPlugin();
+		/**
+		 * @brief ÂàùÊúüÂåñÈñ¢Êï∞
+		 * @return true:ÊàêÂäü false:Â§±Êïó
+		 */
+		virtual bool initialize();
+		/**
+		 * @brief ÁµÇ‰∫ÜÈñ¢Êï∞
+		 * @return true:ÊàêÂäü false:Â§±Êïó
+		 */
+		virtual bool finalize();
+
+
+	};
+
+	/**
+	 * @brief „Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø
+	 */
+	OpenRTMPythonPlugin::OpenRTMPythonPlugin() :
+		Plugin("OpenRTMPython")
+	{
+		require("Body");
+		require("Python");
+		require("Corba");
+		require("OpenRTM");
+
+
+
 	}
 
+	/**
+	 * @brief „Éá„Çπ„Éà„É©„ÇØ„Çø
+	 */
+	OpenRTMPythonPlugin::~OpenRTMPythonPlugin()
 	{
-		PyGILock lock;
-		try
-		{
-			getGlobalNamespace()["runManager"]();
-			//cnoid::pythonMainNamespace()["runManager"]();
-		}
-		catch(const python::error_already_set&e)
-		{
-#ifdef CNOID_USE_PYBIND11
-			MessageView::instance()->putln(0,
-				format(_("%1%")) % e.what());
-#else
-			PyErr_Print();
-#endif
-		}
-		catch (...)
-		{
-		
-		}
+
 	}
-	PyRTCItem::initialize(this);
-	RTCEditorItem::initialize(this);
-	ComponentListItem::initialize(this);
 
-	ComponentListView::initializeClass(this);
+	/**
+	 * @brief ÂàùÊúüÂåñÈñ¢Êï∞
+	 * @return true:ÊàêÂäü false:Â§±Êïó
+	 */
+	bool OpenRTMPythonPlugin::initialize()
+	{
+		//itemManager().registerClass<PyRTCItem>(N_("PyRTCItem"));
+		//itemManager().addCreationPanel<PyRTCItem>();
+		/*
+		if( PyImport_AppendInittab( "CnoidLink" , initCnoidLink ) == -1 )
+		{
+			return false;
+		}
 
-        return true;
+		*/
+
+		{
+			PyGILock lock;
+			python::object obj;
+			try
+			{
+				cnoid::PythonPlugin* pythonPlugin = cnoid::PythonPlugin::instance();
+				if (pythonPlugin)
+				{
+					std::string dir = (filesystem::path(executableTopDirectory()) / CNOID_PLUGIN_SUBDIR / "python/cnoid/OpenRTM_Python_plugin.py").generic_string();
+
+					obj = py::eval_file
+					(
+						dir.c_str(),
+						pythonPlugin->globalNamespace()
+						//cnoid::pythonMainNamespace()
+					);
+				}
+			}
+			catch (const python::error_already_set& e)
+			{
+				MessageView::instance()->putln(0,
+					fmt::format(_("{}"), e.what()));
+			}
+			catch (...)
+			{
+
+			}
+		}
+
+		{
+			PyGILock lock;
+			try
+			{
+				cnoid::PythonPlugin* pythonPlugin = cnoid::PythonPlugin::instance();
+				if (pythonPlugin)
+				{
+					pythonPlugin->globalNamespace()["runManager"]();
+					//cnoid::pythonMainNamespace()["runManager"]();
+				}
+			}
+			catch (const python::error_already_set& e)
+			{
+				MessageView::instance()->putln(0,
+					fmt::format(_("{}"), e.what()));
+			}
+			catch (...)
+			{
+
+			}
+		}
+		PyRTCItem::initialize(this);
+		RTCEditorItem::initialize(this);
+		ComponentListItem::initialize(this);
+
+		ComponentListView::initializeClass(this);
+
+		return true;
+	}
+
+	/**
+	 * @brief ÁµÇ‰∫ÜÈñ¢Êï∞
+	 * @return true:ÊàêÂäü false:Â§±Êïó
+	 */
+	bool OpenRTMPythonPlugin::finalize()
+	{
+		{
+			PyGILock lock;
+			try
+			{
+				cnoid::PythonPlugin* pythonPlugin = cnoid::PythonPlugin::instance();
+				if (pythonPlugin)
+				{
+					pythonPlugin->globalNamespace()["shutdownManager"]();
+					//pythonMainNamespace()["shutdownManager"]();
+				}
+			}
+			catch (const python::error_already_set& e)
+			{
+				MessageView::instance()->putln(0,
+					fmt::format(_("{}"), e.what()));
+			}
+			catch (...)
+			{
+
+			}
+		}
+		return true;
+	}
 }
 
-/**
- * @brief èIóπä÷êî
- * @return true:ê¨å˜ false:é∏îs
- */
-bool OpenRTMPythonPlugin::finalize()
-{
-	{
-		PyGILock lock;
-		try
-		{
-			getGlobalNamespace()["shutdownManager"]();
-			//pythonMainNamespace()["shutdownManager"]();
-		}
-		catch(const python::error_already_set&e)
-		{
-#ifdef CNOID_USE_PYBIND11
-			MessageView::instance()->putln(0,
-				format(_("%1%")) % e.what());
-#else
-			PyErr_Print();
-#endif
-		}
-		catch (...)
-		{
-		
-		}
-	}
-	return true;
-}
-
-CNOID_IMPLEMENT_PLUGIN_ENTRY(OpenRTMPythonPlugin)
+CNOID_IMPLEMENT_PLUGIN_ENTRY(rtmiddleware::OpenRTMPythonPlugin)

@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file  addServicePortTab.h
- * @brief ƒT[ƒrƒXƒ|[ƒgİ’èƒ^ƒu
+ * @brief ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆè¨­å®šã‚¿ãƒ–
  *
  */
 
@@ -31,78 +31,78 @@ QT_END_NAMESPACE
 
 
 
-
-/**
- * @class addDataPortTab
- * @brief ƒT[ƒrƒXƒ|[ƒgİ’èƒ^ƒu
- */
-class addServicePortTab : public BaseTab
-{
-    Q_OBJECT
-
-public:
+namespace rtmiddleware {
 	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param comp ƒRƒ“ƒ|[ƒlƒ“ƒgƒvƒƒtƒ@ƒCƒ‹ƒIƒuƒWƒFƒNƒg
-	 * @param viewWidget RTC•\¦ƒEƒBƒWƒFƒbƒg
-	 * @param listWidget ƒT[ƒrƒXƒ|[ƒgˆê——•\¦ƒEƒBƒWƒFƒbƒg
-	 * @param parent eƒEƒBƒWƒFƒbƒg
+	 * @class addDataPortTab
+	 * @brief ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆè¨­å®šã‚¿ãƒ–
 	 */
-	addServicePortTab(RTC_XML::RTC_ProfileRTP *comp, RTCViewWidget *viewWidget, ServicePortTable *listWidget, QWidget *parent = Q_NULLPTR);
-	/**
-	 * @brief ƒT[ƒrƒXƒ|[ƒgŒŸõ
-	 * @param name ƒ|[ƒg–¼
-	 * @param ret ƒT[ƒrƒXƒ^ƒ|[ƒgƒvƒƒtƒ@ƒCƒ‹ƒIƒuƒWƒFƒNƒg
-	 * @param return trueFw’èƒ|[ƒg–¼‚ÌƒT[ƒrƒXƒ|[ƒg‚ª‘¶İ‚µ‚½ false:‘¶İ‚µ‚È‚©‚Á‚½
-	 */
-	bool searchPort(QString name, RTC_XML::ServicePorts &ret);
-	/**
-	 * @brief ƒT[ƒrƒXƒ|[ƒg’Ç‰Á
-	 * @param profile ƒT[ƒrƒXƒ|[ƒgƒvƒƒtƒ@ƒCƒ‹ƒIƒuƒWƒFƒNƒg
-	 */
-	void addPort(RTC_XML::ServicePorts profile);
-	
+	class addServicePortTab : public BaseTab
+	{
+		Q_OBJECT
 
-
-public Q_SLOTS:
-	/**
-	 * @brief IDLƒtƒ@ƒCƒ‹İ’èƒ{ƒ^ƒ“‰Ÿ‰º‚ÌƒXƒƒbƒg
-	 */
-	void IDLFileButtonSlot();
-	/**
-	 * @brief IDLƒCƒ“ƒNƒ‹[ƒhƒpƒXİ’èƒ{ƒ^ƒ“‰Ÿ‰º‚ÌƒXƒƒbƒg
-	 */
-	void IDLPathButtonSlot();
-	/**
-	 * @brief ¶¬ƒ{ƒ^ƒ“‰Ÿ‰º‚ÌƒXƒƒbƒg
-	 */
-	void createButtonSlot();
-//    void fileNew();
-
-protected:
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param comp ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		 * @param viewWidget RTCè¡¨ç¤ºã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 * @param listWidget ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆä¸€è¦§è¡¨ç¤ºã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		addServicePortTab(RTC_XML::RTC_ProfileRTP* comp, RTCViewWidget* viewWidget, ServicePortTable* listWidget, QWidget* parent = Q_NULLPTR);
+		/**
+		 * @brief ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆæ¤œç´¢
+		 * @param name ãƒãƒ¼ãƒˆå
+		 * @param ret ã‚µãƒ¼ãƒ“ã‚¹ã‚¿ãƒãƒ¼ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		 * @param return trueï¼šæŒ‡å®šãƒãƒ¼ãƒˆåã®ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆãŒå­˜åœ¨ã—ãŸ false:å­˜åœ¨ã—ãªã‹ã£ãŸ
+		 */
+		bool searchPort(QString name, RTC_XML::ServicePorts& ret);
+		/**
+		 * @brief ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆè¿½åŠ 
+		 * @param profile ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		 */
+		void addPort(RTC_XML::ServicePorts profile);
 
 
 
+	public Q_SLOTS:
+		/**
+		 * @brief IDLãƒ•ã‚¡ã‚¤ãƒ«è¨­å®šãƒœã‚¿ãƒ³æŠ¼ä¸‹æ™‚ã®ã‚¹ãƒ­ãƒƒãƒˆ
+		 */
+		void IDLFileButtonSlot();
+		/**
+		 * @brief IDLã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ãƒ‘ã‚¹è¨­å®šãƒœã‚¿ãƒ³æŠ¼ä¸‹æ™‚ã®ã‚¹ãƒ­ãƒƒãƒˆ
+		 */
+		void IDLPathButtonSlot();
+		/**
+		 * @brief ç”Ÿæˆãƒœã‚¿ãƒ³æŠ¼ä¸‹æ™‚ã®ã‚¹ãƒ­ãƒƒãƒˆ
+		 */
+		void createButtonSlot();
+		//    void fileNew();
+
+	protected:
 
 
-//    void fileOpen();
 
 
-private:
-	RTCViewWidget *_viewWidget;
-	ServicePortTable *_listWidget;
-	BaseWidget _portNameTextbox;
-	BaseWidget _interfaceNameTextbox;
-	BaseWidget _dinterfaceDirCombox;
-	BaseWidget _interfaceDirCombox;
-	BaseWidget _IDLTextbox;
-	BaseWidget _interfaceTypeCombox;
-	BaseWidget _IDLPathTextbox;
-	QPushButton *_IDLFileButton;
-	QPushButton *_IDLPathButton;
-	QPushButton *_createButton;
-	RTC_XML::RTC_ProfileRTP *_comp;
 
-};
+		//    void fileOpen();
 
-#endif // TEXTEDIT_H
+
+	private:
+		RTCViewWidget* _viewWidget;
+		ServicePortTable* _listWidget;
+		BaseWidget _portNameTextbox;
+		BaseWidget _interfaceNameTextbox;
+		BaseWidget _dinterfaceDirCombox;
+		BaseWidget _interfaceDirCombox;
+		BaseWidget _IDLTextbox;
+		BaseWidget _interfaceTypeCombox;
+		BaseWidget _IDLPathTextbox;
+		QPushButton* _IDLFileButton;
+		QPushButton* _IDLPathButton;
+		QPushButton* _createButton;
+		RTC_XML::RTC_ProfileRTP* _comp;
+
+	};
+}
+#endif // ADDSERVICEPORTTAB_H

@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file  ServicePortTable.h
- * @brief ƒT[ƒrƒXƒ|[ƒgˆê——•\¦ƒNƒ‰ƒX
+ * @brief ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆä¸€è¦§è¡¨ç¤ºã‚¯ãƒ©ã‚¹
  *
  */
 
@@ -28,82 +28,83 @@ class QLabel;
 class QVBoxLayout;
 QT_END_NAMESPACE
 
-
-/**
- * @class ServicePortOperationDialog
- * @brief ƒT[ƒrƒXƒ|[ƒgİ’èƒ_ƒCƒAƒƒO
- */
-class ServicePortOperationDialog : public QDialog
-{
-	Q_OBJECT
-public:
+namespace rtmiddleware {
 	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param parent eƒEƒBƒWƒFƒbƒg
+	 * @class ServicePortOperationDialog
+	 * @brief ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆè¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°
 	 */
-	ServicePortOperationDialog(QWidget *parent = Q_NULLPTR);
-private:
-	QVBoxLayout *_mainLayout;
+	class ServicePortOperationDialog : public QDialog
+	{
+		Q_OBJECT
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		ServicePortOperationDialog(QWidget* parent = Q_NULLPTR);
+	private:
+		QVBoxLayout* _mainLayout;
 
-};
+	};
 
 
-/**
- * @class ServicePortSettingButton
- * @brief ƒT[ƒrƒXƒ|[ƒgİ’èƒ{ƒ^ƒ“
- */
-class ServicePortSettingButton : QPushButton
-{
-	Q_OBJECT
-public:
 	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param name •\¦–¼
+	 * @class ServicePortSettingButton
+	 * @brief ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆè¨­å®šãƒœã‚¿ãƒ³
 	 */
-	ServicePortSettingButton(QString name);
-protected Q_SLOTS:
+	class ServicePortSettingButton : QPushButton
+	{
+		Q_OBJECT
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param name è¡¨ç¤ºå
+		 */
+		ServicePortSettingButton(QString name);
+	protected Q_SLOTS:
+		/**
+		 * @brief ãƒœã‚¿ãƒ³æŠ¼ä¸‹æ™‚ã‚¹ãƒ­ãƒƒãƒˆ
+		 */
+		void pushSlot();
+	private:
+		ServicePortOperationDialog* _dialog;
+	};
+
 	/**
-	 * @brief ƒ{ƒ^ƒ“‰Ÿ‰ºƒXƒƒbƒg
+	 * @class ServicePortTable
+	 * @brief ã‚µãƒ¼ãƒ“ã‚¹ãƒãƒ¼ãƒˆä¸€è¦§è¡¨ç¤ºã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
 	 */
-	void pushSlot();
-private:
-	ServicePortOperationDialog *_dialog;
-};
+	class ServicePortTable : public QTableWidget
+	{
+		Q_OBJECT
 
-/**
- * @class ServicePortTable
- * @brief ƒT[ƒrƒXƒ|[ƒgˆê——•\¦ƒEƒBƒWƒFƒbƒg
- */
-class ServicePortTable : public QTableWidget
-{
-	Q_OBJECT
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 */
+		ServicePortTable();
+		/**
+		 * @brief ãƒªã‚¹ãƒˆæ›´æ–°
+		 * @param ports ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆä¸€è¦§
+		 */
+		void list_update(QVector<RTC_XML::ServicePorts> ports);
 
-public:
-	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 */
-	ServicePortTable();
-	/**
-	 * @brief ƒŠƒXƒgXV
-	 * @param ports ƒf[ƒ^ƒ|[ƒgˆê——
-	 */
-	void list_update(QVector<RTC_XML::ServicePorts> ports);
+		//    void fileNew();
 
-	//    void fileNew();
-
-protected:
+	protected:
 
 
 
-private Q_SLOTS :
+	private Q_SLOTS:
 
 		//    void fileOpen();
 
 
-private:
+	private:
 
 
 
-};
+	};
+}
 
-#endif // TEXTEDIT_H
+#endif // SERVICEPORTTABLE_H

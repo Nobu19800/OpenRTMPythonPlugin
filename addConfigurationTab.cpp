@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file  addConfigurationTab.cpp
- * @brief ƒRƒ“ƒtƒBƒMƒ…ƒŒ[ƒVƒ‡ƒ“İ’èƒ^ƒu
+ * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³è¨­å®šã‚¿ãƒ–
  *
  */
 
@@ -37,90 +37,91 @@
 #include "gettext.h"
 
 
-
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- * @param comp ƒRƒ“ƒ|[ƒlƒ“ƒgƒvƒƒtƒ@ƒCƒ‹ƒIƒuƒWƒFƒNƒg
- * @param viewWidget RTC•\¦ƒEƒBƒWƒFƒbƒg
- * @param listWidget ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^ˆê——•\¦ƒEƒBƒWƒFƒbƒg
- * @param parent eƒEƒBƒWƒFƒbƒg
- */
-addConfigurationTab::addConfigurationTab(RTC_XML::RTC_ProfileRTP *comp, RTCViewWidget *viewWidget, ConfigurationTable *listWidget, QWidget *parent)
-	: ConfigParamWidgetBase(parent)
-{
-	_comp = comp;
-	_viewWidget = viewWidget;
-	_listWidget = listWidget;
-
-	QVector<QString> type_list({ "short","long", "double", "float", "string" });
-	QVector<QString> widget_list({ "text","slider","spin","radio","checkbox","ordered_list" });
-	_paramNameTextbox = addTextBox("paramNameTextbox", _("Parameter Name"), QVector<QString>(), "param");
-
-	_paramTypeCombox = addCombox("paramTypeCombox", _("Parameter Type"), QVector<QString>(), type_list, "string");
-	_paramDefaultTextbox = addTextBox("paramTypeCombox", _("Default Value"), QVector<QString>(), "1");
-	_paramConstraintsTextbox = addTextBox("paramConstraintsTextbox", _("Constraints"), QVector<QString>(), "");
-	_paramWidgetCombox = addCombox("paramWidgetCombox", _("Widget"), QVector<QString>(), widget_list, "text");
-	_paramStepTextbox = addTextBox("paramStepTextbox", _("Step"), QVector<QString>(), "");
-	
-
-
-	_createButton = new QPushButton(_("Create"));
-	QObject::connect(_createButton, SIGNAL(clicked()),this, SLOT(createButtonSlot()));
-
-	subLayouts.back()->addWidget(_createButton);
-	mainLayout->addStretch();
-	
-
-}
-
-/**
- * @brief ƒRƒ“ƒtƒBƒMƒ…ƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^’Ç‰Á
- * @param profile ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^ƒvƒƒtƒ@ƒCƒ‹ƒIƒuƒWƒFƒNƒg
- */
-void addConfigurationTab::addConfiguration(RTC_XML::ConfigurationSet profile)
-{
-	if (_comp != NULL)
+namespace rtmiddleware {
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * @param comp ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	 * @param viewWidget RTCè¡¨ç¤ºã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+	 * @param listWidget ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ä¸€è¦§è¡¨ç¤ºã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+	 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+	 */
+	addConfigurationTab::addConfigurationTab(RTC_XML::RTC_ProfileRTP* comp, RTCViewWidget* viewWidget, ConfigurationTable* listWidget, QWidget* parent)
+		: ConfigParamWidgetBase(parent)
 	{
-		_comp->addConfigurationSet(profile);
-		_listWidget->list_update(_comp->get_confsets());
+		_comp = comp;
+		_viewWidget = viewWidget;
+		_listWidget = listWidget;
+
+		QVector<QString> type_list({ "short","long", "double", "float", "string" });
+		QVector<QString> widget_list({ "text","slider","spin","radio","checkbox","ordered_list" });
+		_paramNameTextbox = addTextBox("paramNameTextbox", _("Parameter Name"), QVector<QString>(), "param");
+
+		_paramTypeCombox = addCombox("paramTypeCombox", _("Parameter Type"), QVector<QString>(), type_list, "string");
+		_paramDefaultTextbox = addTextBox("paramTypeCombox", _("Default Value"), QVector<QString>(), "1");
+		_paramConstraintsTextbox = addTextBox("paramConstraintsTextbox", _("Constraints"), QVector<QString>(), "");
+		_paramWidgetCombox = addCombox("paramWidgetCombox", _("Widget"), QVector<QString>(), widget_list, "text");
+		_paramStepTextbox = addTextBox("paramStepTextbox", _("Step"), QVector<QString>(), "");
+
+
+
+		_createButton = new QPushButton(_("Create"));
+		QObject::connect(_createButton, SIGNAL(clicked()), this, SLOT(createButtonSlot()));
+
+		subLayouts.back()->addWidget(_createButton);
+		mainLayout->addStretch();
 
 
 	}
-}
 
-/**
- * @brief ì¬ƒ{ƒ^ƒ“‰Ÿ‰º‚ÌƒXƒƒbƒg
- */
-void addConfigurationTab::createButtonSlot()
-{
-	RTC_XML::ConfigurationSet profile;
-
-	QString name = _paramNameTextbox.getText();
-	name = name.replace(" ", "");
-	name = name.replace("\t", "");
-	if (name.isEmpty())
+	/**
+	 * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿è¿½åŠ 
+	 * @param profile ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	 */
+	void addConfigurationTab::addConfiguration(RTC_XML::ConfigurationSet profile)
 	{
-		QMessageBox::question(this, _("Creation Faild"), _("Please Input Name"), QMessageBox::Ok);
-		return;
-	}
-	profile.set_name(name);
-	profile.set_type(_paramTypeCombox.getItemText());
+		if (_comp != NULL)
+		{
+			_comp->addConfigurationSet(profile);
+			_listWidget->list_update(_comp->get_confsets());
 
 
-	QString default_val = _paramDefaultTextbox.getText();
-	default_val = default_val.replace(" ", "");
-	default_val = default_val.replace("\t", "");
-	if (default_val.isEmpty())
-	{
-		QMessageBox::question(this, _("Creation Faild"), _("Please Input Default Value"), QMessageBox::Ok);
-		return;
+		}
 	}
 
-	profile.set_defaultValue(default_val);
+	/**
+	 * @brief ä½œæˆãƒœã‚¿ãƒ³æŠ¼ä¸‹æ™‚ã®ã‚¹ãƒ­ãƒƒãƒˆ
+	 */
+	void addConfigurationTab::createButtonSlot()
+	{
+		RTC_XML::ConfigurationSet profile;
 
-	profile.set_constraint(_paramConstraintsTextbox.getText());
-	profile.set_widget(_paramWidgetCombox.getItemText());
-	profile.set_step(_paramStepTextbox.getText());
+		QString name = _paramNameTextbox.getText();
+		name = name.replace(" ", "");
+		name = name.replace("\t", "");
+		if (name.isEmpty())
+		{
+			QMessageBox::question(this, _("Creation Faild"), _("Please Input Name"), QMessageBox::Ok);
+			return;
+		}
+		profile.set_name(name);
+		profile.set_type(_paramTypeCombox.getItemText());
 
-	addConfiguration(profile);
+
+		QString default_val = _paramDefaultTextbox.getText();
+		default_val = default_val.replace(" ", "");
+		default_val = default_val.replace("\t", "");
+		if (default_val.isEmpty())
+		{
+			QMessageBox::question(this, _("Creation Faild"), _("Please Input Default Value"), QMessageBox::Ok);
+			return;
+		}
+
+		profile.set_defaultValue(default_val);
+
+		profile.set_constraint(_paramConstraintsTextbox.getText());
+		profile.set_widget(_paramWidgetCombox.getItemText());
+		profile.set_step(_paramStepTextbox.getText());
+
+		addConfiguration(profile);
+	}
 }

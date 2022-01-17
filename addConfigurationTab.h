@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file  addConfigurationTab.h
- * @brief ƒRƒ“ƒtƒBƒMƒ…ƒŒ[ƒVƒ‡ƒ“İ’èƒ^ƒu
+ * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³è¨­å®šã‚¿ãƒ–
  *
  */
 
@@ -32,62 +32,66 @@ QT_END_NAMESPACE
 
 
 
+namespace rtmiddleware {
 
-/**
- * @class addConfigurationTab
- * @brief ƒRƒ“ƒtƒBƒMƒ…ƒŒ[ƒVƒ‡ƒ“İ’èƒ^ƒu
- */
-class addConfigurationTab : public ConfigParamWidgetBase
-{
-    Q_OBJECT
 
-public:
 	/**
-	 * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * @param comp ƒRƒ“ƒ|[ƒlƒ“ƒgƒvƒƒtƒ@ƒCƒ‹ƒIƒuƒWƒFƒNƒg
-	 * @param viewWidget RTC•\¦ƒEƒBƒWƒFƒbƒg
-	 * @param listWidget ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^ˆê——•\¦ƒEƒBƒWƒFƒbƒg
-	 * @param parent eƒEƒBƒWƒFƒbƒg
+	 * @class addConfigurationTab
+	 * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³è¨­å®šã‚¿ãƒ–
 	 */
-	addConfigurationTab(RTC_XML::RTC_ProfileRTP *comp, RTCViewWidget *viewWidget, ConfigurationTable *listWidget, QWidget *parent = Q_NULLPTR);
+	class addConfigurationTab : public ConfigParamWidgetBase
+	{
+		Q_OBJECT
 
-	
-
-
-public Q_SLOTS:
-	/**
-	 * @brief ƒRƒ“ƒtƒBƒMƒ…ƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^’Ç‰Á
-	 * @param profile ƒRƒ“ƒtƒBƒOƒŒ[ƒVƒ‡ƒ“ƒpƒ‰ƒ[ƒ^ƒvƒƒtƒ@ƒCƒ‹ƒIƒuƒWƒFƒNƒg
-	 */
-	void addConfiguration(RTC_XML::ConfigurationSet profile);
-	/**
-	 * @brief ì¬ƒ{ƒ^ƒ“‰Ÿ‰º‚ÌƒXƒƒbƒg
-	 */
-	void createButtonSlot();
-//    void fileNew();
-
-protected:
+	public:
+		/**
+		 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		 * @param comp ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		 * @param viewWidget RTCè¡¨ç¤ºã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 * @param listWidget ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ä¸€è¦§è¡¨ç¤ºã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 * @param parent è¦ªã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆ
+		 */
+		addConfigurationTab(RTC_XML::RTC_ProfileRTP* comp, RTCViewWidget* viewWidget, ConfigurationTable* listWidget, QWidget* parent = Q_NULLPTR);
 
 
 
 
+	public Q_SLOTS:
+		/**
+		 * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿è¿½åŠ 
+		 * @param profile ã‚³ãƒ³ãƒ•ã‚£ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		 */
+		void addConfiguration(RTC_XML::ConfigurationSet profile);
+		/**
+		 * @brief ä½œæˆãƒœã‚¿ãƒ³æŠ¼ä¸‹æ™‚ã®ã‚¹ãƒ­ãƒƒãƒˆ
+		 */
+		void createButtonSlot();
+		//    void fileNew();
 
-//    void fileOpen();
+	protected:
 
 
-private:
-	RTCViewWidget *_viewWidget;
-	ConfigurationTable *_listWidget;
-	QPushButton *_createButton;
-	RTC_XML::RTC_ProfileRTP *_comp;
 
-	BaseWidget _paramNameTextbox;
-	BaseWidget _paramTypeCombox;
-	BaseWidget _paramDefaultTextbox;
-	BaseWidget _paramConstraintsTextbox;
-	BaseWidget _paramWidgetCombox;
-	BaseWidget _paramStepTextbox;
-	
-};
 
-#endif // TEXTEDIT_H
+
+		//    void fileOpen();
+
+
+	private:
+		RTCViewWidget* _viewWidget;
+		ConfigurationTable* _listWidget;
+		QPushButton* _createButton;
+		RTC_XML::RTC_ProfileRTP* _comp;
+
+		BaseWidget _paramNameTextbox;
+		BaseWidget _paramTypeCombox;
+		BaseWidget _paramDefaultTextbox;
+		BaseWidget _paramConstraintsTextbox;
+		BaseWidget _paramWidgetCombox;
+		BaseWidget _paramStepTextbox;
+
+	};
+
+}
+
+#endif // ADDCONFIGURATIONTAB_H

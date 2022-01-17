@@ -1,81 +1,83 @@
-/*!
+ï»¿/*!
  * @file  ActivityCode.cpp
- * @brief ƒAƒNƒeƒBƒrƒeƒB‚Ì’è‹`
+ * @brief ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£ã®å®šç¾©
  *
  */
 
 #include "ActivityCode.h"
 
 
-/**
- * @fn
- * @brief ƒAƒNƒeƒBƒrƒeƒB‚ÌID‚ğ•¶š—ñ‚É•ÏŠ·‚·‚é
- * @param id ƒAƒNƒeƒBƒrƒeƒB‚ÌID
- * @return •¶š—ñ
- */
-QString Activity_toString(ActivityCode id)
-{
-	if(id == code_onInitialize)
+namespace rtmiddleware {
+	/**
+	 * @fn
+	 * @brief ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£ã®IDã‚’æ–‡å­—åˆ—ã«å¤‰æ›ã™ã‚‹
+	 * @param id ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£ã®ID
+	 * @return æ–‡å­—åˆ—
+	 */
+	QString Activity_toString(ActivityCode id)
 	{
-		return "onInitialize";
-	}
-	else if(id == code_onFinalize)
-	{
-		return "onFinalize";
-	}
-	else if(id == code_onStartup)
-	{
-		return "onStartup";
-	}
-	else if(id == code_onShutdown)
-	{
-		return "onShutdown";
-	}
-	else if(id == code_onActivated)
-	{
-		return "onActivated";
-	}
-	else if(id == code_onDeactivated)
-	{
-		return "onDeactivated";
-	}
-	else if(id == code_onExecute)
-	{
-		return "onExecute";
-	}
-	else if (id == code_onAborting)
-	{
-		return "onAborting";
-	}
-	else if(id == code_onError)
-	{
-		return "onError";
-	}
-	else if(id == code_onReset)
-	{
-		return "onReset";
-	}
-	else if(id == code_onStateUpdate)
-	{
-		return "onStateUpdate";
-	}
-	else if(id == code_onRateChanged)
-	{
-		return "onRateChanged";
-	}
-	else if (id == code_inputFromSimulator)
-	{
-		return "inputFromSimulator";
-	}
-	else if (id == code_outputToSimulator)
-	{
-		return "outputToSimulator";
-	}
-	else if (id == code_setBody)
-	{
-		return "setBody";
+		if (id == code_onInitialize)
+		{
+			return "onInitialize";
+		}
+		else if (id == code_onFinalize)
+		{
+			return "onFinalize";
+		}
+		else if (id == code_onStartup)
+		{
+			return "onStartup";
+		}
+		else if (id == code_onShutdown)
+		{
+			return "onShutdown";
+		}
+		else if (id == code_onActivated)
+		{
+			return "onActivated";
+		}
+		else if (id == code_onDeactivated)
+		{
+			return "onDeactivated";
+		}
+		else if (id == code_onExecute)
+		{
+			return "onExecute";
+		}
+		else if (id == code_onAborting)
+		{
+			return "onAborting";
+		}
+		else if (id == code_onError)
+		{
+			return "onError";
+		}
+		else if (id == code_onReset)
+		{
+			return "onReset";
+		}
+		else if (id == code_onStateUpdate)
+		{
+			return "onStateUpdate";
+		}
+		else if (id == code_onRateChanged)
+		{
+			return "onRateChanged";
+		}
+		else if (id == code_inputFromSimulator)
+		{
+			return "inputFromSimulator";
+		}
+		else if (id == code_outputToSimulator)
+		{
+			return "outputToSimulator";
+		}
+		else if (id == code_setBody)
+		{
+			return "setBody";
+		}
+
+		return "";
 	}
 
-	return "";
 }
-

@@ -1,6 +1,6 @@
-/*!
+ï»¿/*!
  * @file  DataPortTable.cpp
- * @brief ƒf[ƒ^ƒ|[ƒgˆê——•\¦ƒNƒ‰ƒX
+ * @brief ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆä¸€è¦§è¡¨ç¤ºã‚¯ãƒ©ã‚¹
  *
  */
 
@@ -33,41 +33,42 @@
 #include "DataPortTable.h"
 #include "gettext.h"
 
-
-/**
- * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
- */
-DataPortTable::DataPortTable()
-	: QTableWidget(5,3)
-{
-	QStringList horzHeaders;
-	horzHeaders << _("Name")
-		<< _("Variable Name(Data)")
-		<< _("Variable Name(Port)");
-	setHorizontalHeaderLabels(horzHeaders);
-	setSelectionMode(QAbstractItemView::NoSelection);
-	
-}
-
-/**
- * @brief ƒŠƒXƒgXV
- * @param ports ƒf[ƒ^ƒ|[ƒgˆê——
- */
-void DataPortTable::list_update(QVector<RTC_XML::DataPorts> ports)
-{
-	setRowCount(ports.size());
-	int num = 0;
-	for (QVector<RTC_XML::DataPorts>::iterator itr = ports.begin(); itr != ports.end(); itr++)
+namespace rtmiddleware {
+	/**
+	 * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 */
+	DataPortTable::DataPortTable()
+		: QTableWidget(5, 3)
 	{
-		if ((*itr).get_portType() == "DataOutPort" || (*itr).get_portType() == "DataInPort")
-		{
-			QString data_variable = "self." + (*itr).get_data_name();
-			QString port_variable = "self." + (*itr).get_port_name();
-			setItem(num, 0, new QTableWidgetItem((*itr).get_name()));
-			setItem(num, 1, new QTableWidgetItem(data_variable));
-			setItem(num, 2, new QTableWidgetItem(port_variable));
+		QStringList horzHeaders;
+		horzHeaders << _("Name")
+			<< _("Variable Name(Data)")
+			<< _("Variable Name(Port)");
+		setHorizontalHeaderLabels(horzHeaders);
+		setSelectionMode(QAbstractItemView::NoSelection);
 
-			num += 1;
+	}
+
+	/**
+	 * @brief ãƒªã‚¹ãƒˆæ›´æ–°
+	 * @param ports ãƒ‡ãƒ¼ã‚¿ãƒãƒ¼ãƒˆä¸€è¦§
+	 */
+	void DataPortTable::list_update(QVector<RTC_XML::DataPorts> ports)
+	{
+		setRowCount(ports.size());
+		int num = 0;
+		for (QVector<RTC_XML::DataPorts>::iterator itr = ports.begin(); itr != ports.end(); itr++)
+		{
+			if ((*itr).get_portType() == "DataOutPort" || (*itr).get_portType() == "DataInPort")
+			{
+				QString data_variable = "self." + (*itr).get_data_name();
+				QString port_variable = "self." + (*itr).get_port_name();
+				setItem(num, 0, new QTableWidgetItem((*itr).get_name()));
+				setItem(num, 1, new QTableWidgetItem(data_variable));
+				setItem(num, 2, new QTableWidgetItem(port_variable));
+
+				num += 1;
+			}
 		}
 	}
 }

@@ -42,7 +42,6 @@
 #include <cnoid/MessageView>
 
 
-#include <cnoid/PythonExecutor>
 #include <cnoid/PyUtil>
 #include "cnoid/PythonPlugin"
 #include <cnoid/stdx/filesystem>

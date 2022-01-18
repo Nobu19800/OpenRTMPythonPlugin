@@ -10,7 +10,6 @@
 
 #include <fmt/format.h>
 
-#include <cnoid/PythonExecutor>
 #include <cnoid/PyUtil>
 #include "cnoid/PythonPlugin"
 
@@ -28,6 +27,7 @@ namespace py = pybind11;
 
 #include <cnoid/FileUtil>
 #include <cnoid/ExecutablePath>
+#include <cnoid/stdx/filesystem>
 
 #include "exportdecl.h"
 #include "PyRTCItem.h"
@@ -230,7 +230,7 @@ namespace rtmiddleware {
 				cnoid::PythonPlugin* pythonPlugin = cnoid::PythonPlugin::instance();
 				if (pythonPlugin)
 				{
-					std::string dir = (filesystem::path(executableTopDirectory()) / CNOID_PLUGIN_SUBDIR / "python/cnoid/OpenRTM_Python_plugin.py").generic_string();
+					std::string dir = (cnoid::stdx::filesystem::path(executableTopDirectory()) / CNOID_PLUGIN_SUBDIR / "python/cnoid/OpenRTM_Python_plugin.py").generic_string();
 
 					obj = py::eval_file
 					(

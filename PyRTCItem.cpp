@@ -7,7 +7,6 @@
 #include <cnoid/MenuManager>
 #include <cnoid/MessageView>
 
-#include <cnoid/PythonExecutor>
 #include <cnoid/PyUtil>
 #include "cnoid/PythonPlugin"
 

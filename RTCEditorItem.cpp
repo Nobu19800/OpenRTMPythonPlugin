@@ -9,10 +9,7 @@
 
 #include <QTextCodec>
 
-//#include <src/OpenRTMPlugin/RTSItem.h>
 
-
-#include <cnoid/PythonExecutor>
 #include <cnoid/PyUtil>
 #include "cnoid/PythonPlugin"
 

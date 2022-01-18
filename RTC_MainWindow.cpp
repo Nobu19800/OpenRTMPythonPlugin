@@ -33,7 +33,7 @@
 #include <cnoid/MessageView>
 
 
-#include "Highlighter.h"
+#include "highlighter.h"
 
 #include "gettext.h"
 

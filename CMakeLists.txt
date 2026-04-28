@@ -96,7 +96,7 @@ set(qt_wrap_cpp_files
 )
 
 set(CMAKE_AUTOMOC ON)
-qt5_wrap_cpp(qtsources ${qt_wrap_cpp_files})
+choreonoid_qt_wrap_cpp(qtsources ${qt_wrap_cpp_files})
 
 
 set(plugin_sources
@@ -146,10 +146,12 @@ choreonoid_add_plugin(${plugin} ${plugin_sources} ${mofiles} ${RC_SRCS} ${plugin
 if(IS_MASTER_PROJECT)
   target_compile_definitions(${plugin} PUBLIC ${CHOREONOID_QT_COMPILE_DEFINITIONS})
   target_link_libraries(${plugin}
+    PRIVATE
     CnoidBodyIoRTC
     ${OPENRTM_LIBRARIES} ${CHOREONOID_CORBA_PLUGIN_LIBRARIES} ${CHOREONOID_BODY_PLUGIN_LIBRARIES} ${CHOREONOID_PYTHON_UTIL_LIBRARIES} ${CHOREONOID_PYTHON_LIBRARIES} CnoidPythonPlugin CnoidOpenRTM CnoidOpenRTMPlugin)
 else()
   target_link_libraries(${plugin}
+    PRIVATE
     CnoidBodyPlugin CnoidCorbaPlugin CnoidBodyIoRTC CnoidOpenRTM CnoidOpenRTMPlugin CnoidPyUtil CnoidPythonPlugin ${OPENRTM_LIBRARIES})
 endif()
 

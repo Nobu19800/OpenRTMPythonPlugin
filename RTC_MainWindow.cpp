@@ -28,7 +28,6 @@
 #include <QPushButton>
 #include <QTextEdit>
 #include <QDebug>
-#include <QTextCodec>
 
 #include <cnoid/MessageView>
 
@@ -188,7 +187,6 @@ namespace rtmiddleware {
 		//cnoid::MessageView::instance()->putln(0, "save");
 		//std::cout << tmp_dir.path().toStdString() << std::endl;
 
-		QTextCodec* codec = QTextCodec::codecForName("UTF-8");
 		QString file_name = getFileName();
 		QFile file(file_name);
 
@@ -201,7 +199,7 @@ namespace rtmiddleware {
 			return;
 		}
 		QTextStream stream(&file);
-		stream.setCodec(codec);
+		stream.setEncoding(QStringConverter::Utf8);
 
 		stream << "#!/usr/bin/env python\n";
 		stream << "# -*- coding: utf-8 -*-\n";

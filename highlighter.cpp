@@ -32,7 +32,7 @@ namespace rtmiddleware {
             << "\\bwhile\\b" << "\\byield\\b" << "\\bNone\\b"
             << "\\bTrue\\b" << "\\bFalse\\b";
         Q_FOREACH(const QString & pattern, keywordPatterns) {
-            rule.pattern = QRegExp(pattern);
+            rule.pattern = QRegularExpression(pattern);
             rule.format = keywordFormat;
             highlightingRules.append(rule);
 
@@ -40,30 +40,30 @@ namespace rtmiddleware {
 
         classFormat.setFontWeight(QFont::Bold);
         classFormat.setForeground(Qt::darkMagenta);
-        rule.pattern = QRegExp("\\bQ[A-Za-z]+\\b");
+        rule.pattern = QRegularExpression("\\bQ[A-Za-z]+\\b");
         rule.format = classFormat;
         highlightingRules.append(rule);
 
         singleLineCommentFormat.setForeground(Qt::red);
-        rule.pattern = QRegExp("//[^\n]*");
+        rule.pattern = QRegularExpression("//[^\n]*");
         rule.format = singleLineCommentFormat;
         highlightingRules.append(rule);
 
         multiLineCommentFormat.setForeground(Qt::red);
 
         quotationFormat.setForeground(Qt::darkGreen);
-        rule.pattern = QRegExp("\".*\"");
+        rule.pattern = QRegularExpression("\".*\"");
         rule.format = quotationFormat;
         highlightingRules.append(rule);
 
         functionFormat.setFontItalic(true);
         functionFormat.setForeground(Qt::blue);
-        rule.pattern = QRegExp("\\b[A-Za-z0-9_]+(?=\\()");
+        rule.pattern = QRegularExpression("\\b[A-Za-z0-9_]+(?=\\()");
         rule.format = functionFormat;
         highlightingRules.append(rule);
 
-        commentStartExpression = QRegExp("/\\*");
-        commentEndExpression = QRegExp("\\*/");
+        commentStartExpression = QRegularExpression("/\\*");
+        commentEndExpression = QRegularExpression("\\*/");
     }
 
     /**
@@ -73,6 +73,17 @@ namespace rtmiddleware {
     void Highlighter::highlightBlock(const QString& text)
     {
         Q_FOREACH(const HighlightingRule & rule, highlightingRules) {
+            QRegularExpressionMatchIterator i = rule.pattern.globalMatch(text);
+
+            while (i.hasNext()) {
+                QRegularExpressionMatch match = i.next();
+
+                int index = match.capturedStart();
+                int length = match.capturedLength();
+
+                setFormat(index, length, rule.format);
+            }
+            /*
             QRegExp expression(rule.pattern);
             int index = expression.indexIn(text);
             while (index >= 0) {
@@ -80,12 +91,44 @@ namespace rtmiddleware {
                 setFormat(index, length, rule.format);
                 index = expression.indexIn(text, index + length);
             }
+            */
         }
 
         setCurrentBlockState(0);
 
+        int startIndex = 0;
+        if (previousBlockState() != 1) {
+            QRegularExpressionMatch startMatch = commentStartExpression.match(text);
+            startIndex = startMatch.hasMatch() ? startMatch.capturedStart() : -1;
+        }
 
+        while (startIndex >= 0) {
 
+            QRegularExpressionMatch endMatch =
+                commentEndExpression.match(text, startIndex);
+
+            int commentLength;
+
+            if (!endMatch.hasMatch()) {
+                setCurrentBlockState(1);
+                commentLength = text.length() - startIndex;
+            }
+            else {
+                int endIndex = endMatch.capturedStart();
+                commentLength = endIndex - startIndex + endMatch.capturedLength();
+            }
+
+            setFormat(startIndex, commentLength, multiLineCommentFormat);
+
+            QRegularExpressionMatch nextStartMatch =
+                commentStartExpression.match(text, startIndex + commentLength);
+
+            startIndex = nextStartMatch.hasMatch()
+                ? nextStartMatch.capturedStart()
+                : -1;
+        }
+
+        /*
         int startIndex = 0;
         if (previousBlockState() != 1)
             startIndex = commentStartExpression.indexIn(text);
@@ -106,6 +149,7 @@ namespace rtmiddleware {
             setFormat(startIndex, commentLength, multiLineCommentFormat);
             startIndex = commentStartExpression.indexIn(text, startIndex + commentLength);
         }
+        */
     }
 
 }

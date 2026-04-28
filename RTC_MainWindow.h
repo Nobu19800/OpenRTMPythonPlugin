@@ -72,7 +72,7 @@ namespace rtmiddleware {
 		 * @param parent 親ウィジェット
 		 * @param flags
 		 */
-		explicit RTC_MainWindow(QWidget* parent = Q_NULLPTR, Qt::WindowFlags flags = 0);
+		explicit RTC_MainWindow(QWidget* parent = Q_NULLPTR, Qt::WindowFlags flags = Qt::WindowFlags());
 		/**
 		 * @brief アクティビティ編集タブ追加
 		 * @param name 名前

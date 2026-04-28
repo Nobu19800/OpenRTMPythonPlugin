@@ -7,8 +7,6 @@
 #include <cnoid/MenuManager>
 #include <cnoid/MessageView>
 
-#include <QTextCodec>
-
 
 #include <cnoid/PyUtil>
 #include "cnoid/PythonPlugin"
@@ -30,7 +28,7 @@
 
 #include <cnoid/FileUtil>
 #include <cnoid/ExecutablePath>
-#include <fmt/format.h>
+#include <cnoid/Format>
 
 
 #include <QLayout>
@@ -41,7 +39,6 @@
 #include <QDialogButtonBox>
 #include <QFileDialog>
 #include <QSignalMapper>
-#include <QRegExp>
 
 
 
@@ -220,7 +217,7 @@ namespace rtmiddleware {
 			catch (const py::error_already_set& e)
 			{
 				MessageView::instance()->putln(0,
-					fmt::format(_("{}"), e.what()));
+					formatR(_("{}"), e.what()));
 			}
 			catch (...)
 			{
@@ -261,7 +258,7 @@ namespace rtmiddleware {
 			catch (const py::error_already_set& e)
 			{
 				MessageView::instance()->putln(0,
-					fmt::format(_("{}"), e.what()));
+					formatR(_("{}"), e.what()));
 			}
 			catch (...)
 			{
@@ -302,7 +299,7 @@ namespace rtmiddleware {
 			catch (const py::error_already_set& e)
 			{
 				MessageView::instance()->putln(0,
-					fmt::format(_("{}"), e.what()));
+					formatR(_("{}"), e.what()));
 			}
 			catch (...)
 			{
@@ -342,7 +339,7 @@ namespace rtmiddleware {
 			catch (const py::error_already_set& e)
 			{
 				MessageView::instance()->putln(0,
-					fmt::format(_("{}"), e.what()));
+					formatR(_("{}"), e.what()));
 			}
 			catch (...)
 			{
@@ -381,7 +378,7 @@ namespace rtmiddleware {
 			catch (const py::error_already_set& e)
 			{
 				MessageView::instance()->putln(0,
-					fmt::format(_("{}"), e.what()));
+					formatR(_("{}"), e.what()));
 			}
 			catch (...)
 			{
@@ -403,7 +400,7 @@ namespace rtmiddleware {
 		static bool initialized = false;
 		if (!initialized) {
 			ext->itemManager().registerClass<RTCEditorItem>(N_("RTCEditor"));
-			ext->itemManager().addCreationPanel<RTCEditorItem>(NULL);
+			ext->itemManager().addCreationPanel<RTCEditorItem>();
 			initialized = true;
 		}
 	}
@@ -470,7 +467,7 @@ namespace rtmiddleware {
 			catch (const py::error_already_set& e)
 			{
 				MessageView::instance()->putln(0,
-					fmt::format(_("{}"), e.what()));
+					formatR(_("{}"), e.what()));
 			}
 			catch (...)
 			{
@@ -524,7 +521,7 @@ namespace rtmiddleware {
 			catch (const py::error_already_set& e)
 			{
 				MessageView::instance()->putln(0,
-					fmt::format(_("{}"), e.what()));
+					formatR(_("{}"), e.what()));
 			}
 			catch (...)
 			{

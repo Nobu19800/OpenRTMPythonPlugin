@@ -26,7 +26,6 @@
 #include <QTextEdit>
 #include <QDebug>
 #include <QGroupBox>
-#include <QTextCodec>
 
 
 

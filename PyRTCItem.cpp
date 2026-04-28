@@ -20,8 +20,7 @@
 #include <cnoid/Light>
 #include <cnoid/Archive>
 #include <cnoid/stdx/filesystem>
-#include <fmt/format.h>
-
+#include <cnoid/Format>
 
 #include <QLayout>
 #include <QLabel>
@@ -31,7 +30,6 @@
 #include <QDialogButtonBox>
 #include <QFileDialog>
 #include <QSignalMapper>
-#include <QRegExp>
 
 
 
@@ -133,7 +131,7 @@ namespace rtmiddleware {
 		static bool initialized = false;
 		if (!initialized) {
 			ext->itemManager().registerClass<PyRTCItem>(N_("PyRTCItem"));
-			ext->itemManager().addCreationPanel<PyRTCItem>(NULL);
+			ext->itemManager().addCreationPanel<PyRTCItem>();
 			initialized = true;
 		}
 	}
@@ -226,7 +224,7 @@ namespace rtmiddleware {
 			catch (const py::error_already_set& e)
 			{
 				MessageView::instance()->putln(MessageView::ERROR,
-					fmt::format(_("{}"), e.what()));
+					formatR(_("{}"), e.what()));
 			}
 			catch (...)
 			{
@@ -304,7 +302,7 @@ namespace rtmiddleware {
 			catch (const py::error_already_set& e)
 			{
 				MessageView::instance()->putln(MessageView::ERROR,
-					fmt::format(_("{}"), e.what()));
+					formatR(_("{}"), e.what()));
 			}
 			catch (...)
 			{
@@ -344,7 +342,7 @@ namespace rtmiddleware {
 			catch (const py::error_already_set& e)
 			{
 				MessageView::instance()->putln(MessageView::ERROR,
-					fmt::format(_("{}"), e.what()));
+					formatR(_("{}"), e.what()));
 
 			}
 			catch (...)
@@ -415,7 +413,7 @@ namespace rtmiddleware {
 			catch (const py::error_already_set& e)
 			{
 				MessageView::instance()->putln(MessageView::ERROR,
-					fmt::format(_("{}"), e.what()));
+					formatR(_("{}"), e.what()));
 			}
 			catch (...)
 			{
@@ -476,7 +474,7 @@ namespace rtmiddleware {
 			catch (const py::error_already_set& e)
 			{
 				MessageView::instance()->putln(MessageView::ERROR,
-					fmt::format(_("{}"), e.what()));
+					formatR(_("{}"), e.what()));
 			}
 			catch (...)
 			{

@@ -38,7 +38,6 @@
 #include <QTextEdit>
 #include <QDebug>
 #include <QGroupBox>
-#include <QTextCodec>
 #include <QDesktopServices>
 #include <QDirIterator>
 #include <QScrollBar>
@@ -127,7 +126,7 @@ namespace rtmiddleware {
 		static bool initialized = false;
 		if (!initialized) {
 			ext->itemManager().registerClass<ComponentListItem>(N_("ComponentList"));
-			ext->itemManager().addCreationPanel<ComponentListItem>(NULL);
+			ext->itemManager().addCreationPanel<ComponentListItem>();
 			initialized = true;
 		}
 	}

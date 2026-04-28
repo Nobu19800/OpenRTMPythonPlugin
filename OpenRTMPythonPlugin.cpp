@@ -8,9 +8,9 @@
 #include <cnoid/MenuManager>
 #include <cnoid/MessageView>
 
-#include <fmt/format.h>
 
 #include <cnoid/PyUtil>
+#include <cnoid/Format>
 #include "cnoid/PythonPlugin"
 
 #include <pybind11/embed.h>
@@ -29,14 +29,13 @@ namespace py = pybind11;
 #include <cnoid/ExecutablePath>
 #include <cnoid/stdx/filesystem>
 
-#include "exportdecl.h"
 #include "PyRTCItem.h"
 #include "RTCEditorItem.h"
 #include "ComponentListItem.h"
 #include "ComponentList.h"
 
 #include "gettext.h"
-
+#include "exportdecl.h"
 
 
 
@@ -243,7 +242,7 @@ namespace rtmiddleware {
 			catch (const python::error_already_set& e)
 			{
 				MessageView::instance()->putln(0,
-					fmt::format(_("{}"), e.what()));
+					formatR(_("{}"), e.what()));
 			}
 			catch (...)
 			{
@@ -265,7 +264,7 @@ namespace rtmiddleware {
 			catch (const python::error_already_set& e)
 			{
 				MessageView::instance()->putln(0,
-					fmt::format(_("{}"), e.what()));
+					formatR(_("{}"), e.what()));
 			}
 			catch (...)
 			{
@@ -301,7 +300,7 @@ namespace rtmiddleware {
 			catch (const python::error_already_set& e)
 			{
 				MessageView::instance()->putln(0,
-					fmt::format(_("{}"), e.what()));
+					formatR(_("{}"), e.what()));
 			}
 			catch (...)
 			{

@@ -13,6 +13,7 @@
 #include <QStringList>
 #include <QTextStream>
 #include <QXmlStreamReader>
+#include <QMap>
 
 #include <iostream>
 //#include <QtXml>

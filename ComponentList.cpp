@@ -26,7 +26,6 @@
 #include <QTextEdit>
 #include <QDebug>
 #include <QGroupBox>
-#include <QTextCodec>
 #include <QDesktopServices>
 #include <QDirIterator>
 #include <QScrollBar>
@@ -45,7 +44,7 @@
 #include <cnoid/PyUtil>
 #include "cnoid/PythonPlugin"
 #include <cnoid/stdx/filesystem>
-#include <fmt/format.h>
+#include <cnoid/Format>
 
 #include <pybind11/embed.h>
 namespace py = pybind11;
@@ -95,7 +94,7 @@ namespace rtmiddleware {
 	ComponentList::ComponentList(QWidget *parent)
 		: QTabWidget(parent)
 	{
-		setWindowTitle(QTextCodec::codecForLocale()->toUnicode("RTC List"));
+		setWindowTitle(QString::fromUtf8("RTC List"));
 	
 
 
@@ -298,7 +297,7 @@ namespace rtmiddleware {
 			}*/
 			p->start(cmd);
 			_process.push_back(p);
-			cnoid::MessageView::instance()->putln(0, fmt::format(_("Generate {}"), _comp.get_info().getName().toStdString()));
+			cnoid::MessageView::instance()->putln(0, formatR(_("Generate {}"), _comp.get_info().getName().toStdString()));
 			return;
 		}
 
@@ -347,7 +346,7 @@ namespace rtmiddleware {
 		while (it.hasNext())
 		{
 			QString file = it.next();
-			//cnoid::MessageView::instance()->putln(0, fmt::format(_("%1%"))% _comp.get_language().getKind().toStdString());
+			//cnoid::MessageView::instance()->putln(0, formatR(_("%1%"))% _comp.get_language().getKind().toStdString());
 			if (_comp.get_language().getKind() == "C++")
 			{
 				RTC::Manager *mgr = &RTC::Manager::instance();
@@ -364,31 +363,31 @@ namespace rtmiddleware {
 					{
 						mod_name = mod_name + "?execution_contexts=PeriodicExecutionContext,SimulatorExecutionContext";
 						RTC::RTObject_impl *rto = mgr->createComponent(mod_name.toLocal8Bit());
-						//cnoid::MessageView::instance()->putln(0, fmt::format(_("%1%"))% mod_name.toStdString());
+						//cnoid::MessageView::instance()->putln(0, formatR(_("%1%"))% mod_name.toStdString());
 						//std::cout << file.toStdString() << std::endl;
 						if (rto)
 						{
-							cnoid::MessageView::instance()->putln(0, fmt::format(_("Generate {}"), _comp.get_info().getName().toStdString()));
+							cnoid::MessageView::instance()->putln(0, formatR(_("Generate {}"), _comp.get_info().getName().toStdString()));
 							_cpp_modules.push_back(CPPComponentInfo(rto, ec_type));
 						}
 						else
 						{
-							cnoid::MessageView::instance()->putln(0, fmt::format(_("Failed Generate {}"), _comp.get_info().getName().toStdString()));
-							//cnoid::MessageView::instance()->putln(0, fmt::format(_("%1%")) % (int)ret);
+							cnoid::MessageView::instance()->putln(0, formatR(_("Failed Generate {}"), _comp.get_info().getName().toStdString()));
+							//cnoid::MessageView::instance()->putln(0, formatR(_("%1%")) % (int)ret);
 						}
 					}
 					else
 					{
-						cnoid::MessageView::instance()->putln(0, fmt::format(_("Failed Generate {}"), _comp.get_info().getName().toStdString()));
-						//cnoid::MessageView::instance()->putln(0, fmt::format(_("%1%")) % (int)ret);
-						//cnoid::MessageView::instance()->putln(0, fmt::format(_("%1%")) % file.toStdString());
-						//cnoid::MessageView::instance()->putln(0, fmt::format(_("%1%")) % mod_name.toStdString());
-						//cnoid::MessageView::instance()->putln(0, fmt::format(_("%1%")) % init_func.toStdString());
+						cnoid::MessageView::instance()->putln(0, formatR(_("Failed Generate {}"), _comp.get_info().getName().toStdString()));
+						//cnoid::MessageView::instance()->putln(0, formatR(_("%1%")) % (int)ret);
+						//cnoid::MessageView::instance()->putln(0, formatR(_("%1%")) % file.toStdString());
+						//cnoid::MessageView::instance()->putln(0, formatR(_("%1%")) % mod_name.toStdString());
+						//cnoid::MessageView::instance()->putln(0, formatR(_("%1%")) % init_func.toStdString());
 					}
 				}
 				else
 				{
-					cnoid::MessageView::instance()->putln(0, fmt::format(_("not running {} Manager"), _comp.get_language().getKind().toStdString()));
+					cnoid::MessageView::instance()->putln(0, formatR(_("not running {} Manager"), _comp.get_language().getKind().toStdString()));
 				}
 			}
 			else if (_comp.get_language().getKind() == "Python")
@@ -406,18 +405,18 @@ namespace rtmiddleware {
 							std::string comp_name = pybind11::str(pythonPlugin->globalNamespace()["createCompList"]((const char*)file.toLocal8Bit())).cast<std::string>();
 
 							_python_module.push_back(PythonComponentInfo(comp_name, ec_type));
-							cnoid::MessageView::instance()->putln(0, fmt::format(_("Generate {}"), _comp.get_info().getName().toStdString()));
+							cnoid::MessageView::instance()->putln(0, formatR(_("Generate {}"), _comp.get_info().getName().toStdString()));
 						}
 
 					}
 					catch (const py::error_already_set&e)
 					{
 					
-						MessageView::instance()->putln(0, fmt::format(_("{}"), e.what()));
+						MessageView::instance()->putln(0, formatR(_("{}"), e.what()));
 					}
 					catch (...)
 					{
-						cnoid::MessageView::instance()->putln(0, fmt::format(_("Failed Generate {}"), _comp.get_info().getName().toStdString()));
+						cnoid::MessageView::instance()->putln(0, formatR(_("Failed Generate {}"), _comp.get_info().getName().toStdString()));
 
 
 					}
@@ -429,7 +428,7 @@ namespace rtmiddleware {
 			}
 			else
 			{
-				cnoid::MessageView::instance()->putln(0, fmt::format(_("not supported {}"), _comp.get_language().getKind().toStdString()));
+				cnoid::MessageView::instance()->putln(0, formatR(_("not supported {}"), _comp.get_language().getKind().toStdString()));
 			}
 			return;
 		}
@@ -472,7 +471,7 @@ namespace rtmiddleware {
 				{
 
 					MessageView::instance()->putln(0,
-						fmt::format(_("{}"), e.what()));
+						formatR(_("{}"), e.what()));
 				}
 				catch (...)
 				{
@@ -585,9 +584,9 @@ namespace rtmiddleware {
 
 			RTC::ExecutionContext_var ec = (*itr)._obj->getExecutionContext((*itr)._ec);
 			/*MessageView::instance()->putln(0,
-				fmt::format(_("%1%")) % (bool)CORBA::is_nil(ec));*/
+				formatR(_("%1%")) % (bool)CORBA::is_nil(ec));*/
 			/*MessageView::instance()->putln(0,
-				fmt::format(_("%1%")) % (int)(*itr)._ec);*/
+				formatR(_("%1%")) % (int)(*itr)._ec);*/
 			if (!CORBA::is_nil(ec)) {
 				ec->activate_component((*itr)._obj->getObjRef());
 			}
@@ -609,7 +608,7 @@ namespace rtmiddleware {
 				catch (const py::error_already_set&e)
 				{
 					MessageView::instance()->putln(0,
-						fmt::format(_("{}"), e.what()));
+						formatR(_("{}"), e.what()));
 				}
 				catch (...)
 				{
@@ -668,7 +667,7 @@ namespace rtmiddleware {
 				catch (const py::error_already_set&e)
 				{
 					MessageView::instance()->putln(0,
-						fmt::format(_("{}"), e.what()));
+						formatR(_("{}"), e.what()));
 				}
 				catch (...)
 				{
@@ -722,7 +721,7 @@ namespace rtmiddleware {
 				catch (const py::error_already_set&e)
 				{
 					MessageView::instance()->putln(0,
-						fmt::format(_("{}"), e.what()));
+						formatR(_("{}"), e.what()));
 				}
 				catch (...)
 				{

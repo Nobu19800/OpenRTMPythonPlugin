@@ -16,7 +16,6 @@
 #include <QFontDatabase>
 #include <QMenu>
 #include <QMenuBar>
-#include <QTextCodec>
 #include <QTextEdit>
 #include <QStatusBar>
 #include <QToolBar>
@@ -49,7 +48,7 @@ namespace rtmiddleware {
 		wrapColumn(80)
 	{
 
-		setTabStopWidth(20);
+		setTabStopDistance(20);
 		createFont(fontSize, wrapColumn);
 	}
 
@@ -63,7 +62,7 @@ namespace rtmiddleware {
 	{
 		QFont font("monospace", fontSize);
 		font.setStyleHint(QFont::TypeWriter);
-		int fontPxSize = QFontMetrics(font).width('0');
+		int fontPxSize = QFontMetrics(font).horizontalAdvance('0');
 		setFont(font);
 		setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
 		setLineWrapMode(QTextEdit::FixedPixelWidth);

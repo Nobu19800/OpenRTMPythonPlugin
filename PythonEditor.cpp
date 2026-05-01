@@ -110,11 +110,11 @@ namespace rtmiddleware {
 				int c_s = 0;
 				for (int i = 0; i < s.size(); i++)
 				{
-					if (s[i] == "\t")
+					if (s[i] == QChar('\t'))
 					{
 						c_t += 1;
 					}
-					else if (s[i] == " ")
+					else if (s[i] == QChar(' '))
 					{
 						c_s += 1;
 					}
@@ -126,7 +126,7 @@ namespace rtmiddleware {
 				}
 
 
-				if (s.at(s.length() - 1) == ":")
+				if (s.at(s.length() - 1) == QChar(':'))
 				{
 					add_str += "\t";
 				}

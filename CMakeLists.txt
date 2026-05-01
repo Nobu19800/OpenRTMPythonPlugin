@@ -35,7 +35,12 @@ else()
   endif()
   
   if(NOT CHOREONOID_ENABLE_CORBA)
-    message(FATAL_ERROR "CORBA is not available in Choreonoid")
+    if(UNIX)
+      include(cmake/ChoreonoidCorbaBuildFunctions.cmake)
+      set(CHOREONOID_CORBA_PLUGIN_LIBRARIES CnoidCorbaPlugin)
+    else()
+      message(FATAL_ERROR "CORBA is not available in Choreonoid")
+    endif()
   endif()
 
   if(CHOREONOID_CXX_STANDARD)

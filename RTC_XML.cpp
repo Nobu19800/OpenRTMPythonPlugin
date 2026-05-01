@@ -72,7 +72,7 @@ namespace RTC_XML {
 
 		while (reader.readNextStartElement()) {
 			//std::cout << reader.name().toString().toStdString() << std::endl;
-			if (reader.name() == "Doc")
+			if (reader.name() == QStringLiteral("Doc"))
 			{
 				QXmlStreamAttributes attributes = reader.attributes();
 				Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
@@ -153,7 +153,7 @@ namespace RTC_XML {
 
 		while (reader.readNextStartElement()) {
 			//std::cout << reader.name().toString().toStdString() << std::endl;
-			if (reader.name() == "Doc")
+			if (reader.name() == QStringLiteral("Doc"))
 			{
 				QXmlStreamAttributes attributes = reader.attributes();
 				Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
@@ -216,7 +216,7 @@ namespace RTC_XML {
 
 		while (reader.readNextStartElement()) {
 
-			if (reader.name() == "Doc")
+			if (reader.name() == QStringLiteral("Doc"))
 			{
 				//std::cout << reader.name().toString().toStdString() << std::endl;
 				QXmlStreamAttributes attributes = reader.attributes();
@@ -225,7 +225,7 @@ namespace RTC_XML {
 					//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
 				}
 			}
-			else if (reader.name() == "Properties")
+			else if (reader.name() == QStringLiteral("Properties"))
 			{
 				//std::cout << reader.name().toString().toStdString() << std::endl;
 				QXmlStreamAttributes attributes = reader.attributes();
@@ -491,7 +491,7 @@ namespace RTC_XML {
 
 		while (reader.readNextStartElement()) {
 
-			if (reader.name() == "Doc")
+			if (reader.name() == QStringLiteral("Doc"))
 			{
 				//std::cout << reader.name().toString().toStdString() << std::endl;
 				QXmlStreamAttributes attributes = reader.attributes();
@@ -695,7 +695,7 @@ namespace RTC_XML {
 
 		while (reader.readNextStartElement()) {
 			//std::cout << reader.name().toString().toStdString() << std::endl;
-			if (reader.name() == "Doc")
+			if (reader.name() == QStringLiteral("Doc"))
 			{
 				QXmlStreamAttributes attributes = reader.attributes();
 				Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
@@ -769,7 +769,7 @@ namespace RTC_XML {
 
 		while (reader.readNextStartElement()) {
 			//std::cout << reader.name().toString().toStdString() << std::endl;
-			if (reader.name() == "Doc")
+			if (reader.name() == QStringLiteral("Doc"))
 			{
 				QXmlStreamAttributes attributes = reader.attributes();
 				Q_FOREACH(QXmlStreamAttribute attribute, attributes) {
@@ -778,7 +778,7 @@ namespace RTC_XML {
 					//std::cout << attribute.name().toLocal8Bit().toStdString() << "\t" << attribute.value().toLocal8Bit().toStdString() << std::endl;
 				}
 			}
-			else if (reader.name() == "ServiceInterface")
+			else if (reader.name() == QStringLiteral("ServiceInterface"))
 			{
 				ServiceInterface svc_if;
 				svc_if.getXMLData(reader);
@@ -870,7 +870,7 @@ namespace RTC_XML {
 
 		while (reader.readNextStartElement()) {
 
-			if (reader.name() == "Doc")
+			if (reader.name() == QStringLiteral("Doc"))
 			{
 				//std::cout << reader.name().toString().toStdString() << std::endl;
 				QXmlStreamAttributes attributes = reader.attributes();
@@ -949,7 +949,7 @@ namespace RTC_XML {
 		reader.setNamespaceProcessing(false);
 
 		while (reader.readNextStartElement()) {
-			if (reader.name() == "RtcProfile")
+			if (reader.name() == QStringLiteral("RtcProfile"))
 			{
 				{
 
@@ -962,13 +962,13 @@ namespace RTC_XML {
 				while (reader.readNextStartElement()) {
 					//std::cout << reader.name().toLocal8Bit().toStdString() << std::endl;
 
-					if (reader.name() == "BasicInfo")
+					if (reader.name() == QStringLiteral("BasicInfo"))
 					{
 						_info.getXMLData(reader);
 						//reader.readNext();
 						//reader.skipCurrentElement();
 					}
-					else if (reader.name() == "Actions")
+					else if (reader.name() == QStringLiteral("Actions"))
 					{
 					
 						while (reader.readNextStartElement()) {
@@ -981,7 +981,7 @@ namespace RTC_XML {
 
 
 					}
-					else if (reader.name() == "ConfigurationSet")
+					else if (reader.name() == QStringLiteral("ConfigurationSet"))
 					{
 					
 						while (reader.readNextStartElement()) {
@@ -993,19 +993,19 @@ namespace RTC_XML {
 							reader.readNext();
 						}
 					}
-					else if (reader.name() == "DataPorts")
+					else if (reader.name() == QStringLiteral("DataPorts"))
 					{
 						DataPorts dataport;
 						dataport.getXMLData(reader);
 						_dataports.push_back(dataport);
 					}
-					else if (reader.name() == "ServicePorts")
+					else if (reader.name() == QStringLiteral("ServicePorts"))
 					{
 						ServicePorts svcport;
 						svcport.getXMLData(reader);
 						_svrports.push_back(svcport);
 					}
-					else if (reader.name() == "Language")
+					else if (reader.name() == QStringLiteral("Language"))
 					{
 						_language.getXMLData(reader);
 						reader.readNext();

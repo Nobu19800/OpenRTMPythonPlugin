@@ -46,28 +46,28 @@ namespace rtmiddleware {
 		 * @brief シミュレーション開始時実行関数
 		 * @return
 		 */
-		virtual bool start();
+		virtual bool start() override;
 		/**
 		 * @brief 刻み幅取得
 		 * @return 刻み幅
 		 */
-		virtual double timeStep() const;
+		virtual double timeStep() const override;
 		/**
 		 * @brief シミュレーション更新前実行関数
 		 */
-		virtual void input();
+		virtual void input() override;
 		/**
 		 * @brief シミュレーション更新中実行関数
 		 */
-		virtual bool control();
+		virtual bool control() override;
 		/**
 		 * @brief シミュレーション更新後実行関数
 		 */
-		virtual void output();
+		virtual void output() override;
 		/**
 		 * @brief シミュレーション終了時実行関数
 		 */
-		virtual void stop();
+		virtual void stop() override;
 		/**
 		* @brief 実行コンテキスト設定
 		* @param which 実行コンテキストID

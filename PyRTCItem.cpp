@@ -21,6 +21,7 @@
 #include <cnoid/Archive>
 #include <cnoid/stdx/filesystem>
 #include <cnoid/Format>
+#include <cnoid/ProjectManager>
 
 #include <QLayout>
 #include <QLabel>
@@ -88,9 +89,7 @@ namespace rtmiddleware {
 	 */
 	PyRTCItem::PyRTCItem()
 	{
-
-
-
+		relativePathBaseType.setSymbol(NO_BASE_DIRECTORY, N_("None"));
 		relativePathBaseType.setSymbol(RTC_DIRECTORY, N_("RTC directory"));
 		relativePathBaseType.setSymbol(PROJECT_DIRECTORY, N_("Project directory"));
 		relativePathBaseType.select(RTC_DIRECTORY);
@@ -147,13 +146,13 @@ namespace rtmiddleware {
 			{ _("RT-Component module file(*.py)") });
 
 		ControllerItem::doPutProperties(putProperty);
-		if (!moduleNameProperty.empty() && checkAbsolute(cnoid::stdx::filesystem::path(moduleNameProperty))) {
-			cnoid::stdx::filesystem::path dir = cnoid::stdx::filesystem::path(moduleNameProperty).parent_path().generic_string();
+		rtcPluginDirectory = std::filesystem::path(executableTopDirectory()) / CNOID_PLUGIN_SUBDIR / "rtc_python";
+		if (!moduleNameProperty.empty() && checkAbsolute(std::filesystem::path(moduleNameProperty))) {
+			std::filesystem::path dir = std::filesystem::path(moduleNameProperty).parent_path().generic_string();
 			pyFileProperty.setBaseDirectory(dir.string());
 		}
 		else if (relativePathBaseType.is(RTC_DIRECTORY)) {
-			cnoid::stdx::filesystem::path dir = cnoid::stdx::filesystem::path(executableTopDirectory()) / CNOID_PLUGIN_SUBDIR / "rtc_python";
-			pyFileProperty.setBaseDirectory(dir.string());
+			pyFileProperty.setBaseDirectory(rtcPluginDirectory.string());
 
 		}
 
@@ -207,6 +206,8 @@ namespace rtmiddleware {
 		}
 		{
 			PyGILock lock;
+			std::filesystem::path path = std::filesystem::path(name);
+			name = getModuleFullPath(path).string();
 
 			try
 			{
@@ -242,6 +243,65 @@ namespace rtmiddleware {
 	{
 		return new PyRTCItem(*this);
 	}
+	
+	void PyRTCItem::setRelativePathBaseType(std::filesystem::path& projectDirectory)
+	{
+		std::filesystem::path modulePath(moduleNameProperty);
+		if (modulePath.is_absolute()) {
+			auto rel = std::filesystem::weakly_canonical(modulePath).lexically_relative(std::filesystem::weakly_canonical(projectDirectory));
+			if(!rel.empty() && *rel.begin() != "..")
+			{
+				relativePathBaseType.select(PROJECT_DIRECTORY);
+				notifyUpdate();
+				return;
+			}
+			else
+			{
+				rel = std::filesystem::weakly_canonical(modulePath).lexically_relative(std::filesystem::weakly_canonical(rtcPluginDirectory));
+				if(!rel.empty() && *rel.begin() != "..")
+				{
+					relativePathBaseType.select(RTC_DIRECTORY);
+					notifyUpdate();
+					return;
+				}
+
+			}
+			
+			relativePathBaseType.select(NO_BASE_DIRECTORY);
+			notifyUpdate();
+			return;
+			
+		}
+		
+	}
+	
+	std::filesystem::path PyRTCItem::getModuleFullPath(std::filesystem::path& modulePath)
+	{
+		if (!modulePath.is_absolute())
+		{
+			if (relativePathBaseType.is(NO_BASE_DIRECTORY)) {
+				return modulePath;
+			}
+			else if (relativePathBaseType.is(RTC_DIRECTORY)) {
+				return rtcPluginDirectory / modulePath;
+			}
+			else if (relativePathBaseType.is(PROJECT_DIRECTORY)) {
+				std::string projectDir = ProjectManager::instance()->currentProjectDirectory();
+				if(!projectDir.empty())
+				{
+					return std::filesystem::path(projectDir) / modulePath;
+				}
+				else if(!projectDirectoryPath.empty())
+				{
+					return projectDirectoryPath / modulePath;
+				}
+				
+			}
+		}
+		return modulePath;
+	}
+	
+	
 
 
 
@@ -251,6 +311,9 @@ namespace rtmiddleware {
 	 */
 	bool PyRTCItem::store(Archive& archive)
 	{
+		std::filesystem::path projectDirectory = archive.projectDirectory();
+		setRelativePathBaseType(projectDirectory);
+		archive.write("relativePathBaseType", relativePathBaseType.selectedSymbol(), DOUBLE_QUOTED);
 		archive.writeRelocatablePath("moduleName", moduleNameProperty);
 		archive.write("executionContext", execContextType.selectedSymbol(), DOUBLE_QUOTED);
 
@@ -265,13 +328,17 @@ namespace rtmiddleware {
 	 */
 	bool PyRTCItem::restore(const Archive& archive)
 	{
+		projectDirectoryPath = archive.projectDirectory();
+		std::string symbol;
+		if (archive.read("relativePathBaseType", symbol)) {
+			relativePathBaseType.select(symbol);
+		}
 		std::string value;
 		if (archive.read("moduleName", value)) {
-			cnoid::stdx::filesystem::path path(archive.expandPathVariables(value));
+			std::filesystem::path path(archive.expandPathVariables(value));
 			moduleNameProperty = getNativePathString(path);
 			if (!moduleNameProperty.empty())createComp(moduleNameProperty);
 		}
-		std::string symbol;
 		if (archive.read("executionContext", symbol)) {
 			execContextType.select(symbol);
 		}

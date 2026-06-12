@@ -75,6 +75,7 @@ namespace rtmiddleware {
 		void setExecContextType(int which);
 
 		enum RelativePathBaseType {
+			NO_BASE_DIRECTORY,
 			RTC_DIRECTORY,
 			PROJECT_DIRECTORY,
 			N_RELATIVE_PATH_BASE_TYPES
@@ -95,6 +96,7 @@ namespace rtmiddleware {
 		std::string comp_name;
 
 		std::string moduleNameProperty;
+		std::filesystem::path rtcPluginDirectory;
 
 		cnoid::Selection relativePathBaseType;
 		cnoid::Selection execContextType;
@@ -142,6 +144,19 @@ namespace rtmiddleware {
 		
 	private:
 		//controlLink m_crl;
+		/**
+		 * @brief 
+		 * @param projectDirectory
+		 */
+		void setRelativePathBaseType(std::filesystem::path& projectDirectory);
+		/**
+		 * @brief 
+		 * @return 
+		 */
+		std::filesystem::path getModuleFullPath(std::filesystem::path& modulePath);
+		
+		std::filesystem::path projectDirectoryPath;
+		
 		
 		
 		
